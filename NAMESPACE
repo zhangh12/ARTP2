@@ -1,0 +1,3 @@
+import(parallel)
+useDynLib(ARTP3)
+export(pathway.summaryData, pathway.warm.start, read.bed, options.default, buggy)
