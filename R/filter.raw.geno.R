@@ -1,17 +1,29 @@
 
-filter.reference.geno <- function(ref.geno, pathway, options){
+filter.raw.geno <- function(raw.geno, pathway, options, control.id = NULL, print = FALSE){
+  
+  pathway <- pathway[pathway$SNP %in% colnames(raw.geno), ]
   
   msg <- paste("Removing SNPs with high missing rate:", date())
-  if(options$print) message(msg)
+  if(options$print && print) message(msg)
   
   deleted.snps <- data.frame(SNP = NULL, reason = NULL, comment = NULL, stringsAsFactors = FALSE)
-  rs <- colnames(ref.geno)
-  snp.miss.rate <- apply(ref.geno, 2, function(x){mean(is.na(x))})
+  rs <- colnames(raw.geno)
+  # use for loop to avoid high memory consumption
+  snp.miss.rate <- rep(NA, ncol(raw.geno))
+  for(i in 1:ncol(raw.geno)){
+    snp.miss.rate[i] <- mean(is.na(raw.geno[, i]))
+    if((i %% 50) == 0){
+      gc()
+    }
+  }
+  gc()
+  names(snp.miss.rate) <- rs
+  #snp.miss.rate <- apply(raw.geno, 2, function(x){mean(is.na(x))})
   id <- which(snp.miss.rate > options$snp.miss.rate)
   if(length(id) > 0){
-    exc.snps <- colnames(ref.geno)[id]
+    exc.snps <- colnames(raw.geno)[id]
     del.snps <- data.frame(SNP = exc.snps, reason = "SNP_MISS_RATE", comment = snp.miss.rate[id], stringsAsFactors = FALSE)
-    ref.geno <- ref.geno[, -id, drop = FALSE]
+    raw.geno <- raw.geno[, -id, drop = FALSE]
     rs <- setdiff(rs, exc.snps)
     if(length(rs) == 0){
       msg <- "No SNPs were left due to SNP_MISS_RATE"
@@ -24,14 +36,24 @@ filter.reference.geno <- function(ref.geno, pathway, options){
   ######
   
   msg <- paste("Removing SNPs with low MAFs:", date())
-  if(options$print) message(msg)
+  if(options$print && print) message(msg)
   
-  maf <- apply(ref.geno, 2, function(x){m <- mean(x, na.rm = TRUE)/2; pmin(m, 1-m)})
+  maf <- rep(NA, ncol(raw.geno))
+  for(i in 1:ncol(raw.geno)){
+    m <- mean(raw.geno[, i], na.rm = TRUE)/2
+    if((i %% 50) == 0){
+      gc()
+    }
+    maf[i] <- min(m, 1-m)
+  }
+  gc()
+  names(maf) <- colnames(raw.geno)
+  #maf <- apply(raw.geno, 2, function(x){m <- mean(x, na.rm = TRUE)/2; pmin(m, 1-m)})
   id <- which(maf < options$maf)
   if(length(id) > 0){
-    exc.snps <- colnames(ref.geno)[id]
+    exc.snps <- colnames(raw.geno)[id]
     del.snps <- data.frame(SNP = exc.snps, reason = "SNP_LOW_MAF", comment = maf[id], stringsAsFactors = FALSE)
-    ref.geno <- ref.geno[, -id, drop = FALSE]
+    raw.geno <- raw.geno[, -id, drop = FALSE]
     rs <- setdiff(rs, exc.snps)
     if(length(rs) == 0){
       msg <- "No SNPs were left due to SNP_LOW_MAF"
@@ -44,14 +66,23 @@ filter.reference.geno <- function(ref.geno, pathway, options){
   ######
   
   msg <- paste("Removing constant SNPs:", date())
-  if(options$print) message(msg)
+  if(options$print && print) message(msg)
   
-  SD <- apply(ref.geno, 2, function(x){sd(x, na.rm = TRUE)})
+  SD <- rep(NA, ncol(raw.geno))
+  for(i in 1:ncol(raw.geno)){
+    SD[i] <- sd(raw.geno[, i], na.rm = TRUE)
+    if((i %% 50) == 0){
+      gc()
+    }
+  }
+  gc()
+  names(SD) <- colnames(raw.geno)
+  #SD <- apply(raw.geno, 2, function(x){sd(x, na.rm = TRUE)})
   id <- which(SD == 0)
   if(length(id) > 0){
-    exc.snps <- colnames(ref.geno)[id]
+    exc.snps <- colnames(raw.geno)[id]
     del.snps <- data.frame(SNP = exc.snps, reason = "SNP_CONST", comment = "", stringsAsFactors = FALSE)
-    ref.geno <- ref.geno[, -id, drop = FALSE]
+    raw.geno <- raw.geno[, -id, drop = FALSE]
     rs <- setdiff(rs, exc.snps)
     if(length(rs) == 0){
       msg <- "No SNPs were left due to SNP_CONST"
@@ -65,14 +96,40 @@ filter.reference.geno <- function(ref.geno, pathway, options){
   
   if(options$HWE.p > 0){
     msg <- paste("Removing SNPs fail to pass HWE test:", date())
-    if(options$print) message(msg)
+    if(options$print && print) message(msg)
     
-    hwe.pval <- apply(ref.geno, 2, HWE.exact)
+    if(is.null(control.id) || length(control.id) == 0){
+      hwe.pval <- rep(NA, ncol(raw.geno))
+      for(i in 1:ncol(raw.geno)){
+        hwe.pval[i] <- HWE.exact(raw.geno[, i])
+        if((i %% 50) == 0){
+          gc()
+        }
+      }
+      gc()
+      names(hwe.pval) <- colnames(raw.geno)
+      #hwe.pval <- apply(raw.geno, 2, HWE.exact)
+    }else{
+      if(max(control.id) > nrow(raw.geno)){
+        msg <- "Fail to perform HWE test"
+        stop(msg)
+      }
+      hwe.pval <- rep(NA, ncol(raw.geno))
+      for(i in 1:ncol(raw.geno)){
+        hwe.pval[i] <- HWE.exact(raw.geno[control.id, i])
+        if((i %% 50) == 0){
+          gc()
+        }
+      }
+      gc()
+      names(hwe.pval) <- colnames(raw.geno)
+      #hwe.pval <- apply(raw.geno[control.id, ], 2, HWE.exact)
+    }
     id <- which(hwe.pval < options$HWE.p)
     if(length(id) > 0){
-      exc.snps <- colnames(ref.geno)[id]
+      exc.snps <- colnames(raw.geno)[id]
       del.snps <- data.frame(SNP = exc.snps, reason = "SNP_HWE", comment = "", stringsAsFactors = FALSE)
-      ref.geno <- ref.geno[, -id, drop = FALSE]
+      raw.geno <- raw.geno[, -id, drop = FALSE]
       rs <- setdiff(rs, exc.snps)
       if(length(rs) == 0){
         msg <- "No SNPs were left due to SNP_HWE"
@@ -86,7 +143,7 @@ filter.reference.geno <- function(ref.geno, pathway, options){
   #######
   
   msg <- paste("Removing high LD SNPs within genes:", date())
-  if(options$print) message(msg)
+  if(options$print && print) message(msg)
   
   gene <- unique(pathway$Gene)
   exc.snps <- NULL
@@ -100,7 +157,7 @@ filter.reference.geno <- function(ref.geno, pathway, options){
       next
     }
     
-    rg <- ref.geno[, snps.in.gene, drop = FALSE]
+    rg <- raw.geno[, snps.in.gene, drop = FALSE]
     suppressWarnings(cor2 <- cor(rg, use = "pairwise.complete.obs", method = "pearson")^2)
     cor2[is.na(cor2)] <- 0 # Sometimes two SNPs are approximately independent due to the location of missing, see rs4673651 and rs16847776 in 1000 Genomes EUR as an example
     diag(cor2) <- -1
@@ -112,8 +169,10 @@ filter.reference.geno <- function(ref.geno, pathway, options){
     rg <- rg[, tmp, drop = FALSE]
     cor2 <- cor2[tmp, tmp, drop = FALSE]
     snps.in.gene <- snps.in.gene[tmp]
-
+    
     maf <- apply(rg, 2, function(x){m <- mean(x, na.rm = TRUE)/2; pmin(m, 1-m)})
+    rm(rg)
+    gc()
     names(maf) <- snps.in.gene
     
     if(length(snps.in.gene) > options$huge.gene){
@@ -155,8 +214,8 @@ filter.reference.geno <- function(ref.geno, pathway, options){
   
   if(!is.null(exc.snps)){
     del.snps <- data.frame(SNP = exc.snps, reason = "GENE_R2", comment = comment, stringsAsFactors = FALSE)
-    id <- which(colnames(ref.geno) %in% exc.snps)
-    ref.geno <- ref.geno[, -id, drop = FALSE]
+    id <- which(colnames(raw.geno) %in% exc.snps)
+    raw.geno <- raw.geno[, -id, drop = FALSE]
     rs <- setdiff(rs, exc.snps)
     if(length(rs) == 0){
       msg <- "No SNPs were left due to GENE_R2"
@@ -173,8 +232,8 @@ filter.reference.geno <- function(ref.geno, pathway, options){
     }
     if(!is.null(exc.snps2)){
       del.snps2 <- data.frame(SNP = exc.snps2, reason = "HUGE_GENE_R2", comment = "", stringsAsFactors = FALSE)
-      id <- which(colnames(ref.geno) %in% exc.snps2)
-      ref.geno <- ref.geno[, -id, drop = FALSE]
+      id <- which(colnames(raw.geno) %in% exc.snps2)
+      raw.geno <- raw.geno[, -id, drop = FALSE]
       rs <- setdiff(rs, exc.snps2)
       if(length(rs) == 0){
         msg <- "No SNPs were left due to HUGE_GENE_R2"
@@ -188,7 +247,7 @@ filter.reference.geno <- function(ref.geno, pathway, options){
   ######
   
   msg <- paste("Removing SNPs in high LD within chromosomes:", date())
-  if(options$print) message(msg)
+  if(options$print && print) message(msg)
   
   chr <- unique(pathway$Chr)
   exc.snps <- NULL
@@ -200,7 +259,7 @@ filter.reference.geno <- function(ref.geno, pathway, options){
     if(length(snps.in.chr) <= 1){
       next
     }
-    rg <- ref.geno[, snps.in.chr, drop = FALSE]
+    rg <- raw.geno[, snps.in.chr, drop = FALSE]
     suppressWarnings(cor2 <- cor(rg, use = "pairwise.complete.obs", method = "pearson")^2)
     cor2[is.na(cor2)] <- 0
     diag(cor2) <- -1
@@ -214,6 +273,8 @@ filter.reference.geno <- function(ref.geno, pathway, options){
     snps.in.chr <- snps.in.chr[tmp]
     
     maf <- apply(rg, 2, function(x){m <- mean(x, na.rm = TRUE)/2; pmin(m, 1-m)})
+    rm(rg)
+    gc()
     names(maf) <- snps.in.chr
     while(1){
       if(nrow(cor2) == 1){
@@ -240,8 +301,8 @@ filter.reference.geno <- function(ref.geno, pathway, options){
   
   if(!is.null(exc.snps)){
     del.snps <- data.frame(SNP = exc.snps, reason = "CHR_R2", comment = comment, stringsAsFactors = FALSE)
-    id <- which(colnames(ref.geno) %in% exc.snps)
-    ref.geno <- ref.geno[, -id, drop = FALSE]
+    id <- which(colnames(raw.geno) %in% exc.snps)
+    raw.geno <- raw.geno[, -id, drop = FALSE]
     rs <- setdiff(rs, exc.snps)
     if(length(rs) == 0){
       msg <- "No SNPs were left due to CHR_R2"
@@ -264,7 +325,7 @@ filter.reference.geno <- function(ref.geno, pathway, options){
   if(length(large.chr) > 0 && options$trim.huge.chr){
     
     msg <- paste("Removing high LD SNPs within genes of huge chromosome:", date())
-    if(options$print) message(msg)
+    if(options$print && print) message(msg)
     
     gene <- unique(pathway$Gene)
     exc.snps <- NULL
@@ -283,7 +344,7 @@ filter.reference.geno <- function(ref.geno, pathway, options){
         next
       }
       
-      rg <- ref.geno[, snps.in.gene, drop = FALSE]
+      rg <- raw.geno[, snps.in.gene, drop = FALSE]
       suppressWarnings(cor2 <- cor(rg, use = "pairwise.complete.obs", method = "pearson")^2)
       cor2[is.na(cor2)] <- 0 # Sometimes two SNPs are approximately independent due to the location of missing, see rs4673651 and rs16847776 in 1000 Genomes EUR as an example
       diag(cor2) <- -1
@@ -338,8 +399,8 @@ filter.reference.geno <- function(ref.geno, pathway, options){
     
     if(!is.null(exc.snps)){
       del.snps <- data.frame(SNP = exc.snps, reason = "HUGE_CHR", comment = comment, stringsAsFactors = FALSE)
-      id <- which(colnames(ref.geno) %in% exc.snps)
-      ref.geno <- ref.geno[, -id, drop = FALSE]
+      id <- which(colnames(raw.geno) %in% exc.snps)
+      raw.geno <- raw.geno[, -id, drop = FALSE]
       rs <- setdiff(rs, exc.snps)
       if(length(rs) == 0){
         msg <- "No SNPs were left due to HUGE_CHR"
@@ -356,8 +417,8 @@ filter.reference.geno <- function(ref.geno, pathway, options){
       }
       if(!is.null(exc.snps2)){
         del.snps2 <- data.frame(SNP = exc.snps2, reason = "HUGE_CHR2", comment = "", stringsAsFactors = FALSE)
-        id <- which(colnames(ref.geno) %in% exc.snps2)
-        ref.geno <- ref.geno[, -id, drop = FALSE]
+        id <- which(colnames(raw.geno) %in% exc.snps2)
+        raw.geno <- raw.geno[, -id, drop = FALSE]
         rs <- setdiff(rs, exc.snps2)
         if(length(rs) == 0){
           msg <- "No SNPs were left due to HUGE_CHR2"
@@ -371,7 +432,7 @@ filter.reference.geno <- function(ref.geno, pathway, options){
     ######
     
     msg <- paste("Removing SNPs in high LD within huge chromosomes:", date())
-    if(options$print) message(msg)
+    if(options$print && print) message(msg)
     
     chr <- unique(pathway$Chr)
     exc.snps <- NULL
@@ -387,7 +448,7 @@ filter.reference.geno <- function(ref.geno, pathway, options){
       if(length(snps.in.chr) <= 1){
         next
       }
-      rg <- ref.geno[, snps.in.chr, drop = FALSE]
+      rg <- raw.geno[, snps.in.chr, drop = FALSE]
       suppressWarnings(cor2 <- cor(rg, use = "pairwise.complete.obs", method = "pearson")^2)
       cor2[is.na(cor2)] <- 0
       diag(cor2) <- -1
@@ -427,8 +488,8 @@ filter.reference.geno <- function(ref.geno, pathway, options){
     
     if(!is.null(exc.snps)){
       del.snps <- data.frame(SNP = exc.snps, reason = "HUGE_CHR3", comment = comment, stringsAsFactors = FALSE)
-      id <- which(colnames(ref.geno) %in% exc.snps)
-      ref.geno <- ref.geno[, -id, drop = FALSE]
+      id <- which(colnames(raw.geno) %in% exc.snps)
+      raw.geno <- raw.geno[, -id, drop = FALSE]
       rs <- setdiff(rs, exc.snps)
       if(length(rs) == 0){
         msg <- "No SNPs were left due to HUGE_CHR3"
@@ -443,7 +504,7 @@ filter.reference.geno <- function(ref.geno, pathway, options){
   #########
   
   msg <- paste("Removing genes with high missing rate:", date())
-  if(options$print) message(msg)
+  if(options$print && print) message(msg)
   
   gene <- unique(pathway$Gene)
   exc.snps <- NULL
@@ -452,22 +513,22 @@ filter.reference.geno <- function(ref.geno, pathway, options){
     snps.in.gene <- pathway$SNP[pathway$Gene == g]
     snps.in.gene <- intersect(snps.in.gene, rs)
     snps.in.gene <- sort(snps.in.gene)
-    cc <- !complete.cases(ref.geno[, snps.in.gene, drop = FALSE])
+    cc <- !complete.cases(raw.geno[, snps.in.gene, drop = FALSE])
     gmr <- mean(cc)
     if(gmr > options$gene.miss.rate){
       exc.snps <- c(exc.snps, snps.in.gene)
       comment <- c(comment, gmr)
       pathway <- pathway[pathway$Gene != g, ]
-      ref.geno <- ref.geno[, colnames(ref.geno) %in% pathway$SNP, drop = FALSE]
-      rs <- colnames(ref.geno)
+      raw.geno <- raw.geno[, colnames(raw.geno) %in% pathway$SNP, drop = FALSE]
+      rs <- colnames(raw.geno)
     }
   }
   
   if(!is.null(exc.snps)){
     del.snps <- data.frame(SNP = exc.snps, reason = "GENE_MISS_RATE", comment = comment, stringsAsFactors = FALSE)
-    id <- which(colnames(ref.geno) %in% exc.snps)
+    id <- which(colnames(raw.geno) %in% exc.snps)
     if(length(id) > 0){
-      ref.geno <- ref.geno[, -id, drop = FALSE]
+      raw.geno <- raw.geno[, -id, drop = FALSE]
     }
     rs <- setdiff(rs, exc.snps)
     if(length(rs) == 0){
@@ -483,7 +544,7 @@ filter.reference.geno <- function(ref.geno, pathway, options){
   deleted.genes <- NULL
   if(options$rm.gene.subset){
     msg <- paste("Removing genes which are subsets of other genes:", date())
-    if(options$print) message(msg)
+    if(options$print && print) message(msg)
     
     deleted.genes <- NULL
     chr <- unique(pathway$Chr)

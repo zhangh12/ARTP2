@@ -1,16 +1,16 @@
 
-summaryData.test <- function(setup){
+norm.stat.test <- function(setup){
   
   start.time <- date()
   
   options <- setup$options
-  rec.stat <- setup$rec.stat
+  norm.stat <- setup$norm.stat
   pathway <- setup$pathway
   rm(setup)
   gc()
   
-  V <- rec.stat$V
-  score0 <- rec.stat$score0
+  V <- norm.stat$V
+  score0 <- norm.stat$score0
   
   ngrp <- length(V)
   
@@ -27,7 +27,7 @@ summaryData.test <- function(setup){
     if(options$print) message(msg)
     
     U <- cov.svd(V[[g]], names(V)[[g]])
-    sc <- score0[[g]]
+    sc <- score0[[g]] / sqrt(options$inflation.factor)
     s2 <- diag(V[[g]])
     rs <- names(sc)
     group.setup <- create.group(pathway, rs)
@@ -54,10 +54,13 @@ summaryData.test <- function(setup){
   most.sig.genes <- ppv$most.sig.genes
   
   gene.pvalue <- data.frame(Gene = gene.name, Chr = chr, N.SNP = N.SNP, Pvalue = gene.pval, stringsAsFactors = FALSE)
+  gene.pvalue <- gene.pvalue[order(gene.pvalue$Pvalue), ]
   rownames(gene.pvalue) <- 1:nrow(gene.pvalue)
   
-  ac <- sqrt(pathway.pvalue*(1-pathway.pvalue)/options$nperm)/pathway.pvalue
-  accurate <- ifelse(ac < .1, TRUE, FALSE)
+  ac1 <- sqrt(pathway.pvalue * (1 - pathway.pvalue) / options$nperm) / pathway.pvalue
+  min.gene.pvalue <- min(gene.pvalue$Pvalue)
+  ac2 <- ceiling(-log10(min.gene.pvalue))
+  accurate <- ifelse(ac1 < .1 && ac2 <= log10(options$nperm), TRUE, FALSE)
   
   end.time <- date()
   test.timing <- as.integer(difftime(strptime(end.time, "%c"), strptime(start.time, "%c"), units = "secs"))

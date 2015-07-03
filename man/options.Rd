@@ -26,12 +26,13 @@ The list to describe the options that are used in \code{\link{pathway.summaryDat
     \item{\code{only.setup}}{\code{TRUE} if only the setup is needed while the testing procedure is not. The R code to create the setup uses single thread but the testing procedure can be multi-threaded. The best practice to use \code{ARTP3} on a multi-threaded cluster is to firstly create the setup in single-thread mode, and then call the \code{\link{pathway.warm.start}} to compute the p-values in multiple-thread mode, which uses the saved setup at \code{path.setup} as input. \code{save.setup} will be set to be \code{TRUE} if \code{only.setup} is \code{TRUE}. The default is \code{FALSE}. }
     \item{\code{keep.geno}}{\code{TRUE} if the reference genotypes of SNPs in pathway is returned. The default is \code{FALSE}. }
     \item{\code{seed}}{integer for random number generation. The default is 1. }
-    \item{nthread}{the number of threads for multi-threaded processors in Unix/Linux OS. The default is \code{detectCores()} to use all available processors. }
-    \item{excluded.snps}{character vector of SNPs to be excluded in the analysis. \code{NULL} if no SNP is always excluded. The default is \code{NULL}. }
-    \item{selected.snps}{character vector of SNPs to be selected in the analysis. \code{NULL} if no SNP is always selected but other fiters may applied. The default is \code{NULL}. }
+    \item{\code{nthread}}{the number of threads for multi-threaded processors in Unix/Linux OS. The default is \code{detectCores()} to use all available processors. }
+    \item{\code{excluded.snps}}{character vector of SNPs to be excluded in the analysis. \code{NULL} if no SNP is always excluded. The default is \code{NULL}. }
+    \item{\code{selected.snps}}{character vector of SNPs to be selected in the analysis. \code{NULL} if no SNP is always selected but other fiters may applied. The default is \code{NULL}. }
     \item{\code{excluded.subs}}{character vector of subject IDs to be excluded in the analysis. These IDs must match with those in \code{fam} files in \code{reference}. The default is \code{NULL}. }
     \item{\code{selected.subs}}{character vector of subject IDs to be selected in the analysis. These IDs must match with those in \code{fam} files in \code{reference}. The default is \code{NULL}. }
     \item{\code{excluded.genes}}{character vector of genes to be excluded in the analysis. \code{NULL} if no gene is always excluded. The default is \code{NULL}. }
+    \item{\code{inflation.factor}}{inflation factor lambda to be adjusted in pathway analysis. The default is 1.0. }
   }
   
   \bold{Options for handling huge pathways: }
@@ -45,14 +46,14 @@ The list to describe the options that are used in \code{\link{pathway.summaryDat
   
   \bold{Options for gene-based test: } 
   \describe{
-    \item{inspect.snp.n}{the number of candidate truncation points to inspect the top SNPs in a gene. The default is 5. }
-    \item{inspect.snp.percent}{a value \code{x} between 0 and 1 such that a truncation point will be defined at every \code{x} percent of the top SNPs. The default is 0 so that the truncation points will be 1:\code{inspect.snp.n}. }
+    \item{\code{inspect.snp.n}}{the number of candidate truncation points to inspect the top SNPs in a gene. The default is 5. }
+    \item{\code{inspect.snp.percent}}{a value \code{x} between 0 and 1 such that a truncation point will be defined at every \code{x} percent of the top SNPs. The default is 0 so that the truncation points will be 1:\code{inspect.snp.n}. }
   }
   
   \bold{Options for pathway-based test: } 
   \describe{
-    \item{inspect.gene.n}{the number of candidate truncation points to inspect the top genes in the pathway. The default is 10. }
-    \item{inspect.gene.percent}{a value \code{x} between 0 and 1 such that a truncation point will be defined at every \code{x} percent of the top genes. The default is 0.05. }
+    \item{\code{inspect.gene.n}}{the number of candidate truncation points to inspect the top genes in the pathway. The default is 10. }
+    \item{\code{inspect.gene.percent}}{a value \code{x} between 0 and 1 such that a truncation point will be defined at every \code{x} percent of the top genes. The default is 0.05. }
   }
 }
 

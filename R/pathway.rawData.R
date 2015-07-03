@@ -1,7 +1,7 @@
 
-pathway.summaryData <- function(summary.files, pathway, reference, options = NULL){
+pathway.rawData <- function(formula, data, pathway, family, subset = NULL, options = NULL){
   
-  setup <- summaryData.setup(summary.files, pathway, reference, options)
+  setup <- rawData.setup(formula, data, pathway, family, subset, options)
   
   if(options$only.setup){
     return(setup)

@@ -1,4 +1,3 @@
-
 summaryData.setup <- function(summary.files, pathway, reference, options){
   
   start.time <- date()
@@ -58,11 +57,11 @@ summaryData.setup <- function(summary.files, pathway, reference, options){
   filtered.markers <- filter.reference.geno(ref.geno, pathway, options)
   
   # update with valid/available SNPs
-  exc.snps <- filtered.markers$deleted.snps$SNP
-  deleted.snps <- update.deleted.snps(filtered.markers$deleted.snps, exc.snps, 
-                                      reason = filtered.markers$deleted.snps$reason, 
-                                      comment = filtered.markers$deleted.snps$comment)
-  pathway <- update.pathway.definition(pathway, exc.snps, filtered.markers$deleted.genes)
+  exc.snps <- filtered.markers$SNP
+  deleted.snps <- update.deleted.snps(deleted.snps, exc.snps, 
+                                      reason = filtered.markers$reason, 
+                                      comment = filtered.markers$comment)
+  pathway <- update.pathway.definition(pathway, exc.snps)
   sum.stat <- update.sum.stat(sum.stat, exc.snps)
   allele.info <- update.allele.info(allele.info, exc.snps)
   ref.snps <- update.ref.snps(ref.snps, exc.snps)
@@ -72,7 +71,7 @@ summaryData.setup <- function(summary.files, pathway, reference, options){
   sum.stat <- complete.sum.stat(sum.stat, ref.geno, options)
   
   # recover the summary statistics
-  rec.stat <- recover.stat(sum.stat, pathway, ref.geno, allele.info, options)
+  norm.stat <- recover.stat(sum.stat, pathway, ref.geno, allele.info, options)
   
   if(!options$keep.geno){
     rm(ref.geno)
@@ -90,7 +89,7 @@ summaryData.setup <- function(summary.files, pathway, reference, options){
   setup.timing <- as.integer(difftime(strptime(end.time, "%c"), strptime(start.time, "%c"), units = "secs"))
   
   setup <- list(deleted.snps = deleted.snps, options = options, 
-                pathway = pathway, rec.stat = rec.stat, 
+                pathway = pathway, norm.stat = norm.stat, 
                 ref.geno = ref.geno, setup.timing = setup.timing)
   
   if(options$save.setup){
@@ -100,5 +99,3 @@ summaryData.setup <- function(summary.files, pathway, reference, options){
   setup
   
 }
-
-

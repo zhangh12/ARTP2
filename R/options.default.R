@@ -33,7 +33,8 @@ options.default <- function(){
                       trim.huge.chr = TRUE, 
                       huge.chr.size = 2000, 
                       huge.gene.R2 = .85, 
-                      huge.chr.R2 = .85)
+                      huge.chr.R2 = .85, 
+                      inflation.factor = 1.0)
   
   opt.default
   

@@ -1,7 +1,7 @@
 
-update.pathway.definition <- function(pathway, exc.snps, exc.genes = NULL){
+update.pathway.definition <- function(pathway, exc.snps){
   
-  if(length(exc.snps) == 0 && length(exc.genes) == 0){
+  if(length(exc.snps) == 0){
     return(pathway)
   }
   
@@ -11,15 +11,6 @@ update.pathway.definition <- function(pathway, exc.snps, exc.genes = NULL){
     stop(msg)
   }
   pathway <- pathway[id, ]
-  
-  if(!is.null(exc.genes)){
-    id <- which(!(pathway$Gene %in% exc.genes))
-    if(length(id) == 0){
-      msg <- "All SNPs excluded in update.pathway.definition"
-      stop(msg)
-    }
-    pathway <- pathway[id, ]
-  }
   
   pathway
   

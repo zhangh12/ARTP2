@@ -1,3 +1,4 @@
-import(parallel)
+import(parallel, Formula, data.table)
 useDynLib(ARTP3)
-export(pathway.summaryData, pathway.warm.start, read.bed, options.default, buggy)
+export(pathway.summaryData, pathway.warm.start, read.bed, 
+       options.default, pathway.rawData, filter.raw.geno)
