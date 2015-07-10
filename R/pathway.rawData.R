@@ -3,7 +3,7 @@ pathway.rawData <- function(formula, data, pathway, family, subset = NULL, optio
   
   setup <- rawData.setup(formula, data, pathway, family, subset, options)
   
-  if(options$only.setup){
+  if(setup$options$only.setup){
     return(setup)
   }
   

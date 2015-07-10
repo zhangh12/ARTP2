@@ -35,6 +35,9 @@ options.setup <- function(options){
     options$excluded.subs <- NULL
   }
   
+  tmp <- .C("check_nthread", nthread = as.integer(options$nthread))
+  options$nthread <- tmp$nthread
+  
   options
   
 }

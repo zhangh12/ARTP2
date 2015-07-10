@@ -10,24 +10,8 @@ A function to return default \code{\link{options}} in \code{\link{pathway.summar
 \usage{
 options.default()
 }
-%- maybe also 'usage' for other objects documented here.
-\arguments{
-
-}
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
 \value{
 A list of \code{\link{options}}. 
-}
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~

@@ -6,6 +6,9 @@ rawData.setup <- function(formula, data, pathway, family, subset = NULL, options
   # merge and reset options
   options <- options.setup(options)
   
+  # subset of data
+  data <- data.subset(data, subset, options)
+  
   # load definition of pathway
   pathway <- load.pathway.definition(pathway, options)
   

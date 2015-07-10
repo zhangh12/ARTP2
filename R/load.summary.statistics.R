@@ -49,7 +49,7 @@ load.summary.statistics <- function(summary.files, snps.in.pathway, options){
       }
     }else{
       if(!any(tmp)){
-        msg <- paste0("Neither SE nor P is not provided in ", summary.file[i])
+        msg <- paste0("Neither SE nor P is not provided in ", summary.files[i])
         stop(msg)
       }
     }
@@ -69,7 +69,7 @@ load.summary.statistics <- function(summary.files, snps.in.pathway, options){
     
     id.no.SE.P <- which(is.na(st$SE) & is.na(st$P))
     if(length(id.no.SE.P) > 0){
-      msg <- paste("For SNPs below, neither SE nor P is not provided in", summary.file[i], ":\n", paste(st$SNP[id.no.SE.P], collapse = " "))
+      msg <- paste("For SNPs below, neither SE nor P is not provided in", summary.files[i], ":\n", paste(st$SNP[id.no.SE.P], collapse = " "))
       stop(msg)
     }
     

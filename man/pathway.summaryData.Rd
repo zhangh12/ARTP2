@@ -6,7 +6,8 @@
 Calculate gene and pathway p-values using the ARTP test and summary data
 }
 \usage{
-pathway.summaryData(summary.files, pathway, reference, options = NULL)
+pathway.summaryData(summary.files, pathway, reference, 
+                    options = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -63,17 +64,11 @@ is satisfied.
 Yu K, Li Q, Bergen AW, Pfeiffer RM, Rosenberg PS, Caporaso N, Kraft P, Chatterjee N. (2009) Pathway analysis by adaptive combination of P-values. 
 Genet Epidemiol 33(8): 700 - 709
 }
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{options}}, \code{\link{pathway.warm.start}}
+\code{\link{options}}, \code{\link{pathway.warm.start}}, \code{\link{pathway.rawData}}
 }
 \examples{
 

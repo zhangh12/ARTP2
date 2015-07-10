@@ -3,7 +3,7 @@ pathway.summaryData <- function(summary.files, pathway, reference, options = NUL
   
   setup <- summaryData.setup(summary.files, pathway, reference, options)
   
-  if(options$only.setup){
+  if(setup$options$only.setup){
     return(setup)
   }
   

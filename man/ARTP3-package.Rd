@@ -28,11 +28,5 @@ Yu K, Li Q, Bergen AW, Pfeiffer RM, Rosenberg PS, Caporaso N, Kraft P, Chatterje
 Genet Epidemiol 33(8): 700 - 709
 }
 
-\keyword{ package }
-\seealso{
+\keyword{pathway}
 
-}
-\examples{
-
-
-}

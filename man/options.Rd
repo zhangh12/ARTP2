@@ -90,12 +90,6 @@ inspect.snp.n \tab inspect.snp.percent \tab truncation points \cr
 } % END: tabular
 
 }
-\source{
-%%  ~~ reference to a publication or URL from which the data were obtained ~~
-}
-\references{
-%%  ~~ possibly secondary sources and usages ~~
-}
 
 \seealso{
 \code{\link{options.default}}

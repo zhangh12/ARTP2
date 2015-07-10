@@ -14,6 +14,9 @@ pathway.warm.start <- function(setup.file, nperm = NULL, inflation.factor = NULL
     setup$options$inflation.factor <- inflation.factor
   }
   
+  tmp <- .C("check_nthread", nthread = as.integer(setup$options$nthread))
+  setup$options$nthread <- tmp$nthread
+  
   test <- norm.stat.test(setup)
   
   list(pathway.pvalue = test$pathway.pvalue, gene.pvalue = test$gene.pvalue, 

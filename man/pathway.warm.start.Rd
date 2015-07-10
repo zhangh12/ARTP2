@@ -8,12 +8,13 @@ pathway.warm.start
 Calculate gene and pathway p-values using the ARTP test. The input is created from summary data by calling \code{\link{pathway.summaryData}} with \code{options$only.setup = TRUE}. 
 }
 \usage{
-pathway.warm.start(setup.file, nperm = NULL)
+pathway.warm.start(setup.file, nperm = NULL, inflation.factor = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{setup.file}{character string of file name saving the setup created by \code{\link{pathway.summaryData}}. }
   \item{nperm}{the number of permutations. If it is \code{NULL} as default, then the value in the saved setup will be used. See \code{Details}. }
+  \item{inflation.factor}{inflation factor lambda to be adjusted in pathway analysis. The default is 1.0 (NULL). }
 }
 \details{
 The setup.file is supposed to be a \code{".rda"} R file containing a list called \code{setup}. If \code{nperm} is \code{NULL}, then it will be set as \code{setup$options$nperm}. The user can modify the option values in \code{setup$options} to get more control of the testing procedure. 
@@ -34,12 +35,6 @@ is satisfied.
 \references{
 Yu K, Li Q, Bergen AW, Pfeiffer RM, Rosenberg PS, Caporaso N, Kraft P, Chatterjee N. (2009) Pathway analysis by adaptive combination of P-values. 
 Genet Epidemiol 33(8): 700 - 709
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
