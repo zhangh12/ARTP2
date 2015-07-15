@@ -1,12 +1,15 @@
 
-artp3.chr <- function(group.setup, gene.cutpoint.setup, U, score0, s2, options, cid){
+artp3.chr <- function(group.setup, gene.cutpoint.setup, U, score0, V, options, cid){
   
   ngene <- length(group.setup$GeneInGroup)
   nsnp <- length(score0)
+  s2 <- diag(V)
   vU <- as.vector(t(U)) # expand by row
-  rm(U)
+  vV <- as.vector(V)
+  rm(U, V)
   gc()
   
+  method <- options$method
   nthread <- options$nthread
   nperm <- options$nperm
   ngap <- min(10000, nperm);
@@ -18,9 +21,12 @@ artp3.chr <- function(group.setup, gene.cutpoint.setup, U, score0, s2, options, 
   
   gene.pval <- rep(1, ngene)
   arr.rank <- rep(0, length(gene.cutpoint.setup$vGeneCutPoint))
-  tmp <- .C("artp3_chr", as.character(file.prefix), as.integer(nperm),
+  
+  METHOD <- c("adajoint_chr", "adajoint_chr", "artp3_chr")
+  
+  tmp <- .C(METHOD[method], as.character(file.prefix), as.integer(method), as.integer(nperm),
             as.integer(seed), as.integer(nthread), as.integer(nsnp), 
-            as.integer(ngene), as.double(vU), as.double(score0), as.double(s2), 
+            as.integer(ngene), as.double(vU), as.double(score0), as.double(vV), 
             as.integer(group.setup$vGeneIdx), 
             as.integer(group.setup$GeneStartEnd[, "Start"]), 
             as.integer(group.setup$GeneStartEnd[, "End"]), 

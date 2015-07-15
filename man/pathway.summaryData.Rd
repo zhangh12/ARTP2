@@ -54,7 +54,7 @@ The order of columns in files \code{summary.files}, \code{pathway} or in data fr
 \item{pathway}{a data frame defining pathway that was actually tested after various filters applied. }
 \item{deleted.snps}{a data frame containing SNPs excluded from the analysis and their reasons.}
 \item{options}{a list of options used in the analysis. See \code{\link{options}}}
-\item{timestamp}{a vector of timing information.}
+\item{test.timing}{timing information (in sec)}
 \item{accurate}{\code{TRUE} if \code{options$nperm} is large enougth to accurately estimate p-values, i.e., if the criteria 
 \code{sqrt(pvalue*(1-pvalue)/nperm)/pvalue < 0.1}
 is satisfied.
@@ -63,6 +63,8 @@ is satisfied.
 \references{
 Yu K, Li Q, Bergen AW, Pfeiffer RM, Rosenberg PS, Caporaso N, Kraft P, Chatterjee N. (2009) Pathway analysis by adaptive combination of P-values. 
 Genet Epidemiol 33(8): 700 - 709
+
+Zhang H, Shi J, Liang F, Wheeler W, Stolzenberg-Solomon R, Yu K.  (2014) A fast multilocus test with adaptive SNP selection for large-scale genetic association studies. European Journal of Human Genetics, 22, 696 - 702
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~

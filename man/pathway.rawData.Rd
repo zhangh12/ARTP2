@@ -31,7 +31,7 @@ a list of options to control the test procedure. If \code{NULL}, default options
 }
 }
 \details{
-This function computes gene and pathway p-values when raw genotype data is available. Only the ARTP test modified from Yu et al. (2009) is well tested and is released with this package. ARTP is the Adaptive Rank Truncated Product test.
+This function computes gene and pathway p-values when raw genotype data is available. The ARTP test modified from Yu et al. (2009) and AdaJoint test from Zhang et al. (2014) are released with this package. ARTP is the Adaptive Rank Truncated Product test.
 }
 \value{
 \code{pathway.rawData} returns an object of class \code{"ARTP3"}. It is a list containing the following components: 
@@ -40,7 +40,7 @@ This function computes gene and pathway p-values when raw genotype data is avail
 \item{pathway}{a data frame defining pathway that was actually tested after various filters applied. }
 \item{deleted.snps}{a data frame containing SNPs excluded from the analysis and their reasons.}
 \item{options}{a list of options used in the analysis. See \code{\link{options}}}
-\item{timestamp}{a vector of timing information.}
+\item{test.timing}{timing information (in sec)}
 \item{accurate}{\code{TRUE} if \code{options$nperm} is large enougth to accurately estimate p-values, i.e., if the criteria 
 \code{sqrt(pvalue*(1-pvalue)/nperm)/pvalue < 0.1}
 is satisfied.
@@ -49,6 +49,8 @@ is satisfied.
 \references{
 Yu K, Li Q, Bergen AW, Pfeiffer RM, Rosenberg PS, Caporaso N, Kraft P, Chatterjee N. (2009) Pathway analysis by adaptive combination of P-values. 
 Genet Epidemiol 33(8): 700 - 709
+
+Zhang H, Shi J, Liang F, Wheeler W, Stolzenberg-Solomon R, Yu K.  (2014) A fast multilocus test with adaptive SNP selection for large-scale genetic association studies. European Journal of Human Genetics, 22, 696 - 702
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
@@ -57,6 +59,8 @@ Genet Epidemiol 33(8): 700 - 709
 \code{\link{options}}, \code{\link{pathway.warm.start}}, \code{\link{pathway.summaryData}}, \code{\link{raw}}. 
 }
 \examples{
+
+library(ARTP3)
 
 # Load the sample data
 data(raw, package = "ARTP3")

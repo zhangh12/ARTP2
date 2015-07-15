@@ -10,6 +10,7 @@ The list to describe the options that are used in \code{\link{pathway.summaryDat
   \describe{
     \item{\code{out.dir}}{output directory for temporary files. The default is the working directory \code{\link[base]{getwd}}. }
     \item{\code{id.str}}{character string that is appended to temporary file names. The default is "PID". }
+    \item{\code{method}}{1 = AdaJoint, 2 = AdaJoint2, 3 = ARTP. The default is 3. }
     \item{\code{nperm}}{the number of permutations. The default is 1E5. }
     \item{\code{snp.miss.rate}}{any SNP with missing rate greater than \code{snp.miss.rate} will be removed from the analysis. The default is 0.05. }
     \item{\code{maf}}{any SNP with minor allele frequency less than \code{maf} will be removed from the analysis. The default is 0.05. }

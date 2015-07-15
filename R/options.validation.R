@@ -5,6 +5,10 @@ options.validation <- function(options){
     warning("options$id.str is NULL")
   }
   
+  if(!any(options$method %in% 1:3)){
+    stop("method should be 1 (AdaJoint), 2 (AdaJoint2), or 3 (ARTP)")
+  }
+  
   if(!is.numeric(options$huge.gene) || options$huge.gene < 0){
     stop("huge.gene should be non-negative integer")
   }

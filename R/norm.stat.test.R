@@ -28,7 +28,6 @@ norm.stat.test <- function(setup){
     
     U <- cov.svd(V[[g]], names(V)[[g]])
     sc <- score0[[g]] / sqrt(options$inflation.factor)
-    s2 <- diag(V[[g]])
     rs <- names(sc)
     group.setup <- create.group(pathway, rs)
     N.SNP <- c(N.SNP, group.setup$N.SNP)
@@ -38,7 +37,7 @@ norm.stat.test <- function(setup){
     ngene <- length(group.setup$GeneInGroup)
     gene.id <- c(gene.id, 1:ngene)
     group.id <- c(group.id, rep(g, ngene))
-    gpv <- artp3.chr(group.setup, gene.cutpoint.setup, U, sc, s2, options, g)
+    gpv <- artp3.chr(group.setup, gene.cutpoint.setup, U, sc, V[[g]], options, g)
     gene.pval <- c(gene.pval, gpv$gene.pval)
     model <- c(model, gpv$model)
   }

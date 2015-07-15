@@ -3,6 +3,7 @@ options.default <- function(){
   
   opt.default <- list(out.dir = getwd(), 
                       id.str = "PID", 
+                      method = 3, 
                       nperm = 1E5, 
                       snp.miss.rate = .05, 
                       maf = .05, 

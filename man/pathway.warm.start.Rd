@@ -17,7 +17,7 @@ pathway.warm.start(setup.file, nperm = NULL, inflation.factor = NULL)
   \item{inflation.factor}{inflation factor lambda to be adjusted in pathway analysis. The default is 1.0 (NULL). }
 }
 \details{
-The setup.file is supposed to be a \code{".rda"} R file containing a list called \code{setup}. If \code{nperm} is \code{NULL}, then it will be set as \code{setup$options$nperm}. The user can modify the option values in \code{setup$options} to get more control of the testing procedure. 
+The \code{setup.file} is supposed to be a \code{".rda"} R file containing a list called \code{setup}. If \code{nperm} is \code{NULL}, then it will be set as \code{setup$options$nperm}. The user can modify the option values in \code{setup$options} directly to get more control of the testing procedure. Modified \code{setup$options} should be saved to local file \code{setup.file}
 }
 \value{
 \code{pathway.warm.start} returns an object of class \code{"ARTP3"}. It is a list containing the following components: 
@@ -26,7 +26,7 @@ The setup.file is supposed to be a \code{".rda"} R file containing a list called
 \item{pathway}{a data frame defining pathway that was actually tested after various filters applied. }
 \item{deleted.snps}{a data frame containing SNPs excluded from the analysis and their reasons.}
 \item{options}{a list of options used in the analysis. See \code{\link{options}}}
-\item{timestamp}{a vector of timing information.}
+\item{test.timing}{timing information (in sec)}
 \item{accurate}{\code{TRUE} if \code{options$nperm} is large enougth to accurately estimate p-values, i.e., if the criteria 
 \code{sqrt(pvalue*(1-pvalue)/nperm)/pvalue < 0.1}
 is satisfied.
