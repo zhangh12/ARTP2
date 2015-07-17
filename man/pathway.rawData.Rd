@@ -89,6 +89,7 @@ options <- list(inspect.snp.n = 5, nperm = 1e5,
 # ret <- pathway.rawData(formula, data = raw, pathway, family, options = options)
 # 
 # ret$pathway.pvalue
+## [1] 0.02311477 # mac os
 # head(ret$gene.pvalue)
 
 }

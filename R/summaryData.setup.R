@@ -93,6 +93,8 @@ summaryData.setup <- function(summary.files, pathway, reference, options){
                 ref.geno = ref.geno, setup.timing = setup.timing)
   
   if(options$save.setup){
+    msg <- paste0("setup file has been saved at ", options$path.setup)
+    message(msg)
     save(setup, file = options$path.setup)
   }
   

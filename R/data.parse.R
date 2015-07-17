@@ -11,17 +11,20 @@ data.parse <- function(formula, null){
   }
   
   vars <- all.vars(formula)
+  resp.var <- vars[1]
   
   null <- null[, vars, drop = FALSE]
   gc()
+  
+  validate.outcome(null, resp.var)
+  check.misleading.factor(null, resp.var)
+  
   mf <- model.frame(formula, na.action = na.pass, data = null, rhs = 1, lhs = 1, drop = FALSE)
   
   resp <- model.part(formula, mf, lhs = 1, drop = FALSE)
   covar <- model.matrix(formula, mf, rhs = 1, drop = FALSE)
   
   null <- data.frame(resp, covar, stringsAsFactors = FALSE)
-  
-  resp.var <- vars[1]
   
   list(null = null, resp.var = resp.var)
   

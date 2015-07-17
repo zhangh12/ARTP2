@@ -15,7 +15,7 @@ load.summary.statistics <- function(summary.files, snps.in.pathway, options){
   snps.in.study <- NULL
   nfiles <- length(summary.files)
   for(i in 1:nfiles){
-    st <- read.table(summary.files[i], header = TRUE, as.is = TRUE, nrows = 10)
+    st <- read.table(summary.files[i], header = TRUE, as.is = TRUE, nrows = 1e4)
     tmp <- (header %in% colnames(st))
     if(!all(tmp)){
       msg <- paste0("Columns below were not found in ", summary.files[i], ":\n", paste(header[!tmp], collapse = " "))

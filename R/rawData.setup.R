@@ -36,7 +36,14 @@ rawData.setup <- function(formula, data, pathway, family, subset = NULL, options
   resp.var <- ini$resp.var
   comp.id <- which(complete.cases(null))
   if(length(comp.id) < nrow(null)){
+    
+    msg <- paste0(nrow(null) - length(comp.id), " samples are excluded due to missing covariates. ", length(comp.id), " samples are used")
+    message(msg)
+    
     null <- null[comp.id, ]
+    
+    null <- validate.covar(null, resp.var)
+    
     #raw.geno <- raw.geno[comp.id, ]
     # the code above will double the memory consumption
     # use the codes below instead
@@ -116,6 +123,8 @@ rawData.setup <- function(formula, data, pathway, family, subset = NULL, options
                 raw.geno = raw.geno, setup.timing = setup.timing)
   
   if(options$save.setup){
+    msg <- paste0("setup file has been saved at ", options$path.setup)
+    message(msg)
     save(setup, file = options$path.setup)
   }
   

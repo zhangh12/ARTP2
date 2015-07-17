@@ -1,4 +1,6 @@
 
+# this function is not efficient if data is huge
+# will optimize it later
 data.subset <- function(data, subset, options){
   
   if(!is.null(subset)){
