@@ -4,7 +4,7 @@ check.small.level <- function(null, resp.var){
   covar <- null[, setdiff(colnames(null), c(resp.var, "X.Intercept.")), drop = FALSE]
   id <- NULL
   for(i in 1:ncol(covar)){
-    if(setequal(unique(covar[, i]), c(0,1)) && sum(u) <= 10){
+    if(setequal(unique(covar[, i]), c(0,1)) && sum(covar[, i]) <= 10){
       id <- c(id, i)
     }
   }

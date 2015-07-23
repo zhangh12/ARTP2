@@ -70,6 +70,11 @@ rawData.setup <- function(formula, data, pathway, family, subset = NULL, options
   uni.gene <- unique(pathway$Gene)
   for(g in uni.gene){
     gid <- which(pathway$Gene == g)
+    
+    if(length(gid) == 0){
+      next
+    }
+    
     sid <- which(colnames(raw.geno) %in% pathway$SNP[gid])
     # SNP filtering based on options
     filtered.markers <- filter.raw.geno(raw.geno[, sid, drop = FALSE], pathway[gid, , drop = FALSE], options, control.id)
@@ -88,6 +93,11 @@ rawData.setup <- function(formula, data, pathway, family, subset = NULL, options
   uni.chr <- unique(pathway$Chr)
   for(c in uni.chr){
     cid <- which(pathway$Chr == c)
+    
+    if(length(cid) == 0){
+      next
+    }
+    
     sid <- which(colnames(raw.geno) %in% pathway$SNP[cid])
     # SNP filtering based on options
     filtered.markers <- filter.raw.geno(raw.geno[, sid, drop = FALSE], pathway[cid, , drop = FALSE], options, control.id)

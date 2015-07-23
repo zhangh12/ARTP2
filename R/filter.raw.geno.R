@@ -27,7 +27,8 @@ filter.raw.geno <- function(raw.geno, pathway, options, control.id = NULL, print
     rs <- setdiff(rs, exc.snps)
     if(length(rs) == 0){
       msg <- "No SNPs were left due to SNP_MISS_RATE"
-      stop(msg)
+      #stop(msg)
+      return(deleted.snps)
     }
     deleted.snps <- rbind(deleted.snps, del.snps)
     pathway <- pathway[!(pathway$SNP %in% exc.snps), ]
@@ -57,7 +58,8 @@ filter.raw.geno <- function(raw.geno, pathway, options, control.id = NULL, print
     rs <- setdiff(rs, exc.snps)
     if(length(rs) == 0){
       msg <- "No SNPs were left due to SNP_LOW_MAF"
-      stop(msg)
+      #stop(msg)
+      return(deleted.snps)
     }
     deleted.snps <- rbind(deleted.snps, del.snps)
     pathway <- pathway[!(pathway$SNP %in% exc.snps), ]
@@ -86,7 +88,8 @@ filter.raw.geno <- function(raw.geno, pathway, options, control.id = NULL, print
     rs <- setdiff(rs, exc.snps)
     if(length(rs) == 0){
       msg <- "No SNPs were left due to SNP_CONST"
-      stop(msg)
+      #stop(msg)
+      return(deleted.snps)
     }
     deleted.snps <- rbind(deleted.snps, del.snps)
     pathway <- pathway[!(pathway$SNP %in% exc.snps), ]
@@ -133,7 +136,8 @@ filter.raw.geno <- function(raw.geno, pathway, options, control.id = NULL, print
       rs <- setdiff(rs, exc.snps)
       if(length(rs) == 0){
         msg <- "No SNPs were left due to SNP_HWE"
-        stop(msg)
+        #stop(msg)
+        return(deleted.snps)
       }
       deleted.snps <- rbind(deleted.snps, del.snps)
       pathway <- pathway[!(pathway$SNP %in% exc.snps), ]
@@ -219,7 +223,8 @@ filter.raw.geno <- function(raw.geno, pathway, options, control.id = NULL, print
     rs <- setdiff(rs, exc.snps)
     if(length(rs) == 0){
       msg <- "No SNPs were left due to GENE_R2"
-      stop(msg)
+      #stop(msg)
+      return(deleted.snps)
     }
     deleted.snps <- rbind(deleted.snps, del.snps)
     pathway <- pathway[!(pathway$SNP %in% exc.snps), ]
@@ -237,7 +242,8 @@ filter.raw.geno <- function(raw.geno, pathway, options, control.id = NULL, print
       rs <- setdiff(rs, exc.snps2)
       if(length(rs) == 0){
         msg <- "No SNPs were left due to HUGE_GENE_R2"
-        stop(msg)
+        #stop(msg)
+        return(deleted.snps)
       }
       deleted.snps <- rbind(deleted.snps, del.snps2)
       pathway <- pathway[!(pathway$SNP %in% exc.snps2), ]
@@ -306,7 +312,8 @@ filter.raw.geno <- function(raw.geno, pathway, options, control.id = NULL, print
     rs <- setdiff(rs, exc.snps)
     if(length(rs) == 0){
       msg <- "No SNPs were left due to CHR_R2"
-      stop(msg)
+      #stop(msg)
+      return(deleted.snps)
     }
     deleted.snps <- rbind(deleted.snps, del.snps)
     pathway <- pathway[!(pathway$SNP %in% exc.snps), ]
@@ -404,7 +411,8 @@ filter.raw.geno <- function(raw.geno, pathway, options, control.id = NULL, print
       rs <- setdiff(rs, exc.snps)
       if(length(rs) == 0){
         msg <- "No SNPs were left due to HUGE_CHR"
-        stop(msg)
+        #stop(msg)
+        return(deleted.snps)
       }
       deleted.snps <- rbind(deleted.snps, del.snps)
       pathway <- pathway[!(pathway$SNP %in% exc.snps), ]
@@ -422,7 +430,8 @@ filter.raw.geno <- function(raw.geno, pathway, options, control.id = NULL, print
         rs <- setdiff(rs, exc.snps2)
         if(length(rs) == 0){
           msg <- "No SNPs were left due to HUGE_CHR2"
-          stop(msg)
+          #stop(msg)
+          return(deleted.snps)
         }
         deleted.snps <- rbind(deleted.snps, del.snps2)
         pathway <- pathway[!(pathway$SNP %in% exc.snps2), ]
@@ -493,7 +502,8 @@ filter.raw.geno <- function(raw.geno, pathway, options, control.id = NULL, print
       rs <- setdiff(rs, exc.snps)
       if(length(rs) == 0){
         msg <- "No SNPs were left due to HUGE_CHR3"
-        stop(msg)
+        #stop(msg)
+        return(deleted.snps)
       }
       deleted.snps <- rbind(deleted.snps, del.snps)
       pathway <- pathway[!(pathway$SNP %in% exc.snps), ]
@@ -533,7 +543,8 @@ filter.raw.geno <- function(raw.geno, pathway, options, control.id = NULL, print
     rs <- setdiff(rs, exc.snps)
     if(length(rs) == 0){
       msg <- "No SNPs were left due to GENE_MISS_RATE"
-      stop(msg)
+      #stop(msg)
+      return(deleted.snps)
     }
     deleted.snps <- rbind(deleted.snps, del.snps)
     pathway <- pathway[!(pathway$SNP %in% exc.snps), ]
