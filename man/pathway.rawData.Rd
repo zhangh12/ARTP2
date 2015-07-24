@@ -6,8 +6,7 @@
 Calculate gene and pathway p-values using the ARTP test and raw genotype data
 }
 \usage{
-pathway.rawData(formula, data, pathway, family, subset = NULL, 
-                options = NULL)
+pathway.rawData(formula, data, pathway, family, subset = NULL, options = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -69,7 +68,7 @@ head(raw[, 1:6])
 # Define the formula of base risk model
 formula <- formula(case_control ~ sex + age + bmi + factor(study))
 
-# Load build-in file containing pathway definition
+# Path of a build-in file containing pathway definition
 pathway <- system.file('extdata', package = "ARTP3", "pathway.txt.gz")
 
 # binary outcome
@@ -88,8 +87,8 @@ options <- list(inspect.snp.n = 5, nperm = 1e5,
 ## can take a few minutes
 # ret <- pathway.rawData(formula, data = raw, pathway, family, options = options)
 # 
-# ret$pathway.pvalue
-## [1] 0.02311477 # mac os
+# ret$pathway.pvalue 
+# [1] 0.02311477 # mac os
 # head(ret$gene.pvalue)
 
 }

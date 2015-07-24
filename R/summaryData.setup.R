@@ -2,8 +2,11 @@ summaryData.setup <- function(summary.files, pathway, reference, options){
   
   start.time <- date()
   
+  # reformat reference to convert factor to character
+  reference <- reformat.reference.path(reference)
+  
   # validate the format of main inputs
-  validate.input(summary.files, pathway, reference)
+  validate.summary.input(summary.files, pathway, reference)
   
   # merge and reset options
   options <- options.setup(options)

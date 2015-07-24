@@ -6,8 +6,7 @@
 Calculate gene and pathway p-values using the ARTP test and summary data
 }
 \usage{
-pathway.summaryData(summary.files, pathway, reference, 
-                    options = NULL)
+pathway.summaryData(summary.files, pathway, reference, options = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -74,6 +73,70 @@ Zhang H, Shi J, Liang F, Wheeler W, Stolzenberg-Solomon R, Yu K.  (2014) A fast 
 }
 \examples{
 
-## example
+library(ARTP3)
+
+# Path of files containing summary statistics
+# Only required columns will be loaded
+study1 <- system.file("extdata", package = "ARTP3", "study1.txt.gz")
+study2 <- system.file("extdata", package = "ARTP3", "study2.txt.gz")
+
+# Path of a build-in file containing pathway definition
+pathway <- system.file("extdata", package = "ARTP3", "pathway.txt.gz")
+
+# Create data frame containing paths of build-in PLINK files that are going to used as reference
+# As an example, use all chromosomes
+chr <- 1:22
+nchr <- length(chr)
+
+fam <- vector("character", nchr)
+bim <- vector("character", nchr)
+bed <- vector("character", nchr)
+
+for(i in 1:nchr){
+  fam[i] <- system.file("extdata", package = "ARTP3", paste("1000genomes.chr", chr[i], ".fam", sep = ""))
+  bim[i] <- system.file("extdata", package = "ARTP3", paste("1000genomes.chr", chr[i], ".bim", sep = ""))
+  bed[i] <- system.file("extdata", package = "ARTP3", paste("1000genomes.chr", chr[i], ".bed", sep = ""))
+}
+
+reference <- data.frame(fam, bim, bed)
+
+# Set the options. 
+# Accumulate signal from the top 5 SNPs in each gene
+# 1e5 replicates of resampling to estimate the p-value
+options <- list(inspect.snp.n = 5, nperm = 1e5, 
+                maf = .01, HWE.p = 1e-6, 
+                gene.R2 = .9, chr.R2 = .9, 
+                id.str = "unique-pathway-id", 
+                out.dir = getwd(), save.setup = FALSE)
+
+## pathway test with two study files
+# ret <- pathway.summaryData(summary.files = c(study1, study2), pathway, reference, options = options)
+# 
+# ret$pathway.pvalue
+## [1] 0.00696493 # mac os
+# head(ret$gene.pvalue)
+
+options$print <- FALSE # turn off printing
+
+## pathway test with each of study files
+# ret1 <- pathway.summaryData(summary.files = study1, pathway, reference, options = options)
+# ret2 <- pathway.summaryData(summary.files = study2, pathway, reference, options = options)
+# 
+# ret1$pathway.pvalue
+## [1] 0.08872411 # mac os
+# ret1$pathway.pvalue
+## [1] 0.05579944 # mac os
+
+
+##################################################
+## The reference genotype data can also be merged in a single set of PLINK files
+bed <- system.file("extdata", package = "ARTP3", "1000genomes.bed")
+bim <- system.file("extdata", package = "ARTP3", "1000genomes.bim")
+fam <- system.file("extdata", package = "ARTP3", "1000genomes.fam")
+
+reference <- data.frame(fam, bim, bed)
+# ret.comb <- pathway.summaryData(summary.files = c(study1, study2), pathway, reference, options = options)
+## result should be the same as before
+# ret.comb$pathway.pvalue == ret$pathway.pvalue
 
 }

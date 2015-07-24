@@ -1,5 +1,5 @@
 
-validate.input <- function(summary.files, pathway, reference){
+validate.summary.input <- function(summary.files, pathway, reference){
   
   # validate summary.files
   if(!is.vector(summary.files)){

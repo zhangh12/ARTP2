@@ -122,6 +122,9 @@ rawData.setup <- function(formula, data, pathway, family, subset = NULL, options
     raw.geno <- NULL
   }
   
+  # trim the information of deleted SNPs
+  deleted.snps <- trim.deleted.snps(deleted.snps, options)
+  
   msg <- paste0("Setup completed: ", date())
   if(options$print) message(msg)
   
