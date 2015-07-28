@@ -16,7 +16,8 @@ remove.redendant.covar <- function(null, resp.var){
   while(!no.red){
     svd.obj <- svd(covar)
     std.sv <- svd.obj$d/max(svd.obj$d)
-    ill.cond <- (min(abs(std.sv)) < 1/30)
+    
+    ill.cond <- (min(abs(std.sv)) < 1e-6)
     if(!ill.cond){
       no.red <- TRUE
       next
@@ -24,8 +25,10 @@ remove.redendant.covar <- function(null, resp.var){
     
     ill.id <- which.min(std.sv)
     coef <- svd.obj$v[, ill.id]
+    coef <- coef/max(abs(coef))
     coef[abs(coef) < 1e-6] <- 0
     sel.id <- which.max(abs(coef))
+    
     rm.covar <- c(rm.covar, colnames(covar)[sel.id])
     covar <- covar[, -sel.id, drop = FALSE]
     

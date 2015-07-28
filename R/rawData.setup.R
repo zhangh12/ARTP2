@@ -42,8 +42,6 @@ rawData.setup <- function(formula, data, pathway, family, subset = NULL, options
     
     null <- null[comp.id, ]
     
-    null <- validate.covar(null, resp.var)
-    
     #raw.geno <- raw.geno[comp.id, ]
     # the code above will double the memory consumption
     # use the codes below instead
@@ -64,6 +62,8 @@ rawData.setup <- function(formula, data, pathway, family, subset = NULL, options
     rm(tmp)
     gc()
   }
+  
+  null <- validate.covar(null, resp.var)
   
   control.id <- which(null[, resp.var] == 0)
   

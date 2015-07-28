@@ -32,7 +32,13 @@ generate.normal.statistics <- function(resp.var, null, raw.geno, pathway, family
     r <- null[, 1] - y.hat
     A <- y.hat * (1 - y.hat)
     for(i in 1:nchr){
-      V[[i]] <- t(G[[i]])%*% (A * G[[i]]) - t(G[[i]])%*% (A * X) %*% solve(t(X) %*% (A * X)) %*% t(X) %*% (A * G[[i]])
+      tmp <- try(V[[i]] <- t(G[[i]])%*% (A * G[[i]]) - t(G[[i]])%*% (A * X) %*% solve(t(X) %*% (A * X)) %*% t(X) %*% (A * G[[i]]), silent = TRUE)
+      
+      if(error.try(tmp)){
+        msg <- "Potential existence of multicollinearity detected and ARTP3 cannot automatically deal with it right now. Please check your covariates specified in formula"
+        stop(msg)
+      }
+      
       score0[[i]] <- as.vector(t(G[[i]]) %*% r)
       G[[i]] <- NA
       gc()
@@ -44,7 +50,13 @@ generate.normal.statistics <- function(resp.var, null, raw.geno, pathway, family
     r <- mdl.null$residuals
     s2 <- sum(r^2)/(length(r)-ncol(X))
     for(i in 1:nchr){
-      V[[i]] <- (t(G[[i]]) %*% G[[i]] - t(G[[i]]) %*% X %*% solve(t(X) %*% X) %*% t(X) %*% G[[i]]) / s2
+      tmp <- try(V[[i]] <- (t(G[[i]]) %*% G[[i]] - t(G[[i]]) %*% X %*% solve(t(X) %*% X) %*% t(X) %*% G[[i]]) / s2, silent = TRUE)
+      
+      if(error.try(tmp)){
+        msg <- "Potential existence of multicollinearity detected and ARTP3 cannot automatically deal with it right now. Please check your covariates specified in formula"
+        stop(msg)
+      }
+      
       score0[[i]] <- as.vector(t(G[[i]]) %*% r / s2)
       G[[i]] <- NA
       gc()

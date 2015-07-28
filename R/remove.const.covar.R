@@ -9,11 +9,12 @@ remove.const.covar <- function(null, resp.var){
   rm.covar <- setdiff(colnames(null), keep.var)
   rm.covar <- gsub("^factor.", "", rm.covar)
   
-  msg <- paste0("Covariates or factor levels below are constant and have been removed: \n", 
-                paste(rm.covar, collapse = " "), "\n")
-  message(msg)
-  
-  null <- null[, keep.var, drop = FALSE]
+  if(length(rm.covar) > 0){
+    msg <- paste0("Covariates or factor levels below are constant and have been removed: \n", 
+                  paste(rm.covar, collapse = " "), "\n")
+    message(msg)
+    null <- null[, keep.var, drop = FALSE]
+  }
   
   null
   

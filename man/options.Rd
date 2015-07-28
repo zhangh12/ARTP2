@@ -54,7 +54,7 @@ The list to describe the options that are used in \code{\link{pathway.summaryDat
   \bold{Options for pathway-based test: } 
   \describe{
     \item{\code{inspect.gene.n}}{the number of candidate truncation points to inspect the top genes in the pathway. The default is 10. }
-    \item{\code{inspect.gene.percent}}{a value \code{x} between 0 and 1 such that a truncation point will be defined at every \code{x} percent of the top genes. The default is 0.05. }
+    \item{\code{inspect.gene.percent}}{a value \code{x} between 0 and 1 such that a truncation point will be defined at every \code{x} percent of the top genes. If 0 then the truncation points will be 1:\code{inspect.gene.n}. The default is 0.05. }
   }
 }
 

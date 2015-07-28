@@ -39,6 +39,8 @@ load.pathway.definition <- function(pathway, options){
       stop(msg)
     }
   }
+  
+  pathway <- pathway[!duplicated(pathway), ]
   pathway <- pathway[order(pathway$Chr, pathway$Gene, pathway$SNP), ]
   
   pathway
