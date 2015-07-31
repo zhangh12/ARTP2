@@ -118,6 +118,7 @@ rawData.setup <- function(formula, data, pathway, family, subset = NULL, options
   
   if(!options$keep.geno){
     rm(raw.geno)
+    rm(null)
     gc()
     raw.geno <- NULL
   }
@@ -131,9 +132,13 @@ rawData.setup <- function(formula, data, pathway, family, subset = NULL, options
   end.time <- date()
   setup.timing <- as.integer(difftime(strptime(end.time, "%c"), strptime(start.time, "%c"), units = "secs"))
   
+  yx <- create.yx(resp.var, null)
+  formula <- create.formula(resp.var, yx)
+  
   setup <- list(deleted.snps = deleted.snps, options = options, 
                 pathway = pathway, norm.stat = norm.stat, 
-                raw.geno = raw.geno, setup.timing = setup.timing)
+                formula = formula, yx = yx, raw.geno = raw.geno, 
+                setup.timing = setup.timing)
   
   if(options$save.setup){
     msg <- paste0("setup file has been saved at ", options$path.setup)

@@ -37,9 +37,12 @@ remove.redendant.covar <- function(null, resp.var){
   null <- null[, setdiff(colnames(null), rm.covar), drop = FALSE]
   
   rm.covar <- gsub("^factor.", "", rm.covar)
-  msg <- paste0("Covariates or factor levels below are removed due to potential existence of multicollinearity: \n", 
-               paste(rm.covar, collapse = " "), "\n")
-  message(msg)
+  
+  if(length(rm.covar) > 0){
+    msg <- paste0("Covariates or factor levels below are removed due to potential existence of multicollinearity: \n", 
+                  paste(rm.covar, collapse = " "), "\n")
+    message(msg)
+  }
   
   null
   

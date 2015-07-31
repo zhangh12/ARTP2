@@ -21,6 +21,8 @@ artp3.chr <- function(group.setup, gene.cutpoint.setup, U, score0, V, options, c
   
   gene.pval <- rep(1, ngene)
   arr.rank <- rep(0, length(gene.cutpoint.setup$vGeneCutPoint))
+  marg.id <- rep(-1, ngene)
+  vsel.id <- rep(-1, length(group.setup$vGeneIdx))
   
   METHOD <- c("adajoint_chr", "adajoint_chr", "artp3_chr")
   
@@ -34,19 +36,31 @@ artp3.chr <- function(group.setup, gene.cutpoint.setup, U, score0, V, options, c
             as.integer(gene.cutpoint.setup$GeneCutPointStartEnd[, "Start"]), 
             as.integer(gene.cutpoint.setup$GeneCutPointStartEnd[, "End"]), 
             gene.pval = as.double(gene.pval), 
-            arr.rank = as.integer(arr.rank))
+            arr.rank = as.integer(arr.rank), 
+            vsel.id = as.integer(vsel.id), 
+            marg.id = as.integer(marg.id))
   
   gene.pval <- tmp$gene.pval
   names(gene.pval) <- group.setup$GeneInGroup
   
   arr.rank <- tmp$arr.rank
+  marg.id <- tmp$marg.id
+  vsel.id <- tmp$vsel.id
   
   model <- list()
   for(i in 1:length(group.setup$GeneInGroup)){
     idx <- group.setup$GeneStartEnd[i, "Start"]:group.setup$GeneStartEnd[i, "End"]
-    gene.idx <- group.setup$vGeneIdx[idx]
-    chi <- sort(score0[gene.idx]^2/s2[gene.idx], decreasing = TRUE)
+    
+    sel.idx <- vsel.id[idx]
+    sel.idx <- sel.idx[sel.idx > 0]
+    marg.idx <- marg.id[i]
+    
+    chi <- score0[sel.idx]^2/s2[sel.idx]
     rs <- names(chi)
+    
+    chi.marg <- score0[marg.idx]^2/s2[marg.idx]
+    rs.marg <- names(chi.marg)
+    best.snp.pvalue <- pchisq(chi.marg, df = 1, lower.tail = FALSE)
     
     cp.idx <- gene.cutpoint.setup$GeneCutPointStartEnd[i, "Start"]:gene.cutpoint.setup$GeneCutPointStartEnd[i, "End"]
     cp <- gene.cutpoint.setup$vGeneCutPoint[cp.idx]
@@ -54,9 +68,13 @@ artp3.chr <- function(group.setup, gene.cutpoint.setup, U, score0, V, options, c
     ar <- arr.rank[cp.idx]
     id <- which.min(ar)
     
-    sel.snp.pvalue <- pchisq(chi[1:cp[id]], df = 1, lower.tail = FALSE)
+    if(cp[id] == 1){ # the best model is the marginal model
+      sel.snp.pvalue <- pchisq(chi.marg, df = 1, lower.tail = FALSE)
+    }else{ # at least two SNPs selected in the best model
+      sel.snp.pvalue <- pchisq(chi[1:cp[id]], df = 1, lower.tail = FALSE)
+    }
     unadj.pvalue <- (min(ar) + 1)/(nperm + 1)
-    model[[i]] <- list(sel.snp.pvalue = sel.snp.pvalue, unadj.pvalue = unadj.pvalue)
+    model[[i]] <- list(sel.snp.pvalue = sel.snp.pvalue, best.snp.pvalue = best.snp.pvalue, unadj.pvalue = unadj.pvalue)
   }
   
   names(model) <- group.setup$GeneInGroup

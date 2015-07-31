@@ -157,9 +157,9 @@ const ivec &gene_idx){
 
 
 void search1(fvec &stat, ivec &sel_id, int &marg_id, const fvec &S, const fmat &Sigma, const int &mc){
-	
-	int ns = S.size();
-	
+  
+  int ns = S.size();
+  
 	//find best marginal SNP
 	int id = -1;
 	double max_stat = -1.0;
@@ -261,8 +261,8 @@ void search1(fvec &stat, ivec &sel_id, int &marg_id, const fvec &S, const fmat &
 
 void search2(fvec &stat, ivec &sel_id, int &marg_id, const fvec &S, const fmat &Sigma, const int &mc){
   
-	int ns = S.size();
-	
+  int ns = S.size();
+  
 	//find best marginal SNP
 	int id = -1;
 	double max_stat = -1.0;
@@ -276,10 +276,10 @@ void search2(fvec &stat, ivec &sel_id, int &marg_id, const fvec &S, const fmat &
 	
   stat = fvec(1, max_stat);
   assert(id >= 0 && id < ns);
+  sel_id = ivec(1, id);
   marg_id = id;
   
 	if(ns == 1){
-    sel_id = ivec(1, id);
 		return;
 	}
   
@@ -506,7 +506,8 @@ double *R_vU, double *R_score0, double *R_vV,
 int *R_vgene_idx, int *R_gene_start, int *R_gene_end, 
 int *R_vgene_cutpoint, 
 int *R_gene_cutpoint_start, int *R_gene_cutpoint_end, 
-double *R_gene_pval, int *R_arr_rank){
+double *R_gene_pval, int *R_arr_rank, 
+int *R_sel_id, int *R_marg_id){
   
   int len_file_prefix = strlen(*R_file_prefix);
   char *file_prefix = new char[len_file_prefix + 1];
@@ -552,6 +553,8 @@ double *R_gene_pval, int *R_arr_rank){
   }
   
   // write obs statistics for all genes
+  imat sel_id(ngene);
+  ivec marg_id(ngene);
   for(int g = 0; g < ngene; ++g){
   	fstream gout(gene_out[g].c_str(), ios::out | ios::binary);
   	if(!gout){
@@ -561,10 +564,19 @@ double *R_gene_pval, int *R_arr_rank){
     int ncp = cutpoint[g].size();
     int max_cutpoint = cutpoint[g][ncp - 1];
     fvec s (ns, .0f);
+    VecStat vs (ns, STAT0);
   	for(int j = 0; j < ns; ++j){
   		s[j] = score0[gene_idx[g][j]];
       s[j] = pchisq(s[j] * s[j] / sigma2[gene_idx[g][j]], 1, false, true);
+      vs[j].stat = -s[j];
+      vs[j].id = j;
   	}
+    
+    sort(vs.begin(), vs.end(), descending);
+    marg_id[g] = vs[0].id;
+    for(int j = 0; j < ns; ++j){
+      sel_id[g].push_back(vs[j].id);
+    }
     
     sort(s.begin(), s.end());
     for(int j = 1; j <= max_cutpoint; ++j){
@@ -576,6 +588,21 @@ double *R_gene_pval, int *R_arr_rank){
       gout.write((char*)(&u), sizeof(u));
     }
   	gout.close();
+  }
+  
+  int i_sel_id = -1;
+  for(int g = 0; g < ngene; ++g){
+    R_marg_id[g] = gene_idx[g][marg_id[g]] + 1;
+    for(int k = 0; k < sel_id[g].size(); ++k){
+      ++i_sel_id;
+      R_sel_id[i_sel_id] = gene_idx[g][sel_id[g][k]] + 1;
+    }
+    int nn = gene_idx[g].size() - sel_id[g].size();
+    while(nn){
+      ++i_sel_id;
+      R_sel_id[i_sel_id] = -1;
+      --nn;
+    }
   }
   
   int ngap = min(10000, nperm);
@@ -738,7 +765,8 @@ double *R_vU, double *R_score0, double *R_vV,
 int *R_vgene_idx, int *R_gene_start, int *R_gene_end, 
 int *R_vgene_cutpoint, 
 int *R_gene_cutpoint_start, int *R_gene_cutpoint_end, 
-double *R_gene_pval, int *R_arr_rank){
+double *R_gene_pval, int *R_arr_rank, 
+int *R_sel_id, int *R_marg_id){
   
   int len_file_prefix = strlen(*R_file_prefix);
   char *file_prefix = new char[len_file_prefix + 1];
@@ -779,6 +807,8 @@ double *R_gene_pval, int *R_arr_rank){
   }
   
   // write obs statistics for all genes
+  imat sel_id(ngene);
+  ivec marg_id(ngene);
   for(int g = 0; g < ngene; ++g){
     fstream gout(gene_out[g].c_str(), ios::out | ios::binary);
   	if(!gout){
@@ -790,15 +820,13 @@ double *R_gene_pval, int *R_arr_rank){
   	extract_score(S, score0, gene_idx[g]);
   	extract_cov(Sigma, V, gene_idx[g]);
   	fvec s;
-    ivec sel_id;
-    int marg_id;
     int ncp = cutpoint[g].size();
     int mc = cutpoint[g][ncp - 1];
     
     if(method == 1){
-      search1(s, sel_id, marg_id, S, Sigma, mc);
+      search1(s, sel_id[g], marg_id[g], S, Sigma, mc);
     }else{//assert(method == 2)
-      search2(s, sel_id, marg_id, S, Sigma, mc);
+      search2(s, sel_id[g], marg_id[g], S, Sigma, mc);
     }
     
     for(int k = 0; k < ncp; ++k){
@@ -806,6 +834,21 @@ double *R_gene_pval, int *R_arr_rank){
       gout.write((char*)(&u), sizeof(u));
     }
   	gout.close();
+  }
+  
+  int i_sel_id = -1;
+  for(int g = 0; g < ngene; ++g){
+    R_marg_id[g] = gene_idx[g][marg_id[g]] + 1;
+    for(int k = 0; k < sel_id[g].size(); ++k){
+      ++i_sel_id;
+      R_sel_id[i_sel_id] = gene_idx[g][sel_id[g][k]] + 1;
+    }
+    int nn = gene_idx[g].size() - sel_id[g].size();
+    while(nn){
+      ++i_sel_id;
+      R_sel_id[i_sel_id] = -1;
+      --nn;
+    }
   }
   
   int ngap = min(10000, nperm);
@@ -1132,7 +1175,8 @@ double *R_vU, double *R_score0, double *R_vV,
 int *R_vgene_idx, int *R_gene_start, int *R_gene_end, 
 int *R_vgene_cutpoint, 
 int *R_gene_cutpoint_start, int *R_gene_cutpoint_end, 
-double *R_gene_pval, int *R_arr_rank){
+double *R_gene_pval, int *R_arr_rank, 
+int *R_sel_id, int *R_marg_id){
   
   int len_file_prefix = strlen(*R_file_prefix);
   char *file_prefix = new char[len_file_prefix + 1];
@@ -1180,6 +1224,8 @@ double *R_gene_pval, int *R_arr_rank){
   }
   
   // write obs statistics for all genes
+  imat sel_id(ngene);
+  ivec marg_id(ngene);
   for(int g = 0; g < ngene; ++g){
     fstream gout(gene_out[g].c_str(), ios::out | ios::binary);
   	if(!gout){
@@ -1189,10 +1235,19 @@ double *R_gene_pval, int *R_arr_rank){
     int ncp = cutpoint[g].size();
     int max_cutpoint = cutpoint[g][ncp - 1];
     fvec s (ns, .0f);
+    VecStat vs (ns, STAT0);
   	for(int j = 0; j < ns; ++j){
   		s[j] = score0[gene_idx[g][j]];
       s[j] = pchisq(s[j] * s[j] / sigma2[gene_idx[g][j]], 1, false, true);
+      vs[j].stat = -s[j];
+      vs[j].id = j;
   	}
+    
+    sort(vs.begin(), vs.end(), descending);
+    marg_id[g] = vs[0].id;
+    for(int j = 0; j < ns; ++j){
+      sel_id[g].push_back(vs[j].id);
+    }
     
     sort(s.begin(), s.end());
     for(int j = 1; j <= max_cutpoint; ++j){
@@ -1204,6 +1259,21 @@ double *R_gene_pval, int *R_arr_rank){
       gout.write((char*)(&u), sizeof(u));
     }
   	gout.close();
+  }
+  
+  int i_sel_id = -1;
+  for(int g = 0; g < ngene; ++g){
+    R_marg_id[g] = gene_idx[g][marg_id[g]] + 1;
+    for(int k = 0; k < sel_id[g].size(); ++k){
+      ++i_sel_id;
+      R_sel_id[i_sel_id] = gene_idx[g][sel_id[g][k]] + 1;
+    }
+    int nn = gene_idx[g].size() - sel_id[g].size();
+    while(nn){
+      ++i_sel_id;
+      R_sel_id[i_sel_id] = -1;
+      --nn;
+    }
   }
   
   int ngap = min(10000, nperm);
@@ -1350,7 +1420,8 @@ double *R_vU, double *R_score0, double *R_vV,
 int *R_vgene_idx, int *R_gene_start, int *R_gene_end, 
 int *R_vgene_cutpoint, 
 int *R_gene_cutpoint_start, int *R_gene_cutpoint_end, 
-double *R_gene_pval, int *R_arr_rank){
+double *R_gene_pval, int *R_arr_rank, 
+int *R_sel_id, int *R_marg_id){
   
   int len_file_prefix = strlen(*R_file_prefix);
   char *file_prefix = new char[len_file_prefix + 1];
@@ -1393,6 +1464,8 @@ double *R_gene_pval, int *R_arr_rank){
   }
   
   // write obs statistics for all genes
+  imat sel_id(ngene);
+  ivec marg_id(ngene);
   for(int g = 0; g < ngene; ++g){
     fstream gout(gene_out[g].c_str(), ios::out | ios::binary);
     if(!gout){
@@ -1404,14 +1477,12 @@ double *R_gene_pval, int *R_arr_rank){
   	extract_score(S, score0, gene_idx[g]);
   	extract_cov(Sigma, V, gene_idx[g]);
   	fvec s;
-    ivec sel_id;
-    int marg_id;
     int ncp = cutpoint[g].size();
     int mc = cutpoint[g][ncp - 1];
     if(method == 1){
-      search1(s, sel_id, marg_id, S, Sigma, mc);
+      search1(s, sel_id[g], marg_id[g], S, Sigma, mc);
     }else{//assert(method == 2)
-      search2(s, sel_id, marg_id, S, Sigma, mc);
+      search2(s, sel_id[g], marg_id[g], S, Sigma, mc);
     }
     
     for(int k = 0; k < ncp; ++k){
@@ -1419,6 +1490,21 @@ double *R_gene_pval, int *R_arr_rank){
       gout.write((char*)(&u), sizeof(u));
     }
   	gout.close();
+  }
+  
+  int i_sel_id = -1;
+  for(int g = 0; g < ngene; ++g){
+    R_marg_id[g] = gene_idx[g][marg_id[g]] + 1;
+    for(int k = 0; k < sel_id[g].size(); ++k){
+      ++i_sel_id;
+      R_sel_id[i_sel_id] = gene_idx[g][sel_id[g][k]] + 1;
+    }
+    int nn = gene_idx[g].size() - sel_id[g].size();
+    while(nn){
+      ++i_sel_id;
+      R_sel_id[i_sel_id] = -1;
+      --nn;
+    }
   }
   
   int ngap = min(10000, nperm);
