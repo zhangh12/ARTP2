@@ -3,15 +3,26 @@
 \docType{data}
 \title{options}
 \description{
-The list to describe the options that are used in \code{\link{pathway.summaryData}}. It will be set by function \code{\link{options.default}}. 
+The list to describe the options that are used in \code{\link{pathway.summaryData}} and \code{\link{pathway.rawData}}. It will be set by function \code{\link{options.default}} by default. 
 }
 \format{
-  The format is a list: 
+  The format is a list. 
+  
+  \bold{Options for testing an association: }
+  \describe{
+  \item{\code{out.dir}}{output directory for temporary files. The default is the working directory \code{\link[base]{getwd}}. }
+  \item{\code{id.str}}{character string that is appended to temporary file names. The default is "PID". }
+  \item{\code{method}}{1 = AdaJoint, 2 = AdaJoint2, 3 = ARTP. The default is 3. }
+  \item{\code{nperm}}{the number of permutations. The default is 1E5. }
+  \item{\code{inflation.factor}}{inflation factor lambda to be adjusted in pathway analysis. The default is 1.0. }
+  \item{\code{nthread}}{the number of threads for multi-threaded processors in Unix/Linux OS. The default is \code{detectCores()} to use all available processors. }
+  \item{\code{seed}}{integer for random number generation. The default is 1. }
+  }
+  
+  \bold{Options for controlling data cleaning: }
   \describe{
     \item{\code{out.dir}}{output directory for temporary files. The default is the working directory \code{\link[base]{getwd}}. }
     \item{\code{id.str}}{character string that is appended to temporary file names. The default is "PID". }
-    \item{\code{method}}{1 = AdaJoint, 2 = AdaJoint2, 3 = ARTP. The default is 3. }
-    \item{\code{nperm}}{the number of permutations. The default is 1E5. }
     \item{\code{snp.miss.rate}}{any SNP with missing rate greater than \code{snp.miss.rate} will be removed from the analysis. The default is 0.05. }
     \item{\code{maf}}{any SNP with minor allele frequency less than \code{maf} will be removed from the analysis. The default is 0.05. }
     \item{\code{HWE.p}}{any SNP with HWE exact p-value less than \code{HWE.p} will be removed from the analysis. The test is applied to the reference data. The default is 1E-5. }
@@ -27,14 +38,12 @@ The list to describe the options that are used in \code{\link{pathway.summaryDat
     \item{\code{only.setup}}{\code{TRUE} if only the setup is needed while the testing procedure is not. The R code to create the setup uses single thread but the testing procedure can be multi-threaded. The best practice to use \code{ARTP3} on a multi-threaded cluster is to firstly create the setup in single-thread mode, and then call the \code{\link{pathway.warm.start}} to compute the p-values in multiple-thread mode, which uses the saved setup at \code{path.setup} as input. \code{save.setup} will be set to be \code{TRUE} if \code{only.setup} is \code{TRUE}. The default is \code{FALSE}. }
     \item{\code{keep.geno}}{\code{TRUE} if the reference genotypes of SNPs in pathway is returned. The default is \code{FALSE}. }
     \item{\code{seed}}{integer for random number generation. The default is 1. }
-    \item{\code{nthread}}{the number of threads for multi-threaded processors in Unix/Linux OS. The default is \code{detectCores()} to use all available processors. }
     \item{\code{excluded.snps}}{character vector of SNPs to be excluded in the analysis. \code{NULL} if no SNP is always excluded. The default is \code{NULL}. }
     \item{\code{selected.snps}}{character vector of SNPs to be selected in the analysis. \code{NULL} if no SNP is always selected but other fiters may applied. The default is \code{NULL}. }
     \item{\code{excluded.subs}}{character vector of subject IDs to be excluded in the analysis. These IDs must match with those in \code{fam} files in \code{reference}. The default is \code{NULL}. }
     \item{\code{selected.subs}}{character vector of subject IDs to be selected in the analysis. These IDs must match with those in \code{fam} files in \code{reference}. The default is \code{NULL}. }
     \item{\code{excluded.genes}}{character vector of genes to be excluded in the analysis. \code{NULL} if no gene is always excluded. The default is \code{NULL}. }
-    \item{\code{inflation.factor}}{inflation factor lambda to be adjusted in pathway analysis. The default is 1.0. }
-  }
+    }
   
   \bold{Options for handling huge pathways: }
   \describe{
