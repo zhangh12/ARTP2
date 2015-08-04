@@ -19,6 +19,7 @@ summaryData.setup <- function(summary.files, pathway, reference, options){
   
   # deleted snps and their reason
   deleted.snps <- data.frame(SNP = NULL, reason = NULL, comment = NULL, stringsAsFactors = FALSE)
+  deleted.genes <- data.frame(Gene = NULL, reason = NULL, stringsAsFactors = FALSE)
   exc.snps <- intersect(pathway$SNP, options$excluded.snps)
   exc.snps <- setdiff(exc.snps, options$selected.snps)
   deleted.snps <- update.deleted.snps(deleted.snps, exc.snps, reason = "RM_BY_USER", comment = "")
@@ -57,14 +58,18 @@ summaryData.setup <- function(summary.files, pathway, reference, options){
   ref.geno <- load.reference.geno(reference, pathway$SNP, options)
   
   # SNP filtering based on options
-  filtered.markers <- filter.reference.geno(ref.geno, pathway, options)
+  filtered.data <- filter.reference.geno(ref.geno, pathway, options)
+  filtered.markers <- filtered.data$deleted.snps
+  filtered.genes <- filtered.data$deleted.genes
   
   # update with valid/available SNPs
   exc.snps <- filtered.markers$SNP
+  exc.genes <- filtered.genes$Gene
   deleted.snps <- update.deleted.snps(deleted.snps, exc.snps, 
                                       reason = filtered.markers$reason, 
                                       comment = filtered.markers$comment)
-  pathway <- update.pathway.definition(pathway, exc.snps)
+  deleted.genes <- update.deleted.genes(deleted.genes, exc.genes, filtered.genes$reason)
+  pathway <- update.pathway.definition(pathway, exc.snps, exc.genes)
   sum.stat <- update.sum.stat(sum.stat, exc.snps)
   allele.info <- update.allele.info(allele.info, exc.snps)
   ref.snps <- update.ref.snps(ref.snps, exc.snps)
@@ -91,7 +96,8 @@ summaryData.setup <- function(summary.files, pathway, reference, options){
   end.time <- date()
   setup.timing <- as.integer(difftime(strptime(end.time, "%c"), strptime(start.time, "%c"), units = "secs"))
   
-  setup <- list(deleted.snps = deleted.snps, options = options, 
+  setup <- list(deleted.snps = deleted.snps, deleted.genes = deleted.genes, 
+                options = options, 
                 pathway = pathway, norm.stat = norm.stat, 
                 ref.geno = ref.geno, setup.timing = setup.timing)
   

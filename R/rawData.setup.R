@@ -14,6 +14,7 @@ rawData.setup <- function(formula, data, pathway, family, subset = NULL, options
   
   # deleted snps and their reason
   deleted.snps <- data.frame(SNP = NULL, reason = NULL, comment = NULL, stringsAsFactors = FALSE)
+  deleted.genes <- data.frame(Gene = NULL, reason = NULL, comment = NULL, stringsAsFactors = FALSE)
   exc.snps <- intersect(pathway$SNP, options$excluded.snps)
   exc.snps <- setdiff(exc.snps, options$selected.snps)
   deleted.snps <- update.deleted.snps(deleted.snps, exc.snps, reason = "RM_BY_USER", comment = "")
@@ -77,7 +78,8 @@ rawData.setup <- function(formula, data, pathway, family, subset = NULL, options
     
     sid <- which(colnames(raw.geno) %in% pathway$SNP[gid])
     # SNP filtering based on options
-    filtered.markers <- filter.raw.geno(raw.geno[, sid, drop = FALSE], pathway[gid, , drop = FALSE], options, control.id)
+    filtered.data <- filter.raw.geno(raw.geno[, sid, drop = FALSE], pathway[gid, , drop = FALSE], options, control.id)
+    filtered.markers <- filtered.data$deleted.snps
     gc()
     
     # update with valid/available SNPs
@@ -100,15 +102,19 @@ rawData.setup <- function(formula, data, pathway, family, subset = NULL, options
     
     sid <- which(colnames(raw.geno) %in% pathway$SNP[cid])
     # SNP filtering based on options
-    filtered.markers <- filter.raw.geno(raw.geno[, sid, drop = FALSE], pathway[cid, , drop = FALSE], options, control.id)
+    filtered.data <- filter.raw.geno(raw.geno[, sid, drop = FALSE], pathway[cid, , drop = FALSE], options, control.id)
+    filtered.markers <- filtered.data$deleted.snps
+    filtered.genes <- filtered.data$deleted.genes
     gc()
     
     # update with valid/available SNPs
     exc.snps <- filtered.markers$SNP
+    exc.genes <- filtered.genes$Gene
     deleted.snps <- update.deleted.snps(deleted.snps, exc.snps, 
                                         reason = filtered.markers$reason, 
                                         comment = filtered.markers$comment)
-    pathway <- update.pathway.definition(pathway, exc.snps)
+    deleted.genes <- update.deleted.genes(deleted.genes, exc.genes, filtered.genes$reason)
+    pathway <- update.pathway.definition(pathway, exc.snps, exc.genes)
     raw.geno <- update.raw.geno(raw.geno, exc.snps)
     gc()
   }
@@ -121,6 +127,7 @@ rawData.setup <- function(formula, data, pathway, family, subset = NULL, options
     rm(null)
     gc()
     raw.geno <- NULL
+    null <- NULL
   }
   
   # trim the information of deleted SNPs
@@ -135,8 +142,8 @@ rawData.setup <- function(formula, data, pathway, family, subset = NULL, options
   yx <- create.yx(resp.var, null)
   formula <- create.formula(resp.var, yx)
   
-  setup <- list(deleted.snps = deleted.snps, options = options, 
-                pathway = pathway, norm.stat = norm.stat, 
+  setup <- list(deleted.snps = deleted.snps, deleted.genes = deleted.genes, 
+                options = options, pathway = pathway, norm.stat = norm.stat, 
                 formula = formula, yx = yx, raw.geno = raw.geno, 
                 setup.timing = setup.timing)
   

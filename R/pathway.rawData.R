@@ -13,6 +13,7 @@ pathway.rawData <- function(formula, data, pathway, family, subset = NULL, optio
        model = test$model, most.sig.genes = test$most.sig.genes, 
        accurate = test$accurate, test.timing = test$test.timing, 
        pathway = setup$pathway, deleted.snps = setup$deleted.snps, 
+       deleted.genes = setup$deleted.genes, 
        options = setup$options, setup.timing = setup$setup.timing, 
        setup = setup)
   

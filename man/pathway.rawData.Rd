@@ -40,6 +40,7 @@ This function computes gene and pathway p-values when raw genotype data is avail
 \item{model}{a list containing detailed information of selected SNPs in each gene. }
 \item{most.sig.genes}{a character vector of genes selected by \code{ARTP3}. They are the most promising candidates, although its statistical significance is not guaranteed. }
 \item{deleted.snps}{a data frame containing SNPs excluded from the analysis and their reasons. }
+\item{deleted.genes}{a data frame containing genes excluded from the analysis and their reasons. Set \code{options$rm.gene.subset} to be \code{FALSE} to include all genes. }
 \item{options}{a list of options used in the analysis. See \code{\link{options}}. }
 \item{accurate}{\code{TRUE} if \code{options$nperm} is large enougth to accurately estimate p-values, i.e., if the criteria 
 \code{sqrt(pvalue*(1-pvalue)/nperm)/pvalue < 0.1}
@@ -90,7 +91,10 @@ options <- list(inspect.snp.n = 5, nperm = 1e5,
 # ret <- pathway.rawData(formula, data = raw, pathway, family, options = options)
 # 
 # ret$pathway.pvalue 
-# [1] 0.02311477 # mac os
+# [1] 0.02928971 # mac os
 # head(ret$gene.pvalue)
+# table(ret$deleted.snps$reason)
+# head(ret$deleted.genes)
+
 
 }

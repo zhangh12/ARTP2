@@ -25,7 +25,7 @@ Note that both \code{\link{pathway.summaryData}} and \code{\link{pathway.rawData
 
 The \code{setup.file} is supposed to be the path of a \code{".rda"} file containing a list called \code{setup}. If \code{nperm} is \code{NULL}, then it will be set as \code{setup$options$nperm}. If \code{inflation.factor} is \code{NULL}, then it will be set as 1.0 as default. These two options are the most useful ones in using \code{pathway.warm.start} so we highlight them in the interface. Users can modify any option values in \code{setup$options} directly to get more controls of the testing procedure. See \code{\link{options}} for more details about setting \code{setup$options}. 
 
-Except for \code{setup$options}, all other components in \code{setup} cannot be modified by users. Modified \code{setup$options} should be saved to local file \code{setup.file} by \code{\link[base]{save}} so that \code{pathway.warm.start} can make use of the most updated configuration. 
+Except for \code{setup$options}, all other components in \code{setup} cannot be modified by users. Modified \code{setup} should be saved to local file \code{setup.file} by \code{\link[base]{save}} so that \code{pathway.warm.start} can make use of the most updated configuration. 
 }
 \value{
 \code{pathway.warm.start} returns an object of class \code{"ARTP3"}. It is a list containing the following components: 

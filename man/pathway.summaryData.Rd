@@ -54,6 +54,7 @@ The order of columns in files \code{summary.files}, \code{pathway} or in data fr
 \item{model}{a list containing detailed information of selected SNPs in each gene. }
 \item{most.sig.genes}{a character vector of genes selected by \code{ARTP3}. They are the most promising candidates, although its statistical significance is not guaranteed. }
 \item{deleted.snps}{a data frame containing SNPs excluded from the analysis and their reasons.}
+\item{deleted.genes}{a data frame containing genes excluded from the analysis and their reasons. Set \code{options$rm.gene.subset} to be \code{FALSE} to include all genes. }
 \item{options}{a list of options used in the analysis. See \code{\link{options}}}
 \item{accurate}{\code{TRUE} if \code{options$nperm} is large enougth to accurately estimate p-values, i.e., if the criteria 
 \code{sqrt(pvalue*(1-pvalue)/nperm)/pvalue < 0.1}
@@ -131,7 +132,7 @@ options$print <- FALSE # turn off printing
 
 
 ##################################################
-## The reference genotype data can also be merged in a single set of PLINK files
+## The reference genotype data can also be merged into a single set of PLINK files
 bed <- system.file("extdata", package = "ARTP3", "1000genomes.bed")
 bim <- system.file("extdata", package = "ARTP3", "1000genomes.bim")
 fam <- system.file("extdata", package = "ARTP3", "1000genomes.fam")
