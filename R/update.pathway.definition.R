@@ -1,7 +1,7 @@
 
 update.pathway.definition <- function(pathway, exc.snps, exc.genes = NULL){
   
-  if(length(exc.snps) == 0 && length(exc.genes == 0)){
+  if(length(exc.snps) == 0 && length(exc.genes) == 0){
     return(pathway)
   }
   
