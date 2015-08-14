@@ -2,6 +2,10 @@
 
 HWE.exact <- function (g){
   
+  if(!all(g %in% 0:2)){
+    return(1)
+  }
+  
   n11 <- sum(g == 0, na.rm = TRUE)
   n12 <- sum(g == 1, na.rm = TRUE)
   n22 <- sum(g == 2, na.rm = TRUE)
