@@ -82,7 +82,7 @@ family <- "binomial"
 # 1e5 replicates of resampling to estimate the p-value
 options <- list(inspect.snp.n = 5, nperm = 1e5, 
                 maf = .01, HWE.p = 1e-6, 
-                gene.R2 = .9, chr.R2 = .9, 
+                gene.R2 = .9, 
                 id.str = "unique-pathway-id", 
                 out.dir = getwd(), save.setup = FALSE)
 
@@ -91,7 +91,8 @@ options <- list(inspect.snp.n = 5, nperm = 1e5,
 # ret <- pathway.rawData(formula, data = raw, pathway, family, options = options)
 # 
 # ret$pathway.pvalue 
-# [1] 0.02928971 # mac os
+## [1] 0.02543975 # Mac OS
+## [1] 0.02312977 # Windows
 # head(ret$gene.pvalue)
 # table(ret$deleted.snps$reason)
 # head(ret$deleted.genes)

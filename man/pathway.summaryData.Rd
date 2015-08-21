@@ -108,7 +108,7 @@ reference <- data.frame(fam, bim, bed)
 # 1e5 replicates of resampling to estimate the p-value
 options <- list(inspect.snp.n = 5, nperm = 1e5, 
                 maf = .01, HWE.p = 1e-6, 
-                gene.R2 = .9, chr.R2 = .9, 
+                gene.R2 = .9, 
                 id.str = "unique-pathway-id", 
                 out.dir = getwd(), save.setup = FALSE)
 
@@ -116,7 +116,8 @@ options <- list(inspect.snp.n = 5, nperm = 1e5,
 # ret <- pathway.summaryData(summary.files = c(study1, study2), pathway, reference, options = options)
 # 
 # ret$pathway.pvalue
-## [1] 0.00696493 # mac os
+## [1] 0.00696493  # mac os
+## [1] 0.007394926 # Windows
 # head(ret$gene.pvalue)
 
 options$print <- FALSE # turn off printing
@@ -126,9 +127,11 @@ options$print <- FALSE # turn off printing
 # ret2 <- pathway.summaryData(summary.files = study2, pathway, reference, options = options)
 # 
 # ret1$pathway.pvalue
-## [1] 0.08872411 # mac os
-# ret1$pathway.pvalue
-## [1] 0.05579944 # mac os
+## [1] 0.08872411 # Mac OS
+## [1] 0.0899991  # Windows
+# ret2$pathway.pvalue
+## [1] 0.05579944 # Mac OS
+## [1] 0.05476945 # Windows
 
 
 ##################################################
