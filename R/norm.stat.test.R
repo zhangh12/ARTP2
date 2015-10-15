@@ -1,5 +1,5 @@
 
-norm.stat.test <- function(setup){
+norm.stat.test <- function(setup, lambda = 1.0){
   
   start.time <- date()
   
@@ -27,7 +27,7 @@ norm.stat.test <- function(setup){
     if(options$print) message(msg)
     
     U <- cov.svd(V[[g]], names(V)[[g]])
-    sc <- score0[[g]] / sqrt(options$inflation.factor)
+    sc <- score0[[g]] / sqrt(lambda)
     rs <- names(sc)
     group.setup <- create.group(pathway, rs)
     N.SNP <- c(N.SNP, group.setup$N.SNP)

@@ -1,4 +1,4 @@
-summaryData.setup <- function(summary.files, pathway, reference, options){
+summaryData.setup <- function(summary.files, pathway, reference, lambda, sample.size, options){
   
   start.time <- date()
   
@@ -6,10 +6,10 @@ summaryData.setup <- function(summary.files, pathway, reference, options){
   reference <- reformat.reference.path(reference)
   
   # validate the format of main inputs
-  validate.summary.input(summary.files, pathway, reference)
+  validate.summary.input(summary.files, pathway, reference, lambda, sample.size)
   
   # merge and reset options
-  options <- options.setup(options)
+  options <- options.setup(options, lambda, sample.size)
   
   # load definition of pathway
   pathway <- load.pathway.definition(pathway, options)
@@ -75,7 +75,7 @@ summaryData.setup <- function(summary.files, pathway, reference, options){
   ref.snps <- update.ref.snps(ref.snps, exc.snps)
   ref.geno <- update.ref.geno(ref.geno, exc.snps)
   
-  # estimate P, SE, and N if they are not provided by users
+  # estimate P and SE if they are not provided by users
   sum.stat <- complete.sum.stat(sum.stat, ref.geno, options)
   
   # recover the summary statistics

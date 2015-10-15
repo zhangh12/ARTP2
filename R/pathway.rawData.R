@@ -1,13 +1,13 @@
 
-pathway.rawData <- function(formula, data, pathway, family, subset = NULL, options = NULL){
+pathway.rawData <- function(formula, data, pathway, family, lambda = 1.0, subset = NULL, options = NULL){
   
-  setup <- rawData.setup(formula, data, pathway, family, subset, options)
+  setup <- rawData.setup(formula, data, pathway, family, lambda, subset, options)
   
   if(setup$options$only.setup){
     return(setup)
   }
   
-  test <- norm.stat.test(setup)
+  test <- norm.stat.test(setup, lambda)
   
   list(pathway.pvalue = test$pathway.pvalue, gene.pvalue = test$gene.pvalue, 
        model = test$model, most.sig.genes = test$most.sig.genes, 

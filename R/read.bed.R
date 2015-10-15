@@ -1,6 +1,8 @@
 
 read.bed <- function(bed, bim, fam, sel.snps, sel.subs = NULL){
   
+  sel.snps <- unique(sel.snps)
+  
   col.class <- c("NULL", "character", "NULL", "NULL", "character", "character")
   bim.file <- read.table(bim, header = FALSE, as.is = TRUE, colClasses = col.class)
   nsnp <- nrow(bim.file)

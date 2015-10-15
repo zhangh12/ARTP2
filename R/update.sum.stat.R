@@ -9,6 +9,8 @@ update.sum.stat <- function(sum.stat, exc.snps){
   n <- length(sum.stat$stat)
   fid <- 0
   snps.in.study <- NULL
+  lambda <- NULL
+  sample.size <- list()
   for(i in 1:n){
     id <- which(!(sum.stat$stat[[i]][, "SNP"] %in% exc.snps))
     
@@ -18,7 +20,9 @@ update.sum.stat <- function(sum.stat, exc.snps){
     
     fid <- fid + 1
     stat[[fid]] <- sum.stat$stat[[i]][id, ]
-    snps.in.study <- c(snps.in.study, stat[[fid]][, "SNP"])
+    snps.in.study <- unique(c(snps.in.study, stat[[fid]][, "SNP"]))
+    lambda[fid] <- sum.stat$lambda[i]
+    sample.size[[fid]] <- sum.stat$sample.size[[i]]
     
   }
   
@@ -30,7 +34,8 @@ update.sum.stat <- function(sum.stat, exc.snps){
   rm(sum.stat)
   gc()
   
-  list(stat = stat, snps.in.study = snps.in.study)
+  snps.in.study <- unique(snps.in.study)
+  list(stat = stat, snps.in.study = snps.in.study, lambda = lambda, sample.size = sample.size)
   
 }
 

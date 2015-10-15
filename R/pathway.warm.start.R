@@ -1,6 +1,6 @@
 
 
-pathway.warm.start <- function(setup.file, nperm = NULL, inflation.factor = NULL){
+pathway.warm.start <- function(setup.file, nperm = NULL, lambda = 1.0){
   
   validate.setup(setup.file)
   
@@ -10,14 +10,10 @@ pathway.warm.start <- function(setup.file, nperm = NULL, inflation.factor = NULL
     setup$options$nperm <- nperm
   }
   
-  if(!is.null(inflation.factor) && is.numeric(inflation.factor)){
-    setup$options$inflation.factor <- inflation.factor
-  }
-  
   tmp <- .C("check_nthread", nthread = as.integer(setup$options$nthread))
   setup$options$nthread <- tmp$nthread
   
-  test <- norm.stat.test(setup)
+  test <- norm.stat.test(setup, lambda)
   
   list(pathway.pvalue = test$pathway.pvalue, gene.pvalue = test$gene.pvalue, 
        model = test$model, most.sig.genes = test$most.sig.genes, 

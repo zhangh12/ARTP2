@@ -4,6 +4,7 @@ recover.stat <- function(sum.stat, pathway, ref.geno, allele.info, options){
   msg <- paste("Recovering test statistics:", date())
   if(options$print) message(msg)
   
+  sample.size <- sum.stat$sample.size
   sum.info <- sum.stat$stat
   all.snp <- sort(sum.stat$snps.in.study)
   rm(sum.stat)
@@ -72,17 +73,18 @@ recover.stat <- function(sum.stat, pathway, ref.geno, allele.info, options){
     colnames(wt[[i]]) <- grp.snps
     
     for(k in 1:nstudy){
-      rownames(sum.info[[k]]) <- sum.info[[k]][, "SNP"]
-      tmp <- sum.info[[k]][, "N", drop = TRUE]
-      names(tmp) <- sum.info[[k]][, "SNP"]
-      
       id <- which(grp.snps %in% sum.info[[k]][, "SNP"])
       ks <- grp.snps[id]
-      tmp <- tmp[ks]
-      es <- outer(tmp, tmp, pmin)
+      
+      rownames(sum.info[[k]]) <- sum.info[[k]][, "SNP"]
+      tmp <- strsplit(sum.info[[k]][ks, "Direction", drop = TRUE], '')
+      tmp <- sapply(tmp, as.integer)
+      colnames(tmp) <- sum.info[[k]][ks, "SNP"]
+      
+      es <- t(tmp) %*% (tmp * sample.size[[k]])
       se <- sum.info[[k]][ks, "SE"]
       
-      wt[[i]][ks, ks] <- wt[[i]][ks, ks] + es * outer(tmp, tmp, "*")^(-.5) / outer(se, se, "*")
+      wt[[i]][ks, ks] <- wt[[i]][ks, ks] + es * outer(diag(es), diag(es), "*")^(-.5) / outer(se, se, "*")
     }
     
     V[[i]] <- wt[[i]] * ref.cor[[i]]

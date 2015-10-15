@@ -6,7 +6,7 @@
 Calculate gene and pathway p-values using the ARTP test and summary data
 }
 \usage{
-pathway.summaryData(summary.files, pathway, reference, options = NULL)
+pathway.summaryData(summary.files, pathway, reference, lambda, sample.size, options = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -18,6 +18,12 @@ a character of the name of file containing definition of a pathway. It must be a
 }
   \item{reference}{
 a data.frame containing the paths of binary PLINK files of reference dataset. It must have columns called "bed", "bim" and "fam". The current version allows user to specify multiple sets of PLINK files as separate rows, each contains genotypes and other informations of different SNPs (e.g., by chromosome).
+}
+  \item{lambda}{
+a numeric vector of inflation factors. Each of \code{summary.files} should has one inflation factor specified in \code{lambda}. 
+}
+  \item{sample.size}{
+a list of numeric vectors specifying sample sizes of participating studies. 
 }
   \item{options}{
 a list of options to control the test procedure. If \code{NULL}, default options will be used. See \code{\link{options}}.
@@ -78,16 +84,15 @@ Zhang H, Shi J, Liang F, Wheeler W, Stolzenberg-Solomon R, Yu K.  (2014) A fast 
 
 library(ARTP3)
 
-# Path of files containing summary statistics
-# Only required columns will be loaded
+## Path of files containing summary statistics
+## Only required columns will be loaded
 study1 <- system.file("extdata", package = "ARTP3", "study1.txt.gz")
-study2 <- system.file("extdata", package = "ARTP3", "study2.txt.gz")
 
-# Path of a build-in file containing pathway definition
+## Path of a build-in file containing pathway definition
 pathway <- system.file("extdata", package = "ARTP3", "pathway.txt.gz")
 
-# Create data frame containing paths of build-in PLINK files that are going to used as reference
-# As an example, use all chromosomes
+## Create data frame containing paths of build-in PLINK files that are going to used as reference
+## As an example, use all chromosomes
 chr <- 1:22
 nchr <- length(chr)
 
@@ -96,52 +101,62 @@ bim <- vector("character", nchr)
 bed <- vector("character", nchr)
 
 for(i in 1:nchr){
-  fam[i] <- system.file("extdata", package = "ARTP3", paste("1000genomes.chr", chr[i], ".fam", sep = ""))
-  bim[i] <- system.file("extdata", package = "ARTP3", paste("1000genomes.chr", chr[i], ".bim", sep = ""))
-  bed[i] <- system.file("extdata", package = "ARTP3", paste("1000genomes.chr", chr[i], ".bed", sep = ""))
+  fam[i] <- system.file("extdata", package = "ARTP3", paste("chr", chr[i], ".fam", sep = ""))
+  bim[i] <- system.file("extdata", package = "ARTP3", paste("chr", chr[i], ".bim", sep = ""))
+  bed[i] <- system.file("extdata", package = "ARTP3", paste("chr", chr[i], ".bed", sep = ""))
 }
 
 reference <- data.frame(fam, bim, bed)
 
-# Set the options. 
-# Accumulate signal from the top 5 SNPs in each gene
-# 1e5 replicates of resampling to estimate the p-value
-options <- list(inspect.snp.n = 5, nperm = 1e5, 
+## Set the options. 
+## Accumulate signal from the top 2 SNPs in each gene
+## 1e5 replicates of resampling to estimate the p-value
+options <- list(inspect.snp.n = 2, nperm = 1e5, 
                 maf = .01, HWE.p = 1e-6, 
                 gene.R2 = .9, 
                 id.str = "unique-pathway-id", 
                 out.dir = getwd(), save.setup = FALSE)
+                
+## no inflation factor is adjusted
+lambda <- 1.0
+
+## only one summary file, so only one element in list sample.size
+## summary file includes data calculated from meta-analysis of two sub-studies, each with sample size 63390 and 5643
+## see a few rows in study1
+# s <- read.table(study1, header = TRUE, as.is = TRUE, nrows = 10)
+# s$Direction
+## [1] "+?" "+?" "++" "+?" "+?" "+?" "+?" "+?" "+?" "++"
+## sub-study1 has 63390 samples, and sub-study2 has 5643 samples
+## '?' means a SNP is not included in that sub-study
+## any other symbols means a SNP is included in that sub-study
+sample.size <- list()
+sample.size[[1]] <- c(63390, 5643)
 
 ## pathway test with two study files
-# ret <- pathway.summaryData(summary.files = c(study1, study2), pathway, reference, options = options)
+# ret <- pathway.summaryData(summary.files = study1, pathway, reference, lambda, sample.size, options = options)
 # 
 # ret$pathway.pvalue
-## [1] 0.00696493  # mac os
-## [1] 0.007394926 # Windows
+## [1] 0.00597494  # Mac OS with 8 threads
 # head(ret$gene.pvalue)
 
 options$print <- FALSE # turn off printing
 
 ## pathway test with each of study files
-# ret1 <- pathway.summaryData(summary.files = study1, pathway, reference, options = options)
-# ret2 <- pathway.summaryData(summary.files = study2, pathway, reference, options = options)
+# ret1 <- pathway.summaryData(summary.files = study1, pathway, reference, lambda, sample.size, options = options)
 # 
 # ret1$pathway.pvalue
-## [1] 0.08872411 # Mac OS
-## [1] 0.0899991  # Windows
-# ret2$pathway.pvalue
-## [1] 0.05579944 # Mac OS
-## [1] 0.05476945 # Windows
+## [1] 0.00597494 # Mac OS with 8 threads
 
 
 ##################################################
 ## The reference genotype data can also be merged into a single set of PLINK files
-bed <- system.file("extdata", package = "ARTP3", "1000genomes.bed")
-bim <- system.file("extdata", package = "ARTP3", "1000genomes.bim")
-fam <- system.file("extdata", package = "ARTP3", "1000genomes.fam")
+
+bed <- system.file("extdata", package = "ARTP3", "ref.bed")
+bim <- system.file("extdata", package = "ARTP3", "ref.bim")
+fam <- system.file("extdata", package = "ARTP3", "ref.fam")
 
 reference <- data.frame(fam, bim, bed)
-# ret.comb <- pathway.summaryData(summary.files = c(study1, study2), pathway, reference, options = options)
+# ret.comb <- pathway.summaryData(summary.files = study1, pathway, reference, lambda, sample.size, options = options)
 ## result should be the same as before
 # ret.comb$pathway.pvalue == ret$pathway.pvalue
 

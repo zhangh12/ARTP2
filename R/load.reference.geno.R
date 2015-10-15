@@ -1,6 +1,8 @@
 
 load.reference.geno <- function(reference, snps.in.pathway, options){
   
+  snps.in.pathway <- unique(snps.in.pathway)
+  
   msg <- paste("Loading genotypes from PLINK files:", date())
   if(options$print) message(msg)
   

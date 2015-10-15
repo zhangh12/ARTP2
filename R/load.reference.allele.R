@@ -1,6 +1,8 @@
 
 load.reference.allele <- function(reference, snps.in.pathway, options){
   
+  snps.in.pathway <- unique(snps.in.pathway)
+  
   msg <- paste("Loading allele information from PLINK files:", date())
   if(options$print) message(msg)
   

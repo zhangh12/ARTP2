@@ -1,16 +1,19 @@
 
-options.setup <- function(options){
+options.setup <- function(options, lambda, sample.size){
   
   opt.default <- options.default() # valid and default options
   
-#   spec.opt <- names(options)
-#   if(('gene.R2' %in% spec.opt) && !('chr.R2' %in% spec.opt)){
-#     options$chr.R2 <- options$gene.R2
-#   }else{
-#     if(!('gene.R2' %in% spec.opt) && ('chr.R2' %in% spec.opt)){
-#       options$gene.R2 <- options$chr.R2
-#     }
-#   }
+  opt.default$lambda <- lambda
+  opt.default$sample.size <- sample.size
+  
+  spec.opt <- names(options)
+  if(('gene.R2' %in% spec.opt) && !('chr.R2' %in% spec.opt)){
+    options$chr.R2 <- options$gene.R2
+  }else{
+    if(!('gene.R2' %in% spec.opt) && ('chr.R2' %in% spec.opt)){
+      options$gene.R2 <- options$chr.R2
+    }
+  }
   
   new.opt <- intersect(names(opt.default), names(options)) # valid options specified by users
   

@@ -14,7 +14,6 @@ The list to describe the options that are used in \code{\link{pathway.summaryDat
   \item{\code{id.str}}{character string that is appended to temporary file names. The default is "PID". }
   \item{\code{method}}{1 = AdaJoint, 2 = AdaJoint2, 3 = ARTP. The default is 3. }
   \item{\code{nperm}}{the number of permutations. The default is 1E5. }
-  \item{\code{inflation.factor}}{inflation factor lambda to be adjusted in pathway analysis. The default is 1.0. }
   \item{\code{nthread}}{the number of threads for multi-threaded processors in Unix/Linux OS. The default is \code{detectCores()} to use all available processors. }
   \item{\code{seed}}{integer for random number generation. The default is 1. }
   }

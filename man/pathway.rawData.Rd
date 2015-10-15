@@ -6,7 +6,7 @@
 Calculate gene and pathway p-values using the ARTP test and raw genotype data
 }
 \usage{
-pathway.rawData(formula, data, pathway, family, subset = NULL, options = NULL)
+pathway.rawData(formula, data, pathway, family, lambda = 1.0, subset = NULL, options = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -21,6 +21,9 @@ a character of the name of file containing definition of a pathway. It must be a
 }
   \item{family}{
 a character taking values of "\code{gaussian}" or "\code{binomial}". 
+}
+  \item{lambda}{
+a numeric specifying inflation factor. The default is 1.0. 
 }
   \item{subset}{
 an optional vector specifying a subset of observations in \code{data}. The default is \code{NULL}, i.e., all observations are used. 

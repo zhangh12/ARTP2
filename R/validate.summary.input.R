@@ -1,5 +1,5 @@
 
-validate.summary.input <- function(summary.files, pathway, reference){
+validate.summary.input <- function(summary.files, pathway, reference, lambda, sample.size){
   
   # validate summary.files
   if(!is.vector(summary.files)){
@@ -66,6 +66,26 @@ validate.summary.input <- function(summary.files, pathway, reference){
   tmp <- !file.exists(reference$fam)
   if(any(tmp)){
     msg <- paste(c("Files below were not found: ", reference$fam[tmp]), collapse = "\n")
+    stop(msg)
+  }
+  
+  if(!is.vector(lambda)){
+    msg <- 'lambda should be a numeric vector'
+    stop(msg)
+  }
+  # each summary file should has one inflation factor
+  if(length(summary.files) != length(lambda)){
+    msg <- 'Each summary file should has one inflation factor'
+    stop(msg)
+  }
+  
+  if(!is.list(sample.size)){
+    msg <- 'sample.size should be a list'
+    stop(msg)
+  }
+  
+  if(length(sample.size) != length(lambda)){
+    msg <- 'Length of sample.size and lambda should be equal'
     stop(msg)
   }
   

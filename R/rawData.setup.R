@@ -1,10 +1,10 @@
 
-rawData.setup <- function(formula, data, pathway, family, subset = NULL, options = NULL){
+rawData.setup <- function(formula, data, pathway, family, lambda, subset = NULL, options = NULL){
   
   start.time <- date()
   
   # merge and reset options
-  options <- options.setup(options)
+  options <- options.setup(options, lambda, NULL)
   
   # subset of data
   data <- data.subset(data, subset, options)
