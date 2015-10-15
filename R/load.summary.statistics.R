@@ -41,15 +41,17 @@ load.summary.statistics <- function(summary.files, snps.in.pathway, options){
       warning(msg)
     }
     
-    if(any(opt.header %in% colnames(st))){
-      if("P" %in% colnames(st)){
-        st$SE <- NA
-      }else{
-        st$P <- NA
-      }
-    }else{
+    if(!any(opt.header %in% colnames(st))){
       msg <- paste0("Neither SE nor P is not provided in ", summary.files[i])
       stop(msg)
+    }
+    
+    if(!('P' %in% colnames(st))){
+      st$P <- NA
+    }
+    
+    if(!('SE' %in% colnames(st))){
+      st$SE <- NA
     }
     
     st <- st[, complete.header]

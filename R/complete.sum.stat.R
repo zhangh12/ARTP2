@@ -1,7 +1,7 @@
 
 complete.sum.stat <- function(sum.stat, ref.geno, options){
   
-  msg <- paste("Calculating P, SE, and N if not provided:", date())
+  msg <- paste("Calculating P and SE if not provided:", date())
   if(options$print) message(msg)
   
   nf <- length(sum.stat$stat)
