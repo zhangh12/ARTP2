@@ -3,6 +3,8 @@ rawData.setup <- function(formula, data, pathway, family, lambda, subset = NULL,
   
   start.time <- date()
   
+  validate.lambda.rawData(lambda)
+  
   # merge and reset options
   options <- options.setup(options, lambda, NULL)
   
@@ -120,7 +122,7 @@ rawData.setup <- function(formula, data, pathway, family, lambda, subset = NULL,
   }
   
   # calculate normal covariance and mean
-  norm.stat <- generate.normal.statistics(resp.var, null, raw.geno, pathway, family)
+  norm.stat <- generate.normal.statistics(resp.var, null, raw.geno, pathway, family, lambda)
   
   if(!options$keep.geno){
     rm(raw.geno)

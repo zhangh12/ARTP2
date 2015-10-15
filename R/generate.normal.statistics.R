@@ -1,5 +1,5 @@
 
-generate.normal.statistics <- function(resp.var, null, raw.geno, pathway, family){
+generate.normal.statistics <- function(resp.var, null, raw.geno, pathway, family, lambda){
   
   chr <- sort(unique(pathway$Chr))
   G <- list()
@@ -43,7 +43,7 @@ generate.normal.statistics <- function(resp.var, null, raw.geno, pathway, family
       G[[i]] <- NA
       gc()
       V[[i]] <- V[[i]] / nrow(X)
-      score0[[i]] <- score0[[i]] / sqrt(nrow(X))
+      score0[[i]] <- score0[[i]] / sqrt(nrow(X)) / sqrt(lambda)
       names(score0[[i]]) <- colnames(V[[i]])
     }
   }else{
@@ -57,7 +57,7 @@ generate.normal.statistics <- function(resp.var, null, raw.geno, pathway, family
         stop(msg)
       }
       
-      score0[[i]] <- as.vector(t(G[[i]]) %*% r / s2)
+      score0[[i]] <- as.vector(t(G[[i]]) %*% r / s2) / sqrt(lambda)
       G[[i]] <- NA
       gc()
       V[[i]] <- V[[i]] / nrow(X)
