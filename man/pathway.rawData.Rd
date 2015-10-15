@@ -6,7 +6,8 @@
 Calculate gene and pathway p-values using the ARTP test and raw genotype data
 }
 \usage{
-pathway.rawData(formula, data, pathway, family, lambda = 1.0, subset = NULL, options = NULL)
+pathway.rawData(formula, data, pathway, family, lambda = 1.0, 
+                subset = NULL, options = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
