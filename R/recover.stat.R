@@ -79,6 +79,10 @@ recover.stat <- function(sum.stat, pathway, ref.geno, allele.info, options){
       rownames(sum.info[[k]]) <- sum.info[[k]][, "SNP"]
       tmp <- strsplit(sum.info[[k]][ks, "Direction", drop = TRUE], '')
       tmp <- sapply(tmp, as.integer)
+      
+      if(is.vector(tmp)){
+        tmp <- matrix(tmp, nrow = 1)
+      }
       colnames(tmp) <- sum.info[[k]][ks, "SNP"]
       
       es <- t(tmp) %*% (tmp * sample.size[[k]])
