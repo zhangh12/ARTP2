@@ -88,6 +88,7 @@ library(ARTP3)
 ## Path of files containing summary statistics
 ## Only required columns will be loaded
 study1 <- system.file("extdata", package = "ARTP3", "study1.txt.gz")
+study2 <- system.file("extdata", package = "ARTP3", "study2.txt.gz")
 
 ## Path of a build-in file containing pathway definition
 pathway <- system.file("extdata", package = "ARTP3", "pathway.txt.gz")
@@ -112,17 +113,17 @@ reference <- data.frame(fam, bim, bed)
 ## Set the options. 
 ## Accumulate signal from the top 2 SNPs in each gene
 ## 1e5 replicates of resampling to estimate the p-value
-options <- list(inspect.snp.n = 2, nperm = 1e5, 
+options <- list(inspect.snp.n = 2, nperm = 1e4, 
                 maf = .01, HWE.p = 1e-6, 
                 gene.R2 = .9, 
                 id.str = "unique-pathway-id", 
                 out.dir = getwd(), save.setup = FALSE)
                 
-## no inflation factor is adjusted
-lambda <- 1.0
+## different inflation factors are adjusted in two studies
+lambda <- c(1.10, 1.08)
 
-## only one summary file, so only one element in list sample.size
-## summary file includes data calculated from meta-analysis of two sub-studies, each with sample size 63390 and 5643
+## two summary files, so two elements in list sample.size
+## the first summary file includes data calculated from meta-analysis of two sub-studies, each with sample size 63390 and 5643
 ## see a few rows in study1
 # s <- read.table(study1, header = TRUE, as.is = TRUE, nrows = 10)
 # s$Direction
@@ -133,11 +134,14 @@ lambda <- 1.0
 sample.size <- list()
 sample.size[[1]] <- c(63390, 5643)
 
+## the second summary file includes data calculated from one sub-studies with sample size 61957
+sample.size[[2]] <- 61957
+
 ## pathway test with two study files
-# ret <- pathway.summaryData(summary.files = study1, pathway, reference, lambda, sample.size, options = options)
+# ret <- pathway.summaryData(summary.files = c(study1, study2), pathway, reference, lambda, sample.size, options = options)
 # 
 # ret$pathway.pvalue
-## [1] 0.00597494  # Mac OS with 8 threads
+## [1] 0.06979302  # Mac OS with 8 threads
 # head(ret$gene.pvalue)
 
 options$print <- FALSE # turn off printing
@@ -146,7 +150,7 @@ options$print <- FALSE # turn off printing
 # ret1 <- pathway.summaryData(summary.files = study1, pathway, reference, lambda, sample.size, options = options)
 # 
 # ret1$pathway.pvalue
-## [1] 0.00597494 # Mac OS with 8 threads
+## [1] 0.06979302 # Mac OS with 8 threads
 
 
 ##################################################
@@ -157,7 +161,7 @@ bim <- system.file("extdata", package = "ARTP3", "ref.bim")
 fam <- system.file("extdata", package = "ARTP3", "ref.fam")
 
 reference <- data.frame(fam, bim, bed)
-# ret.comb <- pathway.summaryData(summary.files = study1, pathway, reference, lambda, sample.size, options = options)
+# ret.comb <- pathway.summaryData(summary.files = c(study1, study2), pathway, reference, lambda, sample.size, options = options)
 ## result should be the same as before
 # ret.comb$pathway.pvalue == ret$pathway.pvalue
 

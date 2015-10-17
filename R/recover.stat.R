@@ -74,6 +74,9 @@ recover.stat <- function(sum.stat, pathway, ref.geno, allele.info, options){
     
     for(k in 1:nstudy){
       id <- which(grp.snps %in% sum.info[[k]][, "SNP"])
+      if(length(id) == 0){
+        next
+      }
       ks <- grp.snps[id]
       
       rownames(sum.info[[k]]) <- sum.info[[k]][, "SNP"]
