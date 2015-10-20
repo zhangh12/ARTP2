@@ -62,21 +62,22 @@ Zhang H, Shi J, Liang F, Wheeler W, Stolzenberg-Solomon R, Yu K.  (2014) A fast 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{options}}, \code{\link{pathway.warm.start}}, \code{\link{pathway.summaryData}}, \code{\link{raw}}. 
+\code{\link{options}}, \code{\link{pathway.warm.start}}, \code{\link{pathway.summaryData}}, \code{\link{example}}. 
 }
 \examples{
 
 library(ARTP3)
 
 # Load the sample data
-data(raw, package = "ARTP3")
-head(raw[, 1:6])
+data(example, package = "ARTP3")
+head(data[, 1:6])
+
+# also a build-in data frame containing pathway definition
+# it can also be the path of file
+head(pathway)
 
 # Define the formula of base risk model
 formula <- formula(case_control ~ sex + age + bmi + factor(study))
-
-# Path of a build-in file containing pathway definition
-pathway <- system.file('extdata', package = "ARTP3", "pathway.txt.gz")
 
 # binary outcome
 family <- "binomial"
@@ -92,7 +93,7 @@ options <- list(inspect.snp.n = 5, nperm = 1e5,
 
 ## pathway test
 ## can take a few minutes
-# ret <- pathway.rawData(formula, data = raw, pathway, family, options = options)
+# ret <- pathway.rawData(formula, data = data, pathway, family, options = options)
 # 
 # ret$pathway.pvalue 
 ## [1] 0.02543975 # Mac OS

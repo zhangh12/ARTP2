@@ -141,7 +141,7 @@ sample.size[[2]] <- 61957
 # ret <- pathway.summaryData(summary.files = c(study1, study2), pathway, reference, lambda, sample.size, options = options)
 # 
 # ret$pathway.pvalue
-## [1] 0.06979302  # Mac OS with 8 threads
+## [1] 0.06979302  # Mac OS
 # head(ret$gene.pvalue)
 
 options$print <- FALSE # turn off printing
@@ -150,7 +150,7 @@ options$print <- FALSE # turn off printing
 # ret1 <- pathway.summaryData(summary.files = study1, pathway, reference, lambda, sample.size, options = options)
 # 
 # ret1$pathway.pvalue
-## [1] 0.06979302 # Mac OS with 8 threads
+## [1] 0.06979302 # Mac OS
 
 
 ##################################################

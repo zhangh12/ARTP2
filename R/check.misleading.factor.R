@@ -34,7 +34,7 @@ check.misleading.factor <- function(null, resp.var){
     mis.factor <- head(mis.factor, 11)
     mis.factor[11] <- paste("and", n, "others")
   }
-  msg <- paste0("Are those covariates or factor below really factors? \n", 
+  msg <- paste0("Are those covariates or factor below really factors? They have too many levels: \n", 
                 paste(mis.factor, collapse = " "), "\n")
   message(msg)
   
