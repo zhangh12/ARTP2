@@ -1,18 +1,10 @@
 
-validate.setup <- function(setup.file){
+validate.setup <- function(setup){
   
-  ld <- try(load(setup.file), silent = TRUE)
-  if(error.try(ld)){
-    msg <- paste("Cannot load", setup.file)
-    stop(msg)
-  }
+  setup$options$only.setup <- NULL
+  setup$options$save.setup <- NULL
+  setup$options$path.setup <- NULL
   
-  if(!("setup" %in% ls())){
-    msg <- paste("Cannot find R object \"setup\" in", setup.file)
-    stop(msg)
-  }
-  
-  rm(setup)
-  gc()
+  setup
   
 }

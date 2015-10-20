@@ -8,24 +8,24 @@ pathway.warm.start
 This function is designed to accelerate the \code{ARTP3} test in practice. It uses pre-calculated and reusable statistics as input and allow the users to try different testing configuration more efficiently. See \code{Details} for more information. 
 }
 \usage{
-pathway.warm.start(setup.file, nperm = NULL, lambda = 1.0)
+pathway.warm.start(setup, nperm = NULL, lambda = 1.0)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{setup.file}{character string of file name saving the setup created by \code{\link{pathway.summaryData}} or \code{\link{pathway.rawData}}. }
+  \item{setup}{an R object created by \code{\link{pathway.summaryData}} or \code{\link{pathway.rawData}}. It is a list containing necessary statistics for computing p-values. }
   \item{nperm}{the number of permutations. If it is \code{NULL} as default, then the value in the saved setup will be used. See \code{Details}. }
   \item{lambda}{inflation factor to be adjusted in pathway analysis. \code{lambda} in this function can only be a single numeric number, which is different from the one in \code{pathway.summaryData}. The default is 1.0. }
 }
 \details{
 An \code{ARTP3} test has two major steps in testing an association. The first step applys data clean criteria and creates necessary and reusable statistics, which can be time-consuming for large pathways. The second step performs the testing procedure to estimate the pathway or gene-level p-value. \code{pathway.warm.start} focuses on the second step. 
 
-The first step can be done by using \code{\link{pathway.summaryData}} or \code{\link{pathway.rawData}} if their \code{options$only.setup} is set as \code{TRUE}. A list \code{setup} in their output can be \code{\link[base]{save}} to a local file, and its path can be used as the input of \code{pathway.warm.start}. With \code{pathway.warm.start}, users can try different configurations to perform a various of tests allowed by the \code{ARTP3} framework, but avoid long waiting time for data cleaning. Commonly used options in \code{setup$options} include \code{method}, \code{inspect.snp.n}, \code{inspect.gene.n}, \code{nperm}, etc. 
+The first step can be done by using \code{\link{pathway.summaryData}} or \code{\link{pathway.rawData}} if their \code{options$only.setup} is set as \code{TRUE}. Their output object, \code{setup}, can be used as the first argument of \code{pathway.warm.start}. With \code{pathway.warm.start}, users can try different configurations to perform a various of tests allowed by the \code{ARTP3} framework, but avoid long waiting time for data cleaning. Commonly used options in \code{setup$options} include \code{method}, \code{inspect.snp.n}, \code{inspect.gene.n}, \code{nperm}, etc. 
 
 Note that both \code{\link{pathway.summaryData}} and \code{\link{pathway.rawData}} can produce the final p-value directly if \code{options$only.setup} is \code{FALSE}. 
 
-The \code{setup.file} is supposed to be the path of a \code{".rda"} file containing a list called \code{setup}. If \code{nperm} is \code{NULL}, then it will be set as \code{setup$options$nperm}. The users can also pass another \code{lambda} if \code{setup} was computed with \code{lambda = 1}. These two options are the most useful ones in using \code{pathway.warm.start} so we highlight them in the interface. Users can modify any option values in \code{setup$options} directly to get more controls of the testing procedure. See \code{\link{options}} for more details about setting \code{setup$options}. 
+The \code{setup} is supposed to have all components defined in \code{\link{pathway.summaryData}} and \code{\link{pathway.rawData}}. If \code{nperm} is \code{NULL}, then it will be set as \code{setup$options$nperm}. The users can also pass \code{lambda} if a second round genomic control is needed. However, unlike in \code{\link{pathway.summaryData}}, \code{lambda} here can only be a single numberic number rather than a vector. Options \code{nperm} and \code{lambda} are the most useful ones in using \code{pathway.warm.start} so we highlight them in the interface. Users can modify any option values in \code{setup$options} directly to get more controls of the testing procedure. See \code{\link{options}} for more details about how to set \code{setup$options}. 
 
-Except for \code{setup$options}, all other components in \code{setup} cannot be modified by users. Modified \code{setup} should be saved to local file \code{setup.file} by \code{\link[base]{save}} so that \code{pathway.warm.start} can make use of the most updated configuration. 
+Except for \code{setup$options}, all other components in \code{setup} should not be modified by users. 
 }
 \value{
 \code{pathway.warm.start} returns an object of class \code{"ARTP3"}. It is a list containing the following components: 
@@ -60,11 +60,9 @@ Genet Epidemiol 33(8): 700 - 709
 ## modify or specify the method
 # setup$options$method <- 2
 # setup$options$inspect.snp.n <- 5
-# setup.file <- "path/to/your/file.rda"
-# save(setup, file = setup.file)
 
-# ret1 <- pathway.warm.start(setup.file, nperm = 1e5)
-# ret2 <- pathway.warm.start(setup.file, nperm = 1e4, lambda = 1.08)
+# ret1 <- pathway.warm.start(setup, nperm = 1e5)
+# ret2 <- pathway.warm.start(setup, nperm = 1e4, lambda = 1.08)
 
 
 }

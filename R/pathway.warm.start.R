@@ -1,10 +1,8 @@
 
 
-pathway.warm.start <- function(setup.file, nperm = NULL, lambda = 1.0){
+pathway.warm.start <- function(setup, nperm = NULL, lambda = 1.0){
   
-  validate.setup(setup.file)
-  
-  load(setup.file)
+  setup <- validate.setup(setup)
   
   if(!is.null(nperm)){
     setup$options$nperm <- nperm
