@@ -168,7 +168,7 @@ filter.raw.geno <- function(raw.geno, pathway, options, control.id = NULL, print
     cor2[is.na(cor2)] <- 0 # Sometimes two SNPs are approximately independent due to the location of missing, see rs4673651 and rs16847776 in 1000 Genomes EUR as an example
     diag(cor2) <- -1
     
-    tmp <- apply(cor2, 2, function(x){max(x, na.rm = TRUE) >= options$gene.R2})
+    tmp <- apply(cor2, 2, function(x){max(x, na.rm = TRUE) > options$gene.R2})
     if(!any(tmp)){
       next
     }
@@ -199,7 +199,7 @@ filter.raw.geno <- function(raw.geno, pathway, options, control.id = NULL, print
           break
         }
         max.r2 <- max(cor2, na.rm = TRUE)
-        if(max.r2 < options$gene.R2){
+        if(max.r2 <= options$gene.R2){
           break
         }
         id <- which(cor2 == max.r2, arr.ind = TRUE)
@@ -272,7 +272,7 @@ filter.raw.geno <- function(raw.geno, pathway, options, control.id = NULL, print
     cor2[is.na(cor2)] <- 0
     diag(cor2) <- -1
     
-    tmp <- apply(cor2, 2, function(x){max(x, na.rm = TRUE) >= options$chr.R2})
+    tmp <- apply(cor2, 2, function(x){max(x, na.rm = TRUE) > options$chr.R2})
     if(!any(tmp)){
       next
     }
@@ -289,7 +289,7 @@ filter.raw.geno <- function(raw.geno, pathway, options, control.id = NULL, print
         break
       }
       max.r2 <- max(cor2, na.rm = TRUE)
-      if(max.r2 < options$chr.R2){
+      if(max.r2 <= options$chr.R2){
         break
       }
       id <- which(!is.na(cor2) & (cor2 == max.r2), arr.ind = TRUE)
@@ -358,7 +358,7 @@ filter.raw.geno <- function(raw.geno, pathway, options, control.id = NULL, print
       cor2[is.na(cor2)] <- 0 # Sometimes two SNPs are approximately independent due to the location of missing, see rs4673651 and rs16847776 in 1000 Genomes EUR as an example
       diag(cor2) <- -1
       
-      tmp <- apply(cor2, 2, function(x){max(x, na.rm = TRUE) >= options$huge.gene.R2})
+      tmp <- apply(cor2, 2, function(x){max(x, na.rm = TRUE) > options$huge.gene.R2})
       if(!any(tmp)){
         next
       }
@@ -387,7 +387,7 @@ filter.raw.geno <- function(raw.geno, pathway, options, control.id = NULL, print
             break
           }
           max.r2 <- max(cor2, na.rm = TRUE)
-          if(max.r2 < options$huge.gene.R2){
+          if(max.r2 <= options$huge.gene.R2){
             break
           }
           id <- which(cor2 == max.r2, arr.ind = TRUE)
@@ -464,7 +464,7 @@ filter.raw.geno <- function(raw.geno, pathway, options, control.id = NULL, print
       cor2[is.na(cor2)] <- 0
       diag(cor2) <- -1
       
-      tmp <- apply(cor2, 2, function(x){max(x, na.rm = TRUE) >= options$huge.chr.R2})
+      tmp <- apply(cor2, 2, function(x){max(x, na.rm = TRUE) > options$huge.chr.R2})
       if(!any(tmp)){
         next
       }
@@ -479,7 +479,7 @@ filter.raw.geno <- function(raw.geno, pathway, options, control.id = NULL, print
           break
         }
         max.r2 <- max(cor2, na.rm = TRUE)
-        if(max.r2 < options$huge.chr.R2){
+        if(max.r2 <= options$huge.chr.R2){
           break
         }
         id <- which(!is.na(cor2) & (cor2 == max.r2), arr.ind = TRUE)
