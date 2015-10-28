@@ -19,7 +19,7 @@ pathway.warm.start(setup, nperm = NULL, lambda = 1.0)
 \details{
 An \code{ARTP3} test has two major steps in testing an association. The first step applys data clean criteria and creates necessary and reusable statistics, which can be time-consuming for large pathways. The second step performs the testing procedure to estimate the pathway or gene-level p-value. \code{pathway.warm.start} focuses on the second step. 
 
-The first step can be done by using \code{\link{pathway.summaryData}} or \code{\link{pathway.rawData}} if their \code{options$only.setup} is set as \code{TRUE}. Their output object, \code{setup}, can be used as the first argument of \code{pathway.warm.start}. With \code{pathway.warm.start}, users can try different configurations to perform a various of tests allowed by the \code{ARTP3} framework, but avoid long waiting time for data cleaning. Commonly used options in \code{setup$options} include \code{method}, \code{inspect.snp.n}, \code{inspect.gene.n}, \code{nperm}, etc. 
+The first step can be done by using \code{\link{pathway.summaryData}} or \code{\link{pathway.rawData}} if their \code{options$only.setup} is set as \code{TRUE}. Their output object, \code{setup}, can be used as the first argument of \code{pathway.warm.start}. With \code{pathway.warm.start}, users can try different configurations to perform various tests allowed by the \code{ARTP3} framework, but avoid long waiting time for data cleaning. Commonly used options in \code{setup$options} include \code{method}, \code{inspect.snp.n}, \code{inspect.gene.n}, \code{nperm}, etc. 
 
 Note that both \code{\link{pathway.summaryData}} and \code{\link{pathway.rawData}} can produce the final p-value directly if \code{options$only.setup} is \code{FALSE}. 
 
@@ -31,10 +31,11 @@ Except for \code{setup$options}, all other components in \code{setup} should not
 \code{pathway.warm.start} returns an object of class \code{"ARTP3"}. It is a list containing the following components: 
 \item{pathway.pvalue}{final pathway p-value accounting for multiple comparisons.}
 \item{gene.pvalue}{a data frame containing gene name, number of SNPs in the gene that were included in the analysis, chromosome name, and the p-value for the gene accounting for multiple comparisons.}
-\item{pathway}{a data frame defining pathway that was actually tested after various filters applied. }
+\item{pathway}{a data frame defining the pathway that was actually tested after various filters applied. }
 \item{model}{a list containing detailed information of selected SNPs in each gene. }
-\item{most.sig.genes}{a character vector of genes selected by \code{ARTP3}. They are the most promising candidates, although its statistical significance is not guaranteed. }
+\item{most.sig.genes}{a character vector of genes selected by \code{ARTP3}. They are the most promising candidates, although their statistical significance is not guaranteed. }
 \item{deleted.snps}{a data frame containing SNPs excluded from the analysis and their reasons.}
+\item{deleted.genes}{a data frame containing genes excluded from the analysis because they are subsets of other remaining genes. }
 \item{options}{a list of options used in the analysis. See \code{\link{options}}}
 \item{test.timing}{timing information (in sec)}
 \item{accurate}{\code{TRUE} if \code{options$nperm} is large enougth to accurately estimate p-values, i.e., if the criteria 

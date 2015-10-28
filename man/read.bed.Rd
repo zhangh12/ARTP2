@@ -23,16 +23,27 @@ the name of the fam file.
 a character vector of SNPs to be extracted from the plink files. 
 }
   \item{sel.subs}{
-an optional vector specifying a subset of observations to be extracted from the plink files. The default is \code{NULL}, i.e., all observations are extracted. 
+an optional vector specifying a subset of subject IDs to be extracted from the plink files. The default is \code{NULL}, i.e., all subjects are extracted. 
 }
 }
 \value{
-A data frame of genotypes of specified observations in the plink files. 
+A data frame of genotypes of specified subjects in the plink files. 
 }
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \examples{
 
 # Load the sample data
+
+bed <- system.file("extdata", package = 'ARTP3', 'chr1.bed')
+bim <- system.file("extdata", package = 'ARTP3', 'chr1.bim')
+fam <- system.file("extdata", package = 'ARTP3', 'chr1.fam')
+
+b <- read.table(bim, header = FALSE, as.is = TRUE, nrows = 5)
+f <- read.table(fam, header = FALSE, as.is = TRUE, nrows = 50)
+geno <- read.bed(bed, bim, fam, sel.snps = b[, 2], sel.subs = f[, 1])
+
+dim(geno) # 50 x 5
+
 
 }

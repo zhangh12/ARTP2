@@ -15,16 +15,16 @@ pathway.summaryData(summary.files, pathway, reference, lambda,
 a character vector of file names containing the summary results of SNPs included in one or multiple studies. Each file must be able to be read by \code{\link[utils]{read.table}}. Each file must have columns called "SNP", "RefAllele", "EffectAllele", "BETA", and at least one of "SE", "P". An optional column called "Direction" describing studies information can also be included. See \code{Details}.
 }
   \item{pathway}{
-a character of the name of file containing definition of a pathway. It must be able to be read by \code{\link[utils]{read.table}} and have columns called "SNP", "Gene", "Chr".
+a character of the name of file containing definition of a pathway. It must be able to be read by \code{\link[utils]{read.table}} and have columns called "SNP", "Gene", and "Chr". It can also be a data frame with the three columns. 
 }
   \item{reference}{
-a data.frame containing the paths of binary PLINK files of reference dataset. It must have columns called "bed", "bim" and "fam". The current version allows user to specify multiple sets of PLINK files as separate rows, each contains genotypes and other informations of different SNPs (e.g., by chromosome).
+a data.frame containing the paths of binary PLINK files of reference dataset. It must have columns called "bed", "bim" and "fam". The current version allows users to specify multiple sets of bed/bim/fam PLINK files as separate rows of the data frame. 
 }
   \item{lambda}{
-a numeric vector of inflation factors. Each of \code{summary.files} should has one inflation factor specified in \code{lambda}. 
+a numeric vector of inflation factors. Each file of \code{summary.files} should have one inflation factor specified in \code{lambda}. 
 }
   \item{sample.size}{
-a list of numeric vectors specifying sample sizes of participating studies. 
+a list of numeric vectors specifying sample sizes of participating studies. See \code{Examples}. 
 }
   \item{options}{
 a list of options to control the test procedure. If \code{NULL}, default options will be used. See \code{\link{options}}.
@@ -57,11 +57,11 @@ The order of columns in files \code{summary.files}, \code{pathway} or in data fr
 \code{pathway.summaryData} returns an object of class \code{"ARTP3"}. It is a list containing the following components: 
 \item{pathway.pvalue}{final pathway p-value accounting for multiple comparisons.}
 \item{gene.pvalue}{a data frame containing gene name, number of SNPs in the gene that were included in the analysis, chromosome name, and the p-value for the gene accounting for multiple comparisons.}
-\item{pathway}{a data frame defining pathway that was actually tested after various filters applied. }
+\item{pathway}{a data frame defining the pathway that was actually tested after various filters applied. }
 \item{model}{a list containing detailed information of selected SNPs in each gene. }
-\item{most.sig.genes}{a character vector of genes selected by \code{ARTP3}. They are the most promising candidates, although its statistical significance is not guaranteed. }
+\item{most.sig.genes}{a character vector of genes selected by \code{ARTP3}. They are the most promising candidates, although their statistical significance is not guaranteed. }
 \item{deleted.snps}{a data frame containing SNPs excluded from the analysis and their reasons.}
-\item{deleted.genes}{a data frame containing genes excluded from the analysis and their reasons. Set \code{options$rm.gene.subset} to be \code{FALSE} to include all genes. }
+\item{deleted.genes}{a data frame containing genes excluded from the analysis because they are subsets of other remaining genes. Set \code{options$rm.gene.subset} to be \code{FALSE} to include all genes even if they are subsets of other genes. }
 \item{options}{a list of options used in the analysis. See \code{\link{options}}}
 \item{accurate}{\code{TRUE} if \code{options$nperm} is large enougth to accurately estimate p-values, i.e., if the criteria 
 \code{sqrt(pvalue*(1-pvalue)/nperm)/pvalue < 0.1}

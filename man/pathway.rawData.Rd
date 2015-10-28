@@ -43,11 +43,11 @@ This function computes gene and pathway p-values when raw genotype data is avail
 \code{pathway.rawData} returns an object of class \code{"ARTP3"}. It is a list containing the following components: 
 \item{pathway.pvalue}{final pathway p-value accounting for multiple comparisons. }
 \item{gene.pvalue}{a data frame containing gene name, number of SNPs in the gene that were included in the analysis, chromosome name, and the p-value for the gene accounting for multiple comparisons. }
-\item{pathway}{a data frame defining pathway that was actually tested after various filters applied. }
+\item{pathway}{a data frame defining the pathway that was actually tested after various filters applied. }
 \item{model}{a list containing detailed information of selected SNPs in each gene. }
-\item{most.sig.genes}{a character vector of genes selected by \code{ARTP3}. They are the most promising candidates, although its statistical significance is not guaranteed. }
+\item{most.sig.genes}{a character vector of genes selected by \code{ARTP3}. They are the most promising candidates, although their statistical significance is not guaranteed. }
 \item{deleted.snps}{a data frame containing SNPs excluded from the analysis and their reasons. }
-\item{deleted.genes}{a data frame containing genes excluded from the analysis and their reasons. Set \code{options$rm.gene.subset} to be \code{FALSE} to include all genes. }
+\item{deleted.genes}{a data frame containing genes excluded from the analysis because they are subsets of other remaining genes. Set \code{options$rm.gene.subset} to be \code{FALSE} to include all genes even if they are subsets of other genes. }
 \item{options}{a list of options used in the analysis. See \code{\link{options}}. }
 \item{accurate}{\code{TRUE} if \code{options$nperm} is large enougth to accurately estimate p-values, i.e., if the criteria 
 \code{sqrt(pvalue*(1-pvalue)/nperm)/pvalue < 0.1}
