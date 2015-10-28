@@ -1,5 +1,5 @@
 
-
+# check if geno.files can be read or not
 validate.genofiles <- function(geno.files){
   
   miss.files <- NULL

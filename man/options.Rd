@@ -8,9 +8,11 @@ The list to describe the options that are used in \code{\link{pathway.summaryDat
 \format{
   The format is a list. 
   
+  \describe{
   \item{\code{out.dir}}{output directory for temporary and output files. The default is the working directory \code{\link[base]{getwd}}. }
   \item{\code{id.str}}{character string that is appended to temporary file names. The default is "PID". }
   \item{\code{seed}}{integer for random number generation. The default is 1. }
+  }
   
   \bold{Options for testing an association: }
   \describe{
@@ -30,7 +32,7 @@ The list to describe the options that are used in \code{\link{pathway.summaryDat
     \item{\code{rm.gene.subset}}{\code{TRUE} to remove genes which are subsets of other genes. The default is \code{TRUE}. }
     \item{\code{delete}}{\code{TRUE} to delete temporary files containing the test statistics for each gene. The default is \code{TRUE}. }
     \item{\code{print}}{\code{TRUE} to print information to the console. The default is \code{TRUE}. }
-    \item{\code{tidy}}{the data frame \code{deleted.snps} in the returned object of \code{\link{pathway.summaryData}} containing information of SNPs excluded from the analysis and their reasons. Possible reason codes include \code{"RM_BY_USER"}, \code{"NO_SUM_STAT"}, \code{"NO_REF"}, \code{"SNP_MISS_RATE"}, \code{"SNP_LOW_MAF"}, \code{"SNP_CONST"}, \code{"SNP_HWE"}, \code{"GENE_R2"}, \code{"HUGE_GENE_R2"}, \code{"CHR_R2"}, \code{"GENE_MISS_RATE"}, \code{"GENE_SUBSET"}, \code{"CONF_ALLELE_INFO"}. Set \code{tidy} as \code{TRUE} to hide the SNPs with codes \code{"NO_SUM_STAT"} and \code{"NO_REF"}. The default is \code{TRUE}. }
+    \item{\code{tidy}}{the data frame \code{deleted.snps} in the returned object of \code{\link{pathway.summaryData}} containing information of SNPs excluded from the analysis and their reasons. Possible reason codes include \code{"RM_BY_USER"}, \code{"NO_SUM_STAT"}, \code{"NO_RAW_GENO"}, \code{"NO_REF"}, \code{"SNP_MISS_RATE"}, \code{"SNP_LOW_MAF"}, \code{"SNP_CONST"}, \code{"SNP_HWE"}, \code{"GENE_R2"}, \code{"HUGE_GENE_R2"}, \code{"CHR_R2"}, \code{"GENE_MISS_RATE"}, \code{"GENE_SUBSET"}, \code{"CONF_ALLELE_INFO"}. Set \code{tidy} as \code{TRUE} to hide the SNPs with codes \code{"NO_SUM_STAT"} and \code{"NO_REF"}. The default is \code{TRUE}. }
     \item{\code{save.setup}}{\code{TRUE} to save necessary data, e.g., working options, observed scores and covariance matrix, to local to repeat the analysis more quicly (skip loading and filtering data). It will be set to be \code{TRUE} if \code{only.setup} is \code{TRUE}. The default is \code{TRUE}. }
     \item{\code{path.setup}}{character string of file name to save the setup for \code{\link{pathway.warm.start}} if \code{save.setup} is \code{TRUE}. The default is \code{NULL} so that it is set as \code{paste(out.dir, "/setup.", id.str, ".rda", sep = "")}. }
     \item{\code{only.setup}}{\code{TRUE} if only the setup is needed while the testing procedure is not. The R code to create the setup uses single thread but the testing procedure can be multi-threaded. The best practice to use \code{ARTP3} on a multi-threaded cluster is to firstly create the setup in single-thread mode, and then call the \code{\link{pathway.warm.start}} to compute the p-values in multiple-thread mode, which uses the saved setup at \code{path.setup} as input. \code{save.setup} will be set to be \code{TRUE} if \code{only.setup} is \code{TRUE}. The default is \code{FALSE}. }
@@ -67,9 +69,9 @@ The list to describe the options that are used in \code{\link{pathway.summaryDat
 \details{ 
   \bold{Order of removing SNPs, genes and subjects:} \cr
    1. Apply the option \code{excluded.snps} and \code{selected.snps} if non-NULL. Code: \code{"RM_BY_USER"}.\cr
-   2. Remove SNPs without summary statistics in \code{summary.files}. Code: \code{"NO_SUM_STAT"}. \cr
-   3. Remove SNPs not in \code{bim} files in \code{reference}. Code: \code{"NO_REF"}. \cr
-   4. Remove SNPs with conflictive allele information in summary and reference data. Code: \code{"CONF_ALLELE_INFO"}. \cr
+   2. Remove SNPs without summary statistics in \code{summary.files}. Code: \code{"NO_SUM_STAT"}; or remove SNPs without raw genotype data in \code{data} or \code{geno.files}. Code: \code{NO_RAW_GENO}. \cr
+   3. Remove SNPs not in \code{bim} files in \code{reference} if \code{pathway.summaryData} is used. Code: \code{"NO_REF"}. \cr
+   4. Remove SNPs with conflictive allele information in summary and reference data if \code{pathway.summaryData} is used. Code: \code{"CONF_ALLELE_INFO"}. \cr
    5. Remove SNPs with high missing rate. Code: \code{"SNP_MISS_RATE"}. \cr
    6. Remove SNPs with low MAF. Code: \code{"SNP_LOW_MAF"}. \cr
    7. Remove constant SNPs. Code: \code{"SNP_CONST"}. \cr

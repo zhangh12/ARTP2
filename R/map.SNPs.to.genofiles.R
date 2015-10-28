@@ -1,5 +1,6 @@
 
-SNPs.files <- function(geno.files, pathway){
+# read in the first row of each geno.files to obtain a list of available SNPs. Map each SNP to one geno.files
+map.SNPs.to.genofiles <- function(geno.files, pathway){
   
   SNP <- NULL
   file <- NULL

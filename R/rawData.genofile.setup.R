@@ -19,7 +19,7 @@ rawData.genofiles.setup <- function(formula, null, pathway, family, geno.files, 
   
   # check if all genotype files can be found. Missing files will be given in warning messages
   geno.files <- validate.genofiles(geno.files)
-  sf <- SNPs.files(geno.files, pathway)
+  sf <- map.SNPs.to.genofiles(geno.files, pathway)
   
   # deleted snps and their reason
   deleted.snps <- data.frame(SNP = NULL, reason = NULL, comment = NULL, stringsAsFactors = FALSE)
@@ -101,6 +101,11 @@ rawData.genofiles.setup <- function(formula, null, pathway, family, geno.files, 
       sid <- which(paste0('SID-', 1:nrow(geno)) %in% rownames(null))
       
       # geno <- geno[sid, ]
+      # the code above will double the memory consumption
+      # use the codes below instead
+      # the idea comes from @vc273 at 
+      # http://stackoverflow.com/questions/10790204/how-to-delete-a-row-by-reference-in-r-data-table
+      
       snps <- colnames(geno)
       setDT(geno)
       tmp <- data.table(V1 = geno[[snps[1]]][sid])
