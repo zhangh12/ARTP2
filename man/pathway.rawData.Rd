@@ -6,8 +6,8 @@
 Calculate gene and pathway p-values using the ARTP test and raw genotype data
 }
 \usage{
-pathway.rawData(formula, data, pathway, family, lambda = 1.0, 
-                subset = NULL, options = NULL)
+pathway.rawData(formula, data, pathway, family, geno.files = NULL, 
+                lambda = 1.0, subset = NULL, options = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -15,13 +15,16 @@ pathway.rawData(formula, data, pathway, family, lambda = 1.0,
 an object of class \code{\link[stats]{formula}}: a symbolic description of basic risk model to be fitted. Only the outcome and covariates are included. See more details of formula in \code{\link[stats]{glm}}. 
 }
   \item{data}{
-a data frame containing the variables specified in \code{formula} and genotypes of SNPs. 
+a data frame containing the variables specified in \code{formula}. If \code{geno.files} is not \code{NULL}, then it also contains genotypes. 
 }
   \item{pathway}{
 a character of the name of file containing definition of a pathway. It must be able to be read by \code{\link[utils]{read.table}} and have columns called "SNP", "Gene", "Chr". It also can be a data frame with the three columns. 
 }
   \item{family}{
 a character taking values of "\code{gaussian}" or "\code{binomial}". 
+}
+  \item{geno.files}{
+a character vector containing paths of files containing genotype data. It can be \code{NULL} if all genotype data are put in \code{data}. 
 }
   \item{lambda}{
 a numeric specifying inflation factor. The default is 1.0. 
@@ -93,14 +96,22 @@ options <- list(inspect.snp.n = 5, nperm = 1e5,
 
 ## pathway test
 ## can take a few minutes
-# ret <- pathway.rawData(formula, data = data, pathway, family, options = options)
+# ret1 <- pathway.rawData(formula, data = data, pathway, family, options = options)
 # 
-# ret$pathway.pvalue 
-## [1] 0.02543975 # Mac OS
-## [1] 0.02312977 # Windows
-# head(ret$gene.pvalue)
-# table(ret$deleted.snps$reason)
-# head(ret$deleted.genes)
+# ret1$pathway.pvalue 
+## [1] 0.02568474 # Mac OS
+# head(ret1$gene.pvalue)
+# table(ret1$deleted.snps$reason)
+# head(ret1$deleted.genes)
 
+
+##################################################
+# load a vector 'geno'
+data(geno, package = 'ARTP3')
+# set the paths of genotype files
+geno.files <- system.file("extdata", package = "ARTP3", geno)
+
+# ret2 <- pathway.rawData(formula, data = data[, 1:5], pathway, family, geno.files, options = options)
+# ret2$pathway.pvalue == ret1$pathway.pvalue
 
 }

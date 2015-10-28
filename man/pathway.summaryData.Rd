@@ -141,16 +141,16 @@ sample.size[[2]] <- 61957
 # ret <- pathway.summaryData(summary.files = c(study1, study2), pathway, reference, lambda, sample.size, options = options)
 # 
 # ret$pathway.pvalue
-## [1] 0.06979302  # Mac OS
+## [1] 0.0559944  # Mac OS
 # head(ret$gene.pvalue)
 
 options$print <- FALSE # turn off printing
 
 ## pathway test with each of study files
-# ret1 <- pathway.summaryData(summary.files = study1, pathway, reference, lambda, sample.size, options = options)
+# ret1 <- pathway.summaryData(summary.files = study1, pathway, reference, lambda[1], sample.size[1], options = options)
 # 
 # ret1$pathway.pvalue
-## [1] 0.06979302 # Mac OS
+## [1] 0.04284572 # Mac OS
 
 
 ##################################################
@@ -164,5 +164,6 @@ reference <- data.frame(fam, bim, bed)
 # ret.comb <- pathway.summaryData(summary.files = c(study1, study2), pathway, reference, lambda, sample.size, options = options)
 ## result should be the same as before
 # ret.comb$pathway.pvalue == ret$pathway.pvalue
+
 
 }

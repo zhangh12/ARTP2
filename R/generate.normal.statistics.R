@@ -1,6 +1,8 @@
 
 generate.normal.statistics <- function(resp.var, null, raw.geno, pathway, family, lambda){
   
+  pathway <- pathway[pathway$SNP %in% colnames(raw.geno), ]
+  
   chr <- sort(unique(pathway$Chr))
   G <- list()
   for(i in 1:length(chr)){
@@ -64,6 +66,12 @@ generate.normal.statistics <- function(resp.var, null, raw.geno, pathway, family
       score0[[i]] <- score0[[i]] / sqrt(nrow(X))
       names(score0[[i]]) <- colnames(V[[i]])
     }
+  }
+  
+  for(i in 1:length(V)){
+    rs <- sort(names(score0[[i]]))
+    score0[[i]] <- score0[[i]][rs]
+    V[[i]] <- V[[i]][rs, rs]
   }
   
   names(V) <- as.character(chr)

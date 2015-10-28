@@ -1,7 +1,11 @@
 
-pathway.rawData <- function(formula, data, pathway, family, lambda = 1.0, subset = NULL, options = NULL){
+pathway.rawData <- function(formula, data, pathway, family, geno.files = NULL, lambda = 1.0, subset = NULL, options = NULL){
   
-  setup <- rawData.setup(formula, data, pathway, family, lambda, subset, options)
+  if(is.null(geno.files)){
+    setup <- rawData.dataframe.setup(formula, data, pathway, family, lambda, subset, options)
+  }else{
+    setup <- rawData.genofiles.setup(formula, data, pathway, family, geno.files, lambda, subset, options)
+  }
   
   if(setup$options$only.setup){
     return(setup)

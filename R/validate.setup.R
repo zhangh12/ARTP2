@@ -14,6 +14,13 @@ validate.setup <- function(setup){
     }
   }
   
+  
+  for(i in 1:length(setup$norm.stat$V)){
+    rs <- sort(names(setup$norm.stat$score0[[i]]))
+    setup$norm.stat$score0[[i]] <- setup$norm.stat$score0[[i]][rs]
+    setup$norm.stat$V[[i]] <- setup$norm.stat$V[[i]][rs, rs]
+  }
+  
   setup$options$only.setup <- NULL
   setup$options$save.setup <- NULL
   setup$options$path.setup <- NULL

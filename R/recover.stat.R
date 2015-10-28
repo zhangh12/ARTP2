@@ -97,7 +97,15 @@ recover.stat <- function(sum.stat, pathway, ref.geno, allele.info, options){
     V[[i]] <- wt[[i]] * ref.cor[[i]]
     score0[[i]] <- score0[[i]][colnames(V[[i]])]
   }
+  
+  for(i in 1:length(V)){
+    rs <- sort(names(score0[[i]]))
+    score0[[i]] <- score0[[i]][rs]
+    V[[i]] <- V[[i]][rs, rs]
+  }
+  
   names(V) <- as.character(chr)
+  names(score0) <- as.character(chr)
   
   list(V = V, score0 = score0)
   

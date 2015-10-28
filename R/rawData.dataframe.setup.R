@@ -1,5 +1,5 @@
 
-rawData.setup <- function(formula, data, pathway, family, lambda, subset = NULL, options = NULL){
+rawData.dataframe.setup <- function(formula, data, pathway, family, lambda, subset = NULL, options = NULL){
   
   start.time <- date()
   
