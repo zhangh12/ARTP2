@@ -32,6 +32,15 @@ load.pathway.definition <- function(pathway, options){
   }
   
   pathway <- pathway[, header]
+  
+  if(!is.null(options$selected.snps)){
+    pathway <- pathway[pathway$SNP %in% options$selected.snps, , drop = FALSE]
+    if(nrow(pathway) == 0){
+      msg <- "No SNP is left if only use SNPs specified in options$selected.snps"
+      stop(msg)
+    }
+  }
+  
   if(!is.null(options$excluded.genes)){
     pathway <- pathway[!(pathway$Gene %in% options$excluded.genes), , drop = FALSE]
     if(nrow(pathway) == 0){
