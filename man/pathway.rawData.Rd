@@ -100,6 +100,8 @@ options <- list(inspect.snp.n = 5, nperm = 1e5,
 # 
 # ret1$pathway.pvalue 
 ## [1] 0.02568474 # Mac OS
+## [1] 0.03331467 # Linux with 32 threads
+## [1] 0.02511475 # Linux with 1 thread
 # head(ret1$gene.pvalue)
 # table(ret1$deleted.snps$reason)
 # head(ret1$deleted.genes)

@@ -558,7 +558,7 @@ int *R_sel_id, int *R_marg_id){
   for(int g = 0; g < ngene; ++g){
   	fstream gout(gene_out[g].c_str(), ios::out | ios::binary);
   	if(!gout){
-  		error("Fail to write null statistics to file");
+  		error("Fail to write observed statistics to file");
   	}
   	int ns = gene_idx[g].size();
     int ncp = cutpoint[g].size();
@@ -681,6 +681,10 @@ int *R_sel_id, int *R_marg_id){
   		}
   	}
   	gin.close();
+    
+    if(remove(gene_out[g].c_str())){
+      error("Cannot delete gene output file");
+    }
   	
   	imat arr_rank(ncp, ivec (nperm + 1, 0));
   	#pragma omp parallel num_threads(min(ncp, nthread))
@@ -741,8 +745,7 @@ int *R_sel_id, int *R_marg_id){
     R_gene_pval[g] += rep / 2.0;
     R_gene_pval[g] /= nperm + 1;
     
-    ofstream gout;
-    gout.open(gene_out[g].c_str(), ios::out | ios::binary);
+    fstream gout(gene_out[g].c_str(), ios::out | ios::binary);
     if(!gout){
       error("Fail to write gene statistics to file");
     }
@@ -812,7 +815,7 @@ int *R_sel_id, int *R_marg_id){
   for(int g = 0; g < ngene; ++g){
     fstream gout(gene_out[g].c_str(), ios::out | ios::binary);
   	if(!gout){
-  		error("Fail to write null statistics to file");
+  		error("Fail to write observed statistics to file");
   	}
   	
   	fvec S;
@@ -931,6 +934,10 @@ int *R_sel_id, int *R_marg_id){
   		}
   	}
   	gin.close();
+    
+    if(remove(gene_out[g].c_str())){
+      error("Cannot delete gene output file");
+    }
   	
   	imat arr_rank(ncp, ivec (nperm + 1, 0));
   	#pragma omp parallel num_threads(min(ncp, nthread))
@@ -991,8 +998,7 @@ int *R_sel_id, int *R_marg_id){
     R_gene_pval[g] += rep / 2.0;
     R_gene_pval[g] /= nperm + 1;
     
-    ofstream gout;
-    gout.open(gene_out[g].c_str(), ios::out | ios::binary);
+    fstream gout(gene_out[g].c_str(), ios::out | ios::binary);
     if(!gout){
       error("Fail to write gene statistics to file");
     }
@@ -1112,8 +1118,10 @@ double *R_pathway_pval, int *R_arr_rank, double *R_gene_pval){
         int id = stat[k][i].id;
         arr_rank[k][id] = i;
       }
+      VecStat().swap(stat[k]);
     }
   }
+  vector<VecStat>().swap(stat);
   
   ivec pathway_min_p(nperm + 1, -1);
   ivec subsum(nthread, 0);
@@ -1229,7 +1237,7 @@ int *R_sel_id, int *R_marg_id){
   for(int g = 0; g < ngene; ++g){
     fstream gout(gene_out[g].c_str(), ios::out | ios::binary);
   	if(!gout){
-  		error("Fail to write null statistics to file");
+  		error("Fail to write observed statistics to file");
   	}
   	int ns = gene_idx[g].size();
     int ncp = cutpoint[g].size();
@@ -1343,6 +1351,10 @@ int *R_sel_id, int *R_marg_id){
   		}
   	}
   	gin.close();
+    
+    if(remove(gene_out[g].c_str())){
+      error("Cannot delete gene output file");
+    }
   	
   	imat arr_rank(ncp, ivec (nperm + 1, 0));
 		for(int j = 0; j < ncp; ++j){
@@ -1395,8 +1407,7 @@ int *R_sel_id, int *R_marg_id){
     R_gene_pval[g] += rep / 2.0;
     R_gene_pval[g] /= nperm + 1;
     
-    ofstream gout;
-    gout.open(gene_out[g].c_str(), ios::out | ios::binary);
+    fstream gout(gene_out[g].c_str(), ios::out | ios::binary);
     if(!gout){
       error("Fail to write gene statistics to file");
     }
@@ -1469,7 +1480,7 @@ int *R_sel_id, int *R_marg_id){
   for(int g = 0; g < ngene; ++g){
     fstream gout(gene_out[g].c_str(), ios::out | ios::binary);
     if(!gout){
-  		error("Fail to write null statistics to file");
+  		error("Fail to write observed statistics to file");
   	}
   	
   	fvec S;
@@ -1576,6 +1587,10 @@ int *R_sel_id, int *R_marg_id){
   		}
   	}
   	gin.close();
+    
+    if(remove(gene_out[g].c_str())){
+      error("Cannot delete gene output file");
+    }
   	
   	imat arr_rank(ncp, ivec (nperm + 1, 0));
 		for(int j = 0; j < ncp; ++j){
@@ -1628,8 +1643,7 @@ int *R_sel_id, int *R_marg_id){
     R_gene_pval[g] += rep / 2.0;
     R_gene_pval[g] /= nperm + 1;
     
-    ofstream gout;
-    gout.open(gene_out[g].c_str(), ios::out | ios::binary);
+    fstream gout(gene_out[g].c_str(), ios::out | ios::binary);
     if(!gout){
       error("Fail to write gene statistics to file");
     }
@@ -1740,7 +1754,9 @@ double *R_pathway_pval, int *R_arr_rank, double *R_gene_pval){
       int id = stat[k][i].id;
       arr_rank[k][id] = i;
     }
+    VecStat().swap(stat[k]);
   }
+  vector<VecStat>().swap(stat);
   
   ivec pathway_min_p(nperm + 1, -1);
   ivec subsum(nthread, 0);

@@ -142,6 +142,8 @@ sample.size[[2]] <- 61957
 # 
 # ret$pathway.pvalue
 ## [1] 0.0559944  # Mac OS
+## [1] 0.07444256 # Linux with 32 threads
+## [1] 0.06469353 # Linux with 1 thread
 # head(ret$gene.pvalue)
 
 options$print <- FALSE # turn off printing
