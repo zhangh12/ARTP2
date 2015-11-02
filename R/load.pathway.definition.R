@@ -52,6 +52,14 @@ load.pathway.definition <- function(pathway, options){
   pathway <- pathway[!duplicated(pathway), ]
   pathway <- pathway[order(pathway$Chr, pathway$Gene, pathway$SNP), ]
   
+  tmp <- table(pathway$Gene, pathway$Chr)
+  id <- apply(tmp, 1, function(x){sum(x > 0) > 1})
+  if(any(id)){
+    dup.genes <- rownames(tmp)[id]
+    msg <- paste(c('The follow gene(s) are included in more than one chromosome:\n', dup.genes), collapse = ' ', sep = '')
+    stop(msg)
+  }
+  
   pathway
   
 }

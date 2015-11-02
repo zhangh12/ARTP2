@@ -17,8 +17,16 @@ validate.setup <- function(setup){
   
   for(i in 1:length(setup$norm.stat$V)){
     rs <- sort(names(setup$norm.stat$score0[[i]]))
-    setup$norm.stat$score0[[i]] <- setup$norm.stat$score0[[i]][rs]
-    setup$norm.stat$V[[i]] <- setup$norm.stat$V[[i]][rs, rs]
+    if(length(rs) == 1){
+      # the chromosome contains only one SNP.
+      # in that case, setup$norm.stat$V[[i]] might not be a matrix if version between v0.8.10 and v0.8.14 was used
+      # we need to reformat it as a 1x1 matrix, and also add row/column names to it
+      setup$norm.stat$V[[i]] <- matrix(setup$norm.stat$V[[i]], dimnames = list(rs, rs))
+    }else{
+      setup$norm.stat$score0[[i]] <- setup$norm.stat$score0[[i]][rs]
+      setup$norm.stat$V[[i]] <- setup$norm.stat$V[[i]][rs, rs, drop = FALSE]
+    }
+    
   }
   
   setup$options$only.setup <- NULL

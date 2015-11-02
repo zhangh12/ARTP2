@@ -101,7 +101,7 @@ recover.stat <- function(sum.stat, pathway, ref.geno, allele.info, options){
   for(i in 1:length(V)){
     rs <- sort(names(score0[[i]]))
     score0[[i]] <- score0[[i]][rs]
-    V[[i]] <- V[[i]][rs, rs]
+    V[[i]] <- V[[i]][rs, rs, drop = FALSE]
   }
   
   names(V) <- as.character(chr)
