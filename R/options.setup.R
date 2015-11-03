@@ -29,7 +29,7 @@ options.setup <- function(options, lambda, sample.size){
   }
   
   if(options$only.setup){
-    options$save.setup <- TRUE
+    #options$save.setup <- TRUE
   }
   
   if(options$trim.huge.chr){

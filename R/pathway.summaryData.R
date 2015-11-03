@@ -7,7 +7,7 @@ pathway.summaryData <- function(summary.files, pathway, reference, lambda, sampl
     return(setup)
   }
   
-  test <- norm.stat.test(setup, 1.0)
+  test <- norm.stat.test(setup)
   
   list(pathway.pvalue = test$pathway.pvalue, gene.pvalue = test$gene.pvalue, 
        model = test$model, most.sig.genes = test$most.sig.genes, 

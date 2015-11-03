@@ -1,23 +1,20 @@
 
-
-pathway.warm.start <- function(setup, nperm = NULL, lambda = 1.0){
+# lambda is the second round adjusted inflation factor
+# lambda is different with the ones in pathway.rawData and pathway.summaryData, in which lambda is the study-specific first round inflation factor
+pathway.warm.start <- function(setup, nperm = NULL, lambda = 1.0, nthread = NULL){
   
   setup <- validate.setup(setup)
   
-  if(!is.null(nperm)){
-    setup$options$nperm <- nperm
-  }
+  setup <- update.setup(setup, nperm, lambda, nthread)
   
-  tmp <- .C("check_nthread", nthread = as.integer(setup$options$nthread))
-  setup$options$nthread <- tmp$nthread
-  
-  test <- norm.stat.test(setup, lambda)
+  test <- norm.stat.test(setup)
   
   list(pathway.pvalue = test$pathway.pvalue, gene.pvalue = test$gene.pvalue, 
        model = test$model, most.sig.genes = test$most.sig.genes, 
        accurate = test$accurate, test.timing = test$test.timing, 
        pathway = setup$pathway, deleted.snps = setup$deleted.snps, 
        deleted.genes = setup$deleted.genes, 
-       options = setup$options, setup.timing = setup$setup.timing)
+       options = setup$options, setup.timing = setup$setup.timing, 
+       setup = setup)
   
 }
