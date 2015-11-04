@@ -52,20 +52,20 @@ options.validation <- function(options){
     }
   }
   
-  if(options$gene.R2 < 0 || options$gene.R2 > 1){
-    stop("gene.R2 should be in [0, 1]")
+  if(options$gene.R2 <= 0){
+    stop("gene.R2 should be in (0, 1]")
   }
   
-  if(options$chr.R2 < 0 || options$chr.R > 1){
-    stop("chr.R2 should be in [0, 1]")
+  if(options$chr.R2 <= 0){
+    stop("chr.R2 should be in (0, 1]")
   }
   
-  if(options$huge.gene.R2 < 0 || options$huge.gene.R2 > 1){
-    stop("huge.gene.R2 should be in [0, 1]")
+  if(options$huge.gene.R2 <= 0){
+    stop("huge.gene.R2 should be in (0, 1]")
   }
   
-  if(options$huge.chr.R2 < 0 || options$huge.chr.R > 1){
-    stop("huge.chr.R2 should be in [0, 1]")
+  if(options$huge.chr.R2 <= 0){
+    stop("huge.chr.R2 should be in (0, 1]")
   }
   
 }

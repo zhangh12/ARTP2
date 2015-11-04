@@ -36,9 +36,26 @@ options.setup <- function(options, lambda, sample.size){
     if(options$huge.gene.R2 > options$gene.R2){
       options$huge.gene.R2 <- max(options$gene.R2 - .1, 0)
     }
+    
     if(options$huge.chr.R2 > options$chr.R2){
       options$huge.chr.R2 <- max(options$chr.R2 - .1, 0)
     }
+  }
+  
+  if(options$gene.R2 > 1){
+    options$gene.R2 <- 1
+  }
+  
+  if(options$chr.R2 > 1){
+    options$chr.R2 <- 1
+  }
+  
+  if(options$huge.gene.R2 > 1){
+    options$huge.gene.R2 <- 1
+  }
+  
+  if(options$huge.chr.R2 > 1){
+    options$huge.chr.R2 <- 1
   }
   
   options.validation(options)
