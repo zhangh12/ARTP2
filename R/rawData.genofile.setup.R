@@ -26,7 +26,7 @@ rawData.genofiles.setup <- function(formula, null, pathway, family, geno.files, 
   deleted.genes <- data.frame(Gene = NULL, reason = NULL, comment = NULL, stringsAsFactors = FALSE)
   exc.snps <- intersect(pathway$SNP, options$excluded.snps)
   exc.snps <- setdiff(exc.snps, options$selected.snps)
-  deleted.snps <- update.deleted.snps(deleted.snps, exc.snps, reason = "RM_BY_USER", comment = "")
+  deleted.snps <- update.deleted.snps(deleted.snps, exc.snps, reason = "RM_BY_SNP_NAMES", comment = "")
   pathway <- update.pathway.definition(pathway, exc.snps)
   sf <- update.sf(sf, exc.snps)
   

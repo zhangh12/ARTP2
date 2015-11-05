@@ -154,7 +154,7 @@ filter.reference.geno <- function(ref.geno, pathway, options){
           exc.snps <- c(exc.snps, snp.lower.maf)
           tmp <- c(cor2[snp.lower.maf, ], cor2[, snp.lower.maf])
           tmp <- tmp[tmp > 0]
-          cc <- paste(names(tmp)[which(tmp == max.r2)[1]], max.r2, sep = "_")
+          cc <- paste(names(tmp)[which(tmp == max.r2)[1]], round(max.r2, 3), sep = "_")
           comment <- c(comment, cc)
           cor2 <- cor2[-k, -k, drop = FALSE]
         }
@@ -242,7 +242,7 @@ filter.reference.geno <- function(ref.geno, pathway, options){
         exc.snps <- c(exc.snps, snp.lower.maf)
         tmp <- c(cor2[snp.lower.maf, ], cor2[, snp.lower.maf])
         tmp <- tmp[tmp > 0]
-        cc <- paste(names(tmp)[which.max(tmp)], max.r2, sep = "_")
+        cc <- paste(names(tmp)[which.max(tmp)], round(max.r2, 3), sep = "_")
         comment <- c(comment, cc)
         cor2 <- cor2[-k, -k, drop = FALSE]
       }
@@ -341,7 +341,7 @@ filter.reference.geno <- function(ref.geno, pathway, options){
             exc.snps <- c(exc.snps, snp.lower.maf)
             tmp <- c(cor2[snp.lower.maf, ], cor2[, snp.lower.maf])
             tmp <- tmp[tmp > 0]
-            cc <- paste(names(tmp)[which(tmp == max.r2)[1]], max.r2, sep = "_")
+            cc <- paste(names(tmp)[which(tmp == max.r2)[1]], round(max.r2, 3), sep = "_")
             comment <- c(comment, cc)
             cor2 <- cor2[-k, -k, drop = FALSE]
           }
@@ -433,7 +433,7 @@ filter.reference.geno <- function(ref.geno, pathway, options){
           exc.snps <- c(exc.snps, snp.lower.maf)
           tmp <- c(cor2[snp.lower.maf, ], cor2[, snp.lower.maf])
           tmp <- tmp[tmp > 0]
-          cc <- paste(names(tmp)[which.max(tmp)], max.r2, sep = "_")
+          cc <- paste(names(tmp)[which.max(tmp)], round(max.r2, 3), sep = "_")
           comment <- c(comment, cc)
           cor2 <- cor2[-k, -k, drop = FALSE]
         }

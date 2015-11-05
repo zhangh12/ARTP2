@@ -24,6 +24,7 @@ options.default <- function(){
                       nthread = detectCores(), 
                       excluded.snps = NULL, 
                       selected.snps = NULL, 
+                      excluded.regions = NULL, 
                       excluded.subs = NULL, 
                       selected.subs = NULL, 
                       excluded.genes = NULL, 

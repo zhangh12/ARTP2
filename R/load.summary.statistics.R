@@ -8,8 +8,9 @@ load.summary.statistics <- function(summary.files, snps.in.pathway, options){
   
   header <- c("SNP", "RefAllele", "EffectAllele", "BETA") # columns that must be provided by users
   opt.header <- c("P", "SE")
+  opt.header2 <- c('Chr', 'Pos')
   
-  complete.header <- c(header, opt.header, "Direction")
+  complete.header <- c(header, opt.header, opt.header2, "Direction")
   
   # summary.files is a vector of file names
   stat <- list()
@@ -52,6 +53,14 @@ load.summary.statistics <- function(summary.files, snps.in.pathway, options){
     
     if(!('SE' %in% colnames(st))){
       st$SE <- NA
+    }
+    
+    if(!('Chr' %in% colnames(st))){
+      st$Chr <- NA
+    }
+    
+    if(!('Pos' %in% colnames(st))){
+      st$Pos <- NA
     }
     
     st <- st[, complete.header]

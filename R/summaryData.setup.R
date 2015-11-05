@@ -22,7 +22,14 @@ summaryData.setup <- function(summary.files, pathway, reference, lambda, sample.
   deleted.genes <- data.frame(Gene = NULL, reason = NULL, stringsAsFactors = FALSE)
   exc.snps <- intersect(pathway$SNP, options$excluded.snps)
   exc.snps <- setdiff(exc.snps, options$selected.snps)
-  deleted.snps <- update.deleted.snps(deleted.snps, exc.snps, reason = "RM_BY_USER", comment = "")
+  deleted.snps <- update.deleted.snps(deleted.snps, exc.snps, reason = "RM_BY_SNP_NAMES", comment = "")
+  pathway <- update.pathway.definition(pathway, exc.snps)
+  sum.stat <- update.sum.stat(sum.stat, exc.snps)
+  
+  # delete SNPs in specific regions
+  exc.reg <- find.snps.in.regions(sum.stat$stat, options)
+  exc.snps <- exc.reg$exc.snps
+  deleted.snps <- update.deleted.snps(deleted.snps, exc.snps, reason = "RM_BY_REGIONS", comment = exc.reg$comment)
   pathway <- update.pathway.definition(pathway, exc.snps)
   sum.stat <- update.sum.stat(sum.stat, exc.snps)
   
