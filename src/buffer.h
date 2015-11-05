@@ -1,5 +1,7 @@
 #ifndef BUFFER_BIN_ARTPS
 #define BUFFER_BIN_ARTPS
+
+#define PRINT_DEB
 /*
 Task:
 Buffer reading binary file,
@@ -35,15 +37,21 @@ void read_in_buffer(std::string filename, int nrow, int ncol, std::vector<T> oup
 	const long size_len = (long)nrow*((long)ncol)*mul; // verify size_len == size
 	// buffer read, type = float
     char * buffer = (char *)malloc(sizeof(char)*size_len);
+	if (buffer == NULL){
+		std::cout << "Out of Memory." << std::endl;
+		exit(1);
+	}
 	std::ifstream fin(filename.c_str(), std::ios::in | std::ios::binary);
 	fin.read(buffer, size_len);
 	float * buffer_float = (float *)buffer;  //TODO: recasting char* to float *
+#ifdef PRINT_DEB
 	for (int i = 0; i < nrow; i++){
 		std::cout << "\n[" << i << ",]:\t";
 		for (int j = 0; j < ncol; j++)
 			std::cout  << buffer_float[i*ncol + j]<<"\t";
 	}
 	std::cout << "\n";
+#endif
 	fin.close();
 	free(buffer);
 }
