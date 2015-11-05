@@ -18,7 +18,7 @@ artp3.cpp:
 #include <iostream>
 #include <fstream>
 #include <stdio.h>
-#include <stdio.h>
+#include <stdlib.h>
 #include <omp.h>
 
 // para:
@@ -28,33 +28,22 @@ artp3.cpp:
 template <class T> 
 void read_in_buffer(std::string filename, int nrow, int ncol, std::vector<T> ouput){
 	/*
-	READING TO BUFFER;
+	TODO: READING TO BUFFER;
+	Verified: testbuffer1.cpp
 	*/
-	long size_len = (long)nrow*((long)ncol); // verify size_len == size
-	// buffer read, type = float
 	size_t mul = sizeof(float) / sizeof(unsigned char);
-	FILE *fp;
-	fp = fopen(filename.c_str(), "rb");// open as binary
-	fseek(fp, 0, SEEK_END);
-	long size = ftell(fp);         /*calc the size needed*/
-	fseek(fp, 0, SEEK_SET);
-	unsigned char * buffer = (unsigned *)malloc(size); /*allocalte space on heap*/
-	float * buffer_float = (float *)buffer;// recasting to float
-	if (fp == NULL){ /*ERROR detection if file == empty*/
-		printf("Error: There was an Error reading the file %s \n", path);
-		exit(1);
+	const long size_len = (long)nrow*((long)ncol)*mul; // verify size_len == size
+	// buffer read, type = float
+    char * buffer = (char *)malloc(sizeof(char)*size_len);
+	std::ifstream fin(filename.c_str(), std::ios::in | std::ios::binary);
+	fin.read(buffer, size_len);
+	float * buffer_float = (float *)buffer;
+	for (int i = 0; i < nrow; i++){
+		std::cout << "\n[" << i << ",]:\t";
+		for (int j = 0; j < ncol; j++)
+			std::cout  << buffer_float[i*ncol + j]<<"\t";
 	}
-	else if (fread(&buffer, sizeof(*buffer), size, fp) != size){ /* if count of read bytes != calculated size of .bin file -> ERROR*/
-		printf("Error: There was an Error reading the file %s - %d\n", path, r);
-		exit(1);
-	}
-	else{
-		int i;
-		for (i = 0; i<size/mul; i++){
-			std::cout << buffer_float[i];
-		}
-	}
-	free(buffer);
-	fclose(fp);
+	std::cout << "\n";
+
 }
 #endif
