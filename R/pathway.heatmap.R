@@ -28,6 +28,8 @@ pathway.heatmap <- function(mat, row.names = rownames(mat), col.names = colnames
     mat <- -log10(mat)
   }
   
+  id <- which(apply(mat, 2, function(x){!all(is.na(x))}))
+  mat <- mat[, id, drop = FALSE]
   id <- which(apply(mat, 2, function(x){y <- x[!is.na(x)]; max(y) >= -log10(min.p)}))
   mat <- mat[, id, drop = FALSE]
   
@@ -61,7 +63,7 @@ pathway.heatmap <- function(mat, row.names = rownames(mat), col.names = colnames
     pos[i] <- which(levels(mat$Name) == mat$Name[i])
   }
   
-  mat.m <- reshape2::melt(mat)
+  mat.m <- reshape2::melt(mat, id.vars = 'Name')
   mat.m <- plyr::ddply(mat.m, .(variable), transform)
   
   

@@ -113,7 +113,7 @@ for(i in 1:nchr){
   bed[i] <- system.file("extdata", package = "ARTP3", paste("chr", chr[i], ".bed", sep = ""))
 }
 
-reference <- data.frame(fam, bim, bed)
+reference <- data.frame(fam, bim, bed, stringsAsFactors = FALSE)
 
 ## Set the options. 
 ## Accumulate signal from the top 2 SNPs in each gene
@@ -188,5 +188,16 @@ exc.reg2 <- data.frame(Chr = c(1, 1, 22), Start = c(1701160, 11979231, 51050379)
 options$excluded.regions <- exc.reg2
 # ret2 <- pathway.summaryData(summary.files = c(study1, study2), pathway, reference, lambda, sample.size, options = options)
 # ret1$pathway.pvalue == ret2$pathway.pvalue
+
+#################
+
+## select a subset of subjects in plink files as the reference
+## options$selected.subs should be in the same format as the first column of fam file
+## load character vector subj.id of 400 subjects from build-in dataset
+data(subj.id)
+head(subj.id)
+options$selected.subs <- subj.id
+# ret.s <- pathway.summaryData(summary.files = c(study1, study2), pathway, reference, lambda, sample.size, options = options)
+## [1] 0.03209679 # Mac OS
 
 }
