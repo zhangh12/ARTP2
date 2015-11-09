@@ -1,12 +1,17 @@
 
-read.bed <- function(bed, bim, fam, sel.snps, sel.subs = NULL){
-  
-  sel.snps <- unique(sel.snps)
+read.bed <- function(bed, bim, fam, sel.snps = NULL, sel.subs = NULL){
   
   col.class <- c("NULL", "character", "NULL", "NULL", "character", "character")
   bim.file <- read.table(bim, header = FALSE, as.is = TRUE, colClasses = col.class)
   nsnp <- nrow(bim.file)
-  sel.snps <- intersect(bim.file[, 1], sel.snps)
+  
+  if(is.null(sel.snps)){
+    sel.snps <- bim.file[, 1]
+  }else{
+    sel.snps <- unique(sel.snps)
+    sel.snps <- intersect(bim.file[, 1], sel.snps)
+  }
+  
   sel.snp.id <- which(bim.file[, 1] %in% sel.snps)
   
   nsel <- length(sel.snp.id)
@@ -33,12 +38,13 @@ read.bed <- function(bed, bim, fam, sel.snps, sel.subs = NULL){
   colnames(geno) <- sel.snps
   
   if(!is.null(sel.subs)){
-    id <- which(rownames(geno) %in% sel.subs)
+    id <- which(sel.subs %in% rownames(geno))
     if(length(id) == 0){
       msg <- paste("No subjects were left in \n", bed)
       stop(msg)
     }
-    geno <- geno[id, , drop = FALSE]
+    sel.subs <- sel.subs[id]
+    geno <- geno[sel.subs, , drop = FALSE]
   }
   
   geno[geno == -1] <- NA

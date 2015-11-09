@@ -130,6 +130,8 @@ rawData.dataframe.setup <- function(formula, data, pathway, family, lambda, subs
     gc()
     raw.geno <- NULL
     null <- NULL
+  }else{
+    class(raw.geno) <- 'data.frame'
   }
   
   # trim the information of deleted SNPs

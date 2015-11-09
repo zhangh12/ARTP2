@@ -24,13 +24,13 @@ a character of the name of file containing definition of a pathway. It must be a
 a character taking values of "\code{gaussian}" or "\code{binomial}". 
 }
   \item{geno.files}{
-a character vector containing paths of files containing genotype data. It can be \code{NULL} if all genotype data are put in \code{data}. 
+a character vector containing paths of plain text files containing  the genotype data. Those files can be compressed as gz files and are able to be read by \code{read.table}. It can be a data frame with columns \code{bed}, \code{bim}, and \code{fam}. The data frame contains paths of (multiple sets of) PLINK files containing the genotype data. It can be \code{NULL} if all genotype data are put in \code{data}. 
 }
   \item{lambda}{
 a numeric specifying inflation factor. The default is 1.0. 
 }
   \item{subset}{
-an optional vector specifying a subset of observations in \code{data}. The default is \code{NULL}, i.e., all observations are used. 
+an optional integer vector specifying a subset of observations in \code{data}. The default is \code{NULL}, i.e., all observations are used. 
 }
   \item{options}{
 a list of options to control the test procedure. If \code{NULL}, default options will be used. See \code{\link{options}}.
@@ -71,49 +71,67 @@ Zhang H, Shi J, Liang F, Wheeler W, Stolzenberg-Solomon R, Yu K.  (2014) A fast 
 
 library(ARTP3)
 
-# Load the sample data
-data(example, package = "ARTP3")
-head(data[, 1:6])
+## Load the sample data
+data(data, package = "ARTP3")
+head(data[, 1:7])
 
-# also a build-in data frame containing pathway definition
-# it can also be the path of file
+## Load a build-in data frame containing pathway definition
+## it can also be the path of the file
+data(pathway, package = "ARTP3")
 head(pathway)
 
-# Define the formula of base risk model
+## Define the formula of base risk model
 formula <- formula(case_control ~ sex + age + bmi + factor(study))
 
-# binary outcome
+## binary outcome
 family <- "binomial"
 
-# Set the options. 
-# Accumulate signal from the top 5 SNPs in each gene
-# 1e5 replicates of resampling to estimate the p-value
+## Set the options. 
+## Accumulate signal from the top 5 SNPs in each gene
+## 1e5 replicates of resampling to estimate the p-value
 options <- list(inspect.snp.n = 5, nperm = 1e5, 
                 maf = .01, HWE.p = 1e-6, 
                 gene.R2 = .9, 
                 id.str = "unique-pathway-id", 
                 out.dir = getwd(), save.setup = FALSE)
 
-## pathway test
-## can take a few minutes
+## pathway test, can take a while
+## data contains outcome, covariates and genotypes
 # ret1 <- pathway.rawData(formula, data = data, pathway, family, options = options)
 # 
 # ret1$pathway.pvalue 
-## [1] 0.02568474 # Mac OS
-## [1] 0.03331467 # Linux with 32 threads
-## [1] 0.02511475 # Linux with 1 thread
+## [1] 0.02600974 # Mac OS
 # head(ret1$gene.pvalue)
 # table(ret1$deleted.snps$reason)
 # head(ret1$deleted.genes)
 
 
 ##################################################
-# load a vector 'geno'
+## Another way to use this function
+## Load a vector 'geno' containing file names of genotype
 data(geno, package = 'ARTP3')
-# set the paths of genotype files
+## Set the paths of genotype files
+## in this example, each file contains SNPs in a gene
 geno.files <- system.file("extdata", package = "ARTP3", geno)
 
-# ret2 <- pathway.rawData(formula, data = data[, 1:5], pathway, family, geno.files, options = options)
+## data contains outcome, covariates
+## Genotypes are instead included in files specified in geno.files
+## geno.files are plain text files (or .gz file), which can be read by read.table
+# ret2 <- pathway.rawData(formula, data = data[, 2:6], pathway, family, geno.files, options = options)
 # ret2$pathway.pvalue == ret1$pathway.pvalue
+
+
+##################################################
+## The third way
+## Genotypes are instead stored as binary PLINK files (bed, bim, and fam)
+bed <- system.file("extdata", package = "ARTP3", "raw.bed")
+bim <- system.file("extdata", package = "ARTP3", "raw.bim")
+fam <- system.file("extdata", package = "ARTP3", "raw.fam")
+geno.files <- data.frame(fam, bim, bed, stringsAsFactors = FALSE)
+
+## column SUBID must be included in data, in this example, first column is SUBID
+# ret3 <- pathway.rawData(formula, data = data[, 1:6], pathway, family, geno.files, options = options)
+# ret3$pathway.pvalue == ret1$pathway.pvalue
+
 
 }

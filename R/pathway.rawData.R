@@ -1,10 +1,16 @@
 
 pathway.rawData <- function(formula, data, pathway, family, geno.files = NULL, lambda = 1.0, subset = NULL, options = NULL){
   
-  if(is.null(geno.files)){
+  it <- input.type(geno.files)
+  
+  if(it == 'data.frame'){
     setup <- rawData.dataframe.setup(formula, data, pathway, family, lambda, subset, options)
   }else{
-    setup <- rawData.genofiles.setup(formula, data, pathway, family, geno.files, lambda, subset, options)
+    if(it == 'geno.files'){
+      setup <- rawData.genofiles.setup(formula, data, pathway, family, geno.files, lambda, subset, options)
+    }else{
+      setup <- rawData.plinkfiles.setup(formula, data, pathway, family, geno.files, lambda, subset, options)
+    }
   }
   
   if(setup$options$only.setup){

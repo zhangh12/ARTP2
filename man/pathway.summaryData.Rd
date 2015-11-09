@@ -151,13 +151,15 @@ sample.size[[2]] <- 61957
 ## [1] 0.06469353 # Linux with 1 thread
 # head(ret$gene.pvalue)
 
-options$print <- FALSE # turn off printing
 
 ## pathway test with each of study files
 # ret1 <- pathway.summaryData(summary.files = study1, pathway, reference, lambda[1], sample.size[1], options = options)
-# 
+# ret2 <- pathway.summaryData(summary.files = study2, pathway, reference, lambda[2], sample.size[2], options = options)
+
 # ret1$pathway.pvalue
 ## [1] 0.04284572 # Mac OS
+# ret2$pathway.pvalue
+## [1] 0.3152685  # Mac OS
 
 
 ##################################################
@@ -169,7 +171,6 @@ fam <- system.file("extdata", package = "ARTP3", "ref.fam")
 
 reference <- data.frame(fam, bim, bed)
 # ret.comb <- pathway.summaryData(summary.files = c(study1, study2), pathway, reference, lambda, sample.size, options = options)
-## result should be the same as before
 # ret.comb$pathway.pvalue == ret$pathway.pvalue
 
 ################
@@ -194,10 +195,11 @@ options$excluded.regions <- exc.reg2
 ## select a subset of subjects in plink files as the reference
 ## options$selected.subs should be in the same format as the first column of fam file
 ## load character vector subj.id of 400 subjects from build-in dataset
-data(subj.id)
+data(subj.id, package = "ARTP3")
 head(subj.id)
 options$selected.subs <- subj.id
 # ret.s <- pathway.summaryData(summary.files = c(study1, study2), pathway, reference, lambda, sample.size, options = options)
-## [1] 0.03209679 # Mac OS
+# ret.s$pathway.pvalue
+## [1] 0.03119688 # Mac OS
 
 }
