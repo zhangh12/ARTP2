@@ -101,6 +101,8 @@ sample.size[[2]] <- 61957
 
 ## or adjust the second round of inflation in pathway.warm.start
 # ret2 <- pathway.warm.start(setup, lambda = 1.067)
+
+# two ways of inflation adjustment should give same results
 # ret1$pathway.pvalue == ret2$pathway.pvalue
 
 ###############################################################

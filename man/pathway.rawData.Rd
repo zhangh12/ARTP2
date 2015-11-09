@@ -98,9 +98,14 @@ options <- list(inspect.snp.n = 5, nperm = 1e5,
 ## pathway test, can take a while
 ## data contains outcome, covariates and genotypes
 # ret1 <- pathway.rawData(formula, data = data, pathway, family, options = options)
-# 
+
 # ret1$pathway.pvalue 
 ## [1] 0.02600974 # Mac OS
+## [1] 0.03455965 # Linux with 32 threads
+## [1] 0.02189978 # Linux with 1 thread
+## [1] 0.02443976 # Windows 7
+
+
 # head(ret1$gene.pvalue)
 # table(ret1$deleted.snps$reason)
 # head(ret1$deleted.genes)
@@ -110,6 +115,7 @@ options <- list(inspect.snp.n = 5, nperm = 1e5,
 ## Another way to use this function
 ## Load a vector 'geno' containing file names of genotype
 data(geno, package = 'ARTP3')
+
 ## Set the paths of genotype files
 ## in this example, each file contains SNPs in a gene
 geno.files <- system.file("extdata", package = "ARTP3", geno)

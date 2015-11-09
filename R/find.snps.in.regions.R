@@ -10,6 +10,17 @@ find.snps.in.regions <- function(stat, options){
   exc.snps <- NULL
   comment <- NULL
   for(i in 1:nfiles){
+    
+    if(any(is.na(stat[[i]]$Chr))){
+      msg <- 'Column \'Chr\' is missing or has NA in summary.files but options$excluded.regions is specified'
+      stop(msg)
+    }
+    
+    if(any(is.na(stat[[i]]$Pos))){
+      msg <- 'Column \'Pos\' is missing or has NA in summary.files but options$excluded.regions is specified'
+      stop(msg)
+    }
+    
     for(j in 1:nrow(exc.reg)){
       id <- which(stat[[i]]$Chr == exc.reg$Chr[j])
       if(length(id) == 0){

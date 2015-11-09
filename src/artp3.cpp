@@ -1272,7 +1272,7 @@ int *R_sel_id, int *R_marg_id){
   int i_sel_id = -1;
   for(int g = 0; g < ngene; ++g){
     R_marg_id[g] = gene_idx[g][marg_id[g]] + 1;
-    for(int k = 0; k < sel_id[g].size(); ++k){
+    for(int k = 0; k < (int) sel_id[g].size(); ++k){
       ++i_sel_id;
       R_sel_id[i_sel_id] = gene_idx[g][sel_id[g][k]] + 1;
     }
@@ -1506,7 +1506,7 @@ int *R_sel_id, int *R_marg_id){
   int i_sel_id = -1;
   for(int g = 0; g < ngene; ++g){
     R_marg_id[g] = gene_idx[g][marg_id[g]] + 1;
-    for(int k = 0; k < sel_id[g].size(); ++k){
+    for(int k = 0; k < (int) sel_id[g].size(); ++k){
       ++i_sel_id;
       R_sel_id[i_sel_id] = gene_idx[g][sel_id[g][k]] + 1;
     }
