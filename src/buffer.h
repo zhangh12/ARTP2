@@ -38,6 +38,7 @@ void read_in_buffer(std::string filename, int nrow, int ncol, std::vector<T>& ou
 	TODO: READING TO BUFFER;
 	Verified: testbuffer1.cpp
 	*/
+	std::ios::sync_with_stdio(false);
 	std::cout << "Read into buffer" << std::endl;
 	size_t mul = sizeof(float) / sizeof(char); // mul >= 2
 	const long size_len = (long)nrow*((long)ncol)*mul; // verify size_len == size
@@ -101,7 +102,7 @@ gettimeofday(&started, NULL);
 }
 
 ~StopWatch() {
-std::cerr << msg << " " << usecs() << " µsecs" << std::endl;
+std::cerr << msg << " " << usecs() << " Âµsecs" << std::endl;
 }
 
 unsigned usecs() const {
