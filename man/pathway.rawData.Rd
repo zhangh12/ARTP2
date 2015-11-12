@@ -105,8 +105,16 @@ options <- list(inspect.snp.n = 5, nperm = 1e5,
 ## [1] 0.02189978 # Linux with 1 thread
 ## [1] 0.02443976 # Windows 7
 
-
+## Mac OS
 # head(ret1$gene.pvalue)
+##     Gene Chr N.SNP     Pvalue
+## 1  USP30  12    18 0.00103999
+## 2  DCAF7  17     9 0.07084429
+## 3   CANX   5    13 0.26769232
+## 4  SOX12  20    15 0.35028150
+## 5 CDKN2C   1     6 0.35601144
+## 6   FEN1  11     4 0.41482585
+
 # table(ret1$deleted.snps$reason)
 # head(ret1$deleted.genes)
 

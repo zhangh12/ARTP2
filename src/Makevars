@@ -2,9 +2,10 @@
 #PKG_LIBS = -fopenmp -stdlib=libstdc++
 # MAC is i686-apple-darwin11
 #
+
+CXX_STD = CXX11
 SYS := $(shell gcc -dumpmachine)
 ifneq (, $(findstring linux, $(SYS)))
  PKG_CXXFLAGS = -fopenmp 
  PKG_LIBS = -fopenmp
 endif
-

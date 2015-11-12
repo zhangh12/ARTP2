@@ -150,8 +150,16 @@ sample.size[[2]] <- 61957
 ## [1] 0.07444256 # Linux with 32 threads
 ## [1] 0.06469353 # Linux with 1 thread
 ## [1] 0.07089291 # Windows 7
-# head(ret$gene.pvalue)
 
+## Mac OS
+# head(ret$gene.pvalue)
+##       Gene Chr N.SNP      Pvalue
+## 1     BDH2   4    10 0.000849915
+## 2   UBE2D3   4     6 0.001449855
+## 3 PPP1R14D  15     9 0.003999600
+## 4     PBX2   6    23 0.004149585
+## 5    SCYL1  11     3 0.019948005
+## 6   MRPL10  17    18 0.020747925
 
 ## pathway test with each of two studies
 # ret1 <- pathway.summaryData(summary.files = study1, pathway, reference, lambda[1], sample.size[1], options = options)

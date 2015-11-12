@@ -1,14 +1,15 @@
 
 filter.raw.geno <- function(raw.geno, pathway, options, control.id = NULL, print = FALSE){
   
+  # initialize them in case all filters are turned off
+  deleted.snps <- data.frame(SNP = NULL, reason = NULL, comment = NULL, stringsAsFactors = FALSE)
+  deleted.genes <- data.frame(Gene = NULL, reason = NULL, stringsAsFactors = FALSE)
+  
   pathway <- pathway[pathway$SNP %in% colnames(raw.geno), ]
   
   if(options$snp.miss.rate < 1){
     msg <- paste("Removing SNPs with high missing rate:", date())
     if(options$print && print) message(msg)
-    
-    deleted.snps <- data.frame(SNP = NULL, reason = NULL, comment = NULL, stringsAsFactors = FALSE)
-    deleted.genes <- data.frame(Gene = NULL, reason = NULL, stringsAsFactors = FALSE)
     
     rs <- colnames(raw.geno)
     # use for loop to avoid high memory consumption
