@@ -1,6 +1,7 @@
 #ifndef BUFFER_BIN_ARTPS
 #define BUFFER_BIN_ARTPS
 
+#define BUFFER_FREAD_ENABLE
 //#define PRINT_DEB
 /*
 Task:
@@ -22,6 +23,10 @@ artp3.cpp:
 #include <stdio.h>
 #include <stdlib.h>
 #include <omp.h>
+
+#ifdef BUFFER_FREAD_ENABLE
+#include <fcntl.h>
+#endif
 
 // para:
 //		filename
@@ -49,8 +54,13 @@ void read_in_buffer(std::string filename, int nrow, int ncol, std::vector<T>& ou
 		std::cout << "Out of Memory." << std::endl;
 		exit(1);
 	}
+#ifndef BUFFER_FREAD_ENABLE
 	std::ifstream fin(filename.c_str(), std::ios::in | std::ios::binary);
 	fin.read(buffer, size_len);
+#else
+    freopen(filename.c_str(),"rb", stdin);
+	fread(buffer,1,size_len, stdin);
+#endif
 	float * buffer_float = (float *)buffer;  //TODO: recasting char* to float *
 #ifdef PRINT_DEB
 	for (int i = 0; i < nrow; i++) {
@@ -60,14 +70,18 @@ void read_in_buffer(std::string filename, int nrow, int ncol, std::vector<T>& ou
 	}
 	std::cout << "\n";
 #endif
+#ifndef BUFFER_FREAD_ENABLE
 	fin.close();
+#else 
+	fclose(stdin);
+#endif
 	std::cout << "Read into OMP" << std::endl;
 		int nthreads;
 		int i;
 #pragma omp parallel
 		{
 			nthreads = omp_get_num_threads();
-			std::cout << "Thread:" << nthreads <<std::endl;
+//			std::cout << "Thread:" << nthreads <<std::endl;
 #pragma omp parallel for num_threads(nthreads) private(i)  shared(output)
 			for (i = 1; i < sizeA; i++) {
 				output[i] = buffer_float[i];
