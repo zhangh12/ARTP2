@@ -36,7 +36,7 @@ int segment_read(char *buff, const int len, const int count) {
 	return 1;
 }
 
-template <class T> 
+template <class T>
 void read_in_buffer(std::string filename, int nrow, int ncol, std::vector<T>& output) {
 
 	/*
@@ -72,7 +72,7 @@ void read_in_buffer(std::string filename, int nrow, int ncol, std::vector<T>& ou
 #endif
 #ifndef BUFFER_FREAD_ENABLE
 	fin.close();
-#else 
+#else
 	fclose(stdin);
 #endif
 	std::cout << "Read into OMP" << std::endl;
@@ -83,12 +83,15 @@ void read_in_buffer(std::string filename, int nrow, int ncol, std::vector<T>& ou
 			nthreads = omp_get_num_threads();
 //			std::cout << "Thread:" << nthreads <<std::endl;
 #pragma omp parallel for num_threads(nthreads) private(i)  shared(output)
-			for (i = 1; i < sizeA; i++) {
-				output[i] = buffer_float[i];
-				
-			}
+for (i = 0; i < sizeA; i++) {
+	int ii = i%nrow;// Row
+	int jj = i/nrow;// Col
+	output[ii][jj].stat = buffer_float[i];
+	output[ii][jj].id= jj;
+}
 		}
 	free(buffer);
+		std::cout << "Read into OMP Finished." << std::endl;
 	}
 #endif
 
