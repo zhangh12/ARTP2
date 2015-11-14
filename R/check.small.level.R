@@ -2,6 +2,10 @@
 check.small.level <- function(null, resp.var){
   
   covar <- null[, setdiff(colnames(null), c(resp.var, "X.Intercept.")), drop = FALSE]
+  if(ncol(covar) == 0){ # formula y ~ 1
+    return(NULL)
+  }
+  
   id <- NULL
   for(i in 1:ncol(covar)){
     if(setequal(unique(covar[, i]), c(0,1)) && sum(covar[, i]) <= 10){

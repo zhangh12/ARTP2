@@ -2,6 +2,10 @@
 check.misleading.factor <- function(null, resp.var){
   
   covar <- null[, colnames(null) != resp.var, drop = FALSE]
+  if(ncol(covar) == 0){ # formula y ~ 1
+    return(NULL)
+  }
+  
   id <- NULL
   for(i in 1:ncol(covar)){
     if(class(covar[, i]) %in% c("factor", "character")){
