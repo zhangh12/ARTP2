@@ -924,7 +924,7 @@ int *R_sel_id, int *R_marg_id){
   for(int g = 0; g < ngene; ++g){
   	int ncp = cutpoint[g].size();
   	vector<VecStat> stat(ncp, VecStat (nperm + 1, STAT0));
-    fstream gin(gene_out[g].c_str(), ios::in | ios::binary);
+    /*fstream gin(gene_out[g].c_str(), ios::in | ios::binary);
 
   	for(int i = 0; i < nperm + 1; ++i){
   		for(int j = 0; j < ncp; ++j){
@@ -934,7 +934,8 @@ int *R_sel_id, int *R_marg_id){
   			stat[j][i].id = i;
   		}
   	}
-  	gin.close();
+  	gin.close();*/
+    read_in_buffer(gene_out[g].c_str(), ncp, nperm+1, stat);
 
     if(remove(gene_out[g].c_str())){
       error("Cannot delete gene output file");
