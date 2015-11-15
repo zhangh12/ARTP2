@@ -44,7 +44,6 @@ TODO: READING TO BUFFER;
 Verified: testbuffer1.cpp
 */
 	std::ios::sync_with_stdio(false);
-	std::cout << "Read into buffer" << std::endl;
 	size_t mul = sizeof(float) / sizeof(char); // mul >= 2
 	const long size_len = (long)nrow*((long)ncol)*mul; // verify size_len == size
 	size_t sizeA = nrow*ncol;
