@@ -1,5 +1,5 @@
 
-validate.summary.input <- function(summary.files, pathway, reference, lambda, sample.size){
+validate.summary.input <- function(summary.files, pathway, reference, lambda, ncases, ncontrols){
   
   # validate summary.files
   if(!is.vector(summary.files)){
@@ -79,14 +79,31 @@ validate.summary.input <- function(summary.files, pathway, reference, lambda, sa
     stop(msg)
   }
   
-  if(!is.list(sample.size)){
-    msg <- 'sample.size should be a list'
+  if(!is.list(ncases)){
+    msg <- 'ncases should be a list'
     stop(msg)
   }
   
-  if(length(sample.size) != length(lambda)){
-    msg <- 'Length of sample.size and lambda should be equal'
+  if(!is.list(ncontrols)){
+    msg <- 'ncontrols should be a list'
     stop(msg)
+  }
+  
+  if(length(ncases) != length(lambda)){
+    msg <- 'Length of ncases and lambda should be equal'
+    stop(msg)
+  }
+  
+  if(length(ncontrols) != length(lambda)){
+    msg <- 'Length of ncontrols and lambda should be equal'
+    stop(msg)
+  }
+  
+  for(i in 1:length(ncases)){
+    if(length(ncases[[i]]) != length(ncontrols[[i]])){
+      msg <- 'Length of each element of ncases and ncontrols should be equal'
+      stop(msg)
+    }
   }
   
 }

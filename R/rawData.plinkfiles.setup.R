@@ -6,7 +6,7 @@ rawData.plinkfiles.setup <- function(formula, null, pathway, family, geno.files,
   validate.lambda.rawData(lambda)
   
   # merge and reset options
-  options <- options.setup(options, lambda, NULL)
+  options <- options.setup(options, lambda, NULL, NULL)
   
   # encoding the row numbers of phenotype data so that I can extract proper subset of genotype data
   null <- assign.subject.id(null)

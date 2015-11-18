@@ -16,9 +16,12 @@ load.summary.statistics <- function(summary.files, snps.in.pathway, options){
   stat <- list()
   lambda <- NULL
   sample.size <- list()
+  ncases <- list()
+  ncontrols <- list()
   fid <- 0
   snps.in.study <- NULL
   nfiles <- length(summary.files)
+  
   for(i in 1:nfiles){
     st <- read.table(summary.files[i], header = TRUE, as.is = TRUE, nrows = 1e4)
     tmp <- (header %in% colnames(st))
@@ -94,14 +97,20 @@ load.summary.statistics <- function(summary.files, snps.in.pathway, options){
     
     fid <- fid + 1
     st$Direction <- sapply(tmp, function(x){paste(ifelse(x=='?',0,1),sep='',collapse = '')})
-    #st$N <- sapply(tmp, function(x, ss = options$sample.size[[i]]){sum(ss[x != '?'])})
+    st$N <- sapply(tmp, function(x, ss = options$sample.size[[i]]){sum(ss[x != '?'])})
+    st$N1 <- sapply(tmp, function(x, ss = options$ncases[[i]]){sum(ss[x != '?'])})
+    st$N0 <- sapply(tmp, function(x, ss = options$ncontrols[[i]]){sum(ss[x != '?'])})
+    
     rm(tmp)
     gc()
     
+    rownames(st) <- st$SNP
     stat[[fid]] <- st
     snps.in.study <- unique(c(snps.in.study, st$SNP))
     lambda[fid] <- options$lambda[i]
     sample.size[[fid]] <- options$sample.size[[i]]
+    ncases[[fid]] <- options$ncases[[i]]
+    ncontrols[[fid]] <- options$ncontrols[[i]]
     
     rm(st, len)
     gc()
@@ -113,7 +122,17 @@ load.summary.statistics <- function(summary.files, snps.in.pathway, options){
   }
   
   snps.in.study <- unique(snps.in.study)
-  list(stat = stat, snps.in.study = snps.in.study, lambda = lambda, sample.size = sample.size)
+  nsnps <- length(snps.in.study)
+  SNP.sample.size <- data.frame(N = rep(0, nsnps), N0 = rep(0, nsnps), N1 = rep(0, nsnps))
+  rownames(SNP.sample.size) <- snps.in.study
+  
+  for(i in 1:length(stat)){
+    snps <- stat[[i]]$SNP
+    SNP.sample.size[snps, ] <- SNP.sample.size[snps, ] + stat[[i]][, c('N', 'N0', 'N1')]
+  }
+  list(stat = stat, snps.in.study = snps.in.study, lambda = lambda, 
+       sample.size = sample.size, ncases = ncases, ncontrols = ncontrols, 
+       SNP.sample.size = SNP.sample.size)
   
 
 }

@@ -1,5 +1,5 @@
 
-filter.reference.geno <- function(ref.geno, pathway, options){
+filter.reference.geno <- function(ref.geno, pathway, sum.stat, options){
   
   pathway <- pathway[pathway$SNP %in% colnames(ref.geno), ]
   
@@ -126,8 +126,17 @@ filter.reference.geno <- function(ref.geno, pathway, options){
       maf <- apply(rg, 2, function(x){m <- mean(x, na.rm = TRUE)/2; pmin(m, 1-m)})
       names(maf) <- snps.in.gene
       
+      N <- sum.stat$SNP.sample.size[snps.in.gene, 'N']
+      N0 <- sum.stat$SNP.sample.size[snps.in.gene, 'N0']
+      N1 <- sum.stat$SNP.sample.size[snps.in.gene, 'N1']
+      
+      crt <- N0 * N1 / N * 2 * maf * (1 - maf)
+      names(crt) <- snps.in.gene
+      rm(N, N0, N1)
+      gc()
+      
       if(length(snps.in.gene) > options$huge.gene){
-        tmp <- order(maf)
+        tmp <- order(crt)
         cor2 <- cor2[tmp, tmp]
         cor2[lower.tri(cor2)] <- -1
         maf <- maf[tmp]
@@ -149,10 +158,10 @@ filter.reference.geno <- function(ref.geno, pathway, options){
           }
           id <- which(cor2 == max.r2, arr.ind = TRUE)
           s <- unique(rownames(id))
-          snp.lower.maf <- names(which.min(maf[s]))
-          k <- which(colnames(cor2) == snp.lower.maf)
-          exc.snps <- c(exc.snps, snp.lower.maf)
-          tmp <- c(cor2[snp.lower.maf, ], cor2[, snp.lower.maf])
+          snp.lower.crt <- names(which.min(crt[s]))
+          k <- which(colnames(cor2) == snp.lower.crt)
+          exc.snps <- c(exc.snps, snp.lower.crt)
+          tmp <- c(cor2[snp.lower.crt, ], cor2[, snp.lower.crt])
           tmp <- tmp[tmp > 0]
           cc <- paste(names(tmp)[which(tmp == max.r2)[1]], round(max.r2, 3), sep = "_")
           comment <- c(comment, cc)
@@ -227,6 +236,16 @@ filter.reference.geno <- function(ref.geno, pathway, options){
       
       maf <- apply(rg, 2, function(x){m <- mean(x, na.rm = TRUE)/2; pmin(m, 1-m)})
       names(maf) <- snps.in.chr
+      
+      N <- sum.stat$SNP.sample.size[snps.in.chr, 'N']
+      N0 <- sum.stat$SNP.sample.size[snps.in.chr, 'N0']
+      N1 <- sum.stat$SNP.sample.size[snps.in.chr, 'N1']
+      
+      crt <- N0 * N1 / N * 2 * maf * (1 - maf)
+      names(crt) <- snps.in.chr
+      rm(N, N0, N1)
+      gc()
+      
       while(1){
         if(nrow(cor2) == 1){
           break
@@ -237,10 +256,10 @@ filter.reference.geno <- function(ref.geno, pathway, options){
         }
         id <- which(!is.na(cor2) & (cor2 == max.r2), arr.ind = TRUE)
         s <- unique(rownames(id))
-        snp.lower.maf <- names(which.min(maf[s]))
-        k <- which(colnames(cor2) == snp.lower.maf)
-        exc.snps <- c(exc.snps, snp.lower.maf)
-        tmp <- c(cor2[snp.lower.maf, ], cor2[, snp.lower.maf])
+        snp.lower.crt <- names(which.min(crt[s]))
+        k <- which(colnames(cor2) == snp.lower.crt)
+        exc.snps <- c(exc.snps, snp.lower.crt)
+        tmp <- c(cor2[snp.lower.crt, ], cor2[, snp.lower.crt])
         tmp <- tmp[tmp > 0]
         cc <- paste(names(tmp)[which.max(tmp)], round(max.r2, 3), sep = "_")
         comment <- c(comment, cc)
@@ -313,8 +332,17 @@ filter.reference.geno <- function(ref.geno, pathway, options){
         maf <- apply(rg, 2, function(x){m <- mean(x, na.rm = TRUE)/2; pmin(m, 1-m)})
         names(maf) <- snps.in.gene
         
+        N <- sum.stat$SNP.sample.size[snps.in.gene, 'N']
+        N0 <- sum.stat$SNP.sample.size[snps.in.gene, 'N0']
+        N1 <- sum.stat$SNP.sample.size[snps.in.gene, 'N1']
+        
+        crt <- N0 * N1 / N * 2 * maf * (1 - maf)
+        names(crt) <- snps.in.gene
+        rm(N, N0, N1)
+        gc()
+        
         if(length(snps.in.gene) > options$huge.gene){
-          tmp <- order(maf)
+          tmp <- order(crt)
           cor2 <- cor2[tmp, tmp]
           cor2[lower.tri(cor2)] <- -1
           maf <- maf[tmp]
@@ -336,10 +364,10 @@ filter.reference.geno <- function(ref.geno, pathway, options){
             }
             id <- which(cor2 == max.r2, arr.ind = TRUE)
             s <- unique(rownames(id))
-            snp.lower.maf <- names(which.min(maf[s]))
-            k <- which(colnames(cor2) == snp.lower.maf)
-            exc.snps <- c(exc.snps, snp.lower.maf)
-            tmp <- c(cor2[snp.lower.maf, ], cor2[, snp.lower.maf])
+            snp.lower.crt <- names(which.min(crt[s]))
+            k <- which(colnames(cor2) == snp.lower.crt)
+            exc.snps <- c(exc.snps, snp.lower.crt)
+            tmp <- c(cor2[snp.lower.crt, ], cor2[, snp.lower.crt])
             tmp <- tmp[tmp > 0]
             cc <- paste(names(tmp)[which(tmp == max.r2)[1]], round(max.r2, 3), sep = "_")
             comment <- c(comment, cc)
@@ -418,6 +446,16 @@ filter.reference.geno <- function(ref.geno, pathway, options){
         
         maf <- apply(rg, 2, function(x){m <- mean(x, na.rm = TRUE)/2; pmin(m, 1-m)})
         names(maf) <- snps.in.chr
+        
+        N <- sum.stat$SNP.sample.size[snps.in.chr, 'N']
+        N0 <- sum.stat$SNP.sample.size[snps.in.chr, 'N0']
+        N1 <- sum.stat$SNP.sample.size[snps.in.chr, 'N1']
+        
+        crt <- N0 * N1 / N * 2 * maf * (1 - maf)
+        names(crt) <- snps.in.chr
+        rm(N, N0, N1)
+        gc()
+        
         while(1){
           if(nrow(cor2) == 1){
             break
@@ -428,10 +466,10 @@ filter.reference.geno <- function(ref.geno, pathway, options){
           }
           id <- which(!is.na(cor2) & (cor2 == max.r2), arr.ind = TRUE)
           s <- unique(rownames(id))
-          snp.lower.maf <- names(which.min(maf[s]))
-          k <- which(colnames(cor2) == snp.lower.maf)
-          exc.snps <- c(exc.snps, snp.lower.maf)
-          tmp <- c(cor2[snp.lower.maf, ], cor2[, snp.lower.maf])
+          snp.lower.crt <- names(which.min(crt[s]))
+          k <- which(colnames(cor2) == snp.lower.crt)
+          exc.snps <- c(exc.snps, snp.lower.crt)
+          tmp <- c(cor2[snp.lower.crt, ], cor2[, snp.lower.crt])
           tmp <- tmp[tmp > 0]
           cc <- paste(names(tmp)[which.max(tmp)], round(max.r2, 3), sep = "_")
           comment <- c(comment, cc)

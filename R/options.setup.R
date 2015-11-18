@@ -1,10 +1,18 @@
 
-options.setup <- function(options, lambda, sample.size){
+options.setup <- function(options, lambda, ncases, ncontrols){
   
   opt.default <- options.default() # valid and default options
   
   opt.default$lambda <- lambda
-  opt.default$sample.size <- sample.size
+  opt.default$ncases <- ncases
+  opt.default$ncontrols <- ncontrols
+  
+  if(!is.null(ncases) && !is.null(ncontrols)){
+    opt.default$sample.size <- list()
+    for(i in 1:length(ncases)){
+      opt.default$sample.size[[i]] <- ncases[[i]] + ncontrols[[i]]
+    }
+  }
   
   spec.opt <- names(options)
   if(('gene.R2' %in% spec.opt) && !('chr.R2' %in% spec.opt)){

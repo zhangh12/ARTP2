@@ -1,7 +1,7 @@
 
-pathway.summaryData <- function(summary.files, pathway, reference, lambda, sample.size, options = NULL){
+pathway.summaryData <- function(summary.files, pathway, reference, lambda, ncases, ncontrols, options = NULL){
   
-  setup <- summaryData.setup(summary.files, pathway, reference, lambda, sample.size, options)
+  setup <- summaryData.setup(summary.files, pathway, reference, lambda, ncases, ncontrols, options)
   
   if(setup$options$only.setup){
     return(setup)

@@ -84,20 +84,23 @@ options <- list(inspect.snp.n = 2, nperm = 1e4,
 ## different inflation factors are adjusted in two studies
 ## first round adjustment
 lambda <- c(1.10, 1.08)
-sample.size <- list()
-sample.size[[1]] <- c(63390, 5643)
-sample.size[[2]] <- 61957
+ncases <- list()
+ncontrols <- list()
+ncases[[1]] <- c(9580, 2591)
+ncontrols[[1]] <- c(53810, 3052)
+ncases[[2]] <- 7638
+ncontrols[[2]] <- 54319
 
 ## do not run permutation
-# options$only.setup <- TRUE
+options$only.setup <- TRUE
 ## the first round study-specific inflation is adjusted as lambda = c(1.10, 1.08)
-# setup <- pathway.summaryData(summary.files = c(study1, study2), pathway, reference, lambda, sample.size, options = options)
+# setup <- pathway.summaryData(summary.files = c(study1, study2), pathway, reference, lambda, ncases, ncontrols, options = options)
 
 ## the two rounds of inflation is adjusted as lambda2 = c(1.17370, 1.15236)
-# lambda2 <- lambda * 1.067
+lambda2 <- lambda * 1.067
 ## run permutation to calculate p-value
-# options$only.setup <- FALSE
-# ret1 <- pathway.summaryData(summary.files = c(study1, study2), pathway, reference, lambda2, sample.size, options = options)
+options$only.setup <- FALSE
+# ret1 <- pathway.summaryData(summary.files = c(study1, study2), pathway, reference, lambda2, ncases, ncontrols, options = options)
 
 ## or adjust the second round of inflation in pathway.warm.start
 # ret2 <- pathway.warm.start(setup, lambda = 1.067)

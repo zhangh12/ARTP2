@@ -1,4 +1,4 @@
-summaryData.setup <- function(summary.files, pathway, reference, lambda, sample.size, options){
+summaryData.setup <- function(summary.files, pathway, reference, lambda, ncases, ncontrols, options){
   
   start.time <- date()
   
@@ -6,10 +6,10 @@ summaryData.setup <- function(summary.files, pathway, reference, lambda, sample.
   reference <- reformat.reference.path(reference)
   
   # validate the format of main inputs
-  validate.summary.input(summary.files, pathway, reference, lambda, sample.size)
+  validate.summary.input(summary.files, pathway, reference, lambda, ncases, ncontrols)
   
   # merge and reset options
-  options <- options.setup(options, lambda, sample.size)
+  options <- options.setup(options, lambda, ncases, ncontrols)
   
   # load definition of pathway
   pathway <- load.pathway.definition(pathway, options)
@@ -65,7 +65,7 @@ summaryData.setup <- function(summary.files, pathway, reference, lambda, sample.
   ref.geno <- load.reference.geno(reference, pathway$SNP, options)
   
   # SNP filtering based on options
-  filtered.data <- filter.reference.geno(ref.geno, pathway, options)
+  filtered.data <- filter.reference.geno(ref.geno, pathway, sum.stat, options)
   filtered.markers <- filtered.data$deleted.snps
   filtered.genes <- filtered.data$deleted.genes
   

@@ -6,7 +6,7 @@ rawData.dataframe.setup <- function(formula, data, pathway, family, lambda, subs
   validate.lambda.rawData(lambda)
   
   # merge and reset options
-  options <- options.setup(options, lambda, NULL)
+  options <- options.setup(options, lambda, NULL, NULL)
   
   # subset of data
   data <- data.subset(data, subset, options)
