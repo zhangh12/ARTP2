@@ -1,17 +1,22 @@
 
 validate.setup <- function(setup){
   
-  if(is.character(setup)){
+  if(is.character(setup)){ # path of setup file
     ld <- try(load(setup), silent = TRUE)
     if(error.try(ld)){
       msg <- paste('Cannot load', setup)
       stop(msg)
     }
-    
-    if(!is.list(setup)){
-      msg <- paste('Invalid components in', setup)
-      stop(msg)
-    }
+  }
+  
+  if(!is.list(setup)){
+    msg <- 'setup should be a list'
+    stop(msg)
+  }
+  
+  if(!all(c('norm.stat', 'options') %in% names(setup))){
+    msg <- 'norm.stat or options is not found in setup'
+    stop(msg)
   }
   
   

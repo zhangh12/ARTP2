@@ -13,11 +13,21 @@ pathway.rawData <- function(formula, data, pathway, family, geno.files = NULL, l
     }
   }
   
+  if(options$save.setup){
+    msg <- paste0("setup file has been saved at ", options$path.setup)
+    message(msg)
+    save(setup, file = options$path.setup)
+  }
+  
   if(setup$options$only.setup){
     return(setup)
   }
   
   test <- norm.stat.test(setup)
+  
+  if(options$save.setup){
+    setup <- NULL
+  }
   
   list(pathway.pvalue = test$pathway.pvalue, gene.pvalue = test$gene.pvalue, 
        model = test$model, most.sig.genes = test$most.sig.genes, 
