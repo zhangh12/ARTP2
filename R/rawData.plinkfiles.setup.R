@@ -201,6 +201,12 @@ rawData.plinkfiles.setup <- function(formula, null, pathway, family, geno.files,
                 formula = formula, yx = yx, raw.geno = raw.geno, 
                 setup.timing = setup.timing)
   
+  if(options$save.setup){
+    msg <- paste0("setup file has been saved at ", options$path.setup)
+    message(msg)
+    save(setup, file = options$path.setup)
+  }
+  
   setup
   
 }
