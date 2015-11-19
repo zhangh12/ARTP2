@@ -682,7 +682,7 @@ int *R_sel_id, int *R_marg_id){
   	}
   	gin.close();
     */
-    read_in_buffer(gene_out[g].c_str(), ncp, nperm+1, stat);
+    read_in_buffer(gene_out[g].c_str(), ncp, nperm+1, stat, nthread);
     if(remove(gene_out[g].c_str())){
       error("Cannot delete gene output file");
     }
@@ -935,7 +935,7 @@ int *R_sel_id, int *R_marg_id){
   		}
   	}
   	gin.close();*/
-    read_in_buffer(gene_out[g].c_str(), ncp, nperm+1, stat);
+    read_in_buffer(gene_out[g].c_str(), ncp, nperm+1, stat, nthread);
 
     if(remove(gene_out[g].c_str())){
       error("Cannot delete gene output file");

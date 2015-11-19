@@ -37,7 +37,7 @@ int segment_read(char *buff, const int len, const int count) {
 }
 
 template <class T>
-void read_in_buffer(std::string filename, int nrow, int ncol, std::vector<T>& output) {
+void read_in_buffer(std::string filename, int nrow, int ncol, std::vector<T>& output, int nthread) {
 
 	/*
 TODO: READING TO BUFFER;
@@ -74,12 +74,10 @@ Verified: testbuffer1.cpp
 #else
 	fclose(stdin);
 #endif
-	int nthreads;
 	int i;
 #pragma omp parallel
 	{
-		nthreads = omp_get_num_threads();
-#pragma omp parallel for num_threads(nthreads) private(i)  shared(output)
+#pragma omp parallel for num_threads(nthread) private(i)  shared(output)
 		for (i = 0; i < sizeA; i++) {
 			int ii = i%nrow;// Row
 			int jj = i/nrow;// Col
