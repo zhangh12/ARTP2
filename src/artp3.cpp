@@ -495,6 +495,53 @@ void load_pathway_cutpoint(int *R_pathway_cutpoint, ivec &pathway_cutpoint, int 
   
 }
 
+void read_in_buffer(const string &file, const int &nperm, const int &ncp, const int &nthread, vector<VecStat> &stat){
+  
+  stat = vector<VecStat>(ncp, VecStat (nperm + 1, STAT0));
+  
+  FILE * gFile = fopen(file.c_str(), "rb");
+  if(gFile == NULL){
+    error("Cannot open gene output file");
+  }
+  
+  //check file size
+  fseek(gFile, 0, SEEK_END);
+  long lsize = ftell(gFile);
+  rewind(gFile);
+  assert(lsize == (long) (nperm + 1L) * (long) (ncp) * sizeof(float)/sizeof(char));
+  
+  char *buffer = new char[lsize];
+  if(buffer == NULL){
+    error("Out of memory in loading gene output file");
+  }
+  
+  size_t status = fread(buffer, 1, lsize, gFile);
+  if(status != lsize){
+    error("Gene output file might be modified by other jobs in queue. Please check options$id.str and options$out.dir");
+  }
+  
+  fclose(gFile);
+  
+  float *buffer_float = (float *) buffer;
+  #if __PARALLEL__
+  #pragma omp parallel num_threads(nthread)
+  {
+  #endif
+    #pragma omp for
+    for(int i = 0; i < nperm + 1; ++i){
+      for(int j = 0; j < ncp; ++j){
+        stat[j][i].stat = buffer_float[i * ncp + j];
+        stat[j][i].id = i;
+      }
+    }
+  #if __PARALLEL__
+  }
+  #endif
+  
+  buffer_float = NULL;
+  delete[] buffer;
+  
+}
 
 #if __PARALLEL__
 extern "C" {
@@ -669,19 +716,9 @@ int *R_sel_id, int *R_marg_id){
   int irk = -1;
   for(int g = 0; g < ngene; ++g){
   	int ncp = cutpoint[g].size();
-  	vector<VecStat> stat(ncp, VecStat (nperm + 1, STAT0));
-    fstream gin(gene_out[g].c_str(), ios::in | ios::binary);
+  	vector<VecStat> stat;
     
-  	for(int i = 0; i < nperm + 1; ++i){
-  		for(int j = 0; j < ncp; ++j){
-  			float s = .0f;
-  			gin.read((char*)(&s), sizeof(s));
-  			stat[j][i].stat = s;
-  			stat[j][i].id = i;
-  		}
-  	}
-  	
-  	gin.close();
+    read_in_buffer(gene_out[g], nperm, ncp, nthread, stat);
     
     if(remove(gene_out[g].c_str())){
       error("Cannot delete gene output file");
@@ -942,18 +979,9 @@ int *R_sel_id, int *R_marg_id){
   int irk = -1;
   for(int g = 0; g < ngene; ++g){
   	int ncp = cutpoint[g].size();
-  	vector<VecStat> stat(ncp, VecStat (nperm + 1, STAT0));
-    fstream gin(gene_out[g].c_str(), ios::in | ios::binary);
+  	vector<VecStat> stat;
     
-  	for(int i = 0; i < nperm + 1; ++i){
-  		for(int j = 0; j < ncp; ++j){
-  			float s = .0f;
-  			gin.read((char*)(&s), sizeof(s));
-  			stat[j][i].stat = s;
-  			stat[j][i].id = i;
-  		}
-  	}
-  	gin.close();
+    read_in_buffer(gene_out[g], nperm, ncp, nthread, stat);
     
     if(remove(gene_out[g].c_str())){
       error("Cannot delete gene output file");
@@ -1194,7 +1222,6 @@ double *R_pathway_pval, int *R_arr_rank, double *R_gene_pval){
   *R_pathway_pval += rep / 2.0;
   *R_pathway_pval /= nperm + 1;
   
-  cout << "v0.8.26" << endl;
   delete[] file_prefix;
   
   
@@ -1367,19 +1394,9 @@ int *R_sel_id, int *R_marg_id){
   int irk = -1;
   for(int g = 0; g < ngene; ++g){
   	int ncp = cutpoint[g].size();
-  	vector<VecStat> stat(ncp, VecStat (nperm + 1, STAT0));
-    fstream gin(gene_out[g].c_str(), ios::in | ios::binary);
+  	vector<VecStat> stat;
     
-  	for(int i = 0; i < nperm + 1; ++i){
-  		for(int j = 0; j < ncp; ++j){
-  			float s = .0f;
-  			gin.read((char*)(&s), sizeof(s));
-  			stat[j][i].stat = s;
-  			stat[j][i].id = i;
-  		}
-  	}
-    
-  	gin.close();
+    read_in_buffer(gene_out[g], nperm, ncp, nthread, stat);
     
     if(remove(gene_out[g].c_str())){
       error("Cannot delete gene output file");
@@ -1620,18 +1637,9 @@ int *R_sel_id, int *R_marg_id){
   int irk = -1;
   for(int g = 0; g < ngene; ++g){
   	int ncp = cutpoint[g].size();
-  	vector<VecStat> stat(ncp, VecStat (nperm + 1, STAT0));
-    fstream gin(gene_out[g].c_str(), ios::in | ios::binary);
+  	vector<VecStat> stat;
     
-  	for(int i = 0; i < nperm + 1; ++i){
-  		for(int j = 0; j < ncp; ++j){
-  			float s = .0f;
-  			gin.read((char*)(&s), sizeof(s));
-  			stat[j][i].stat = s;
-  			stat[j][i].id = i;
-  		}
-  	}
-  	gin.close();
+    read_in_buffer(gene_out[g], nperm, ncp, nthread, stat);
     
     if(remove(gene_out[g].c_str())){
       error("Cannot delete gene output file");
@@ -1852,7 +1860,6 @@ double *R_pathway_pval, int *R_arr_rank, double *R_gene_pval){
   *R_pathway_pval += rep / 2.0;
   *R_pathway_pval /= nperm + 1;
   
-  cout << "v0.8.26" << endl;
   delete[] file_prefix;
   
   

@@ -130,7 +130,7 @@ options <- list(inspect.snp.n = 2, nperm = 1e4,
 ## different inflation factors are adjusted in two studies
 lambda <- c(1.10, 1.08)
 
-## two summary files, so two elements in each of two lists ncase and ncontrol
+## two summary files, so there are two elements in each of two lists ncases and ncontrols
 ## the first summary file includes data calculated from meta-analysis of two sub-studies, each with sample size 63390 (9580 cases and 53810 controls) and 5643 (2591 cases and 3052 controls)
 ## see a few rows in study1
 # s <- read.table(study1, header = TRUE, as.is = TRUE, nrows = 10)
