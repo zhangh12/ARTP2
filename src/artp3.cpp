@@ -662,7 +662,7 @@ int *R_sel_id, int *R_marg_id){
 	  		gout.close();
 	  	}
 	  }
-	  //fmat().swap(null);
+	  fmat().swap(null);
   }
   
   // read null statistics (per gene)
@@ -680,6 +680,7 @@ int *R_sel_id, int *R_marg_id){
   			stat[j][i].id = i;
   		}
   	}
+  	
   	gin.close();
     
     if(remove(gene_out[g].c_str())){
@@ -696,12 +697,13 @@ int *R_sel_id, int *R_marg_id){
   				int id = stat[j][i].id;
   				arr_rank[j][id] = i;
   			}
+  			VecStat().swap(stat[j]);
   		}
   	}
   	
   	vector<VecStat>().swap(stat);
     
-    ivec gene_min_p (nperm + 1, -1);
+    VecMinp gene_min_p (nperm + 1, MINP0);
     ivec subsum(nthread, 0);
     ivec subtie(nthread, 0);
     int m = nperm + 1;
@@ -712,7 +714,8 @@ int *R_sel_id, int *R_marg_id){
         m = arr_rank[j][0];
       }
     }
-    gene_min_p[0] = m;
+    gene_min_p[0].stat = m;
+    gene_min_p[0].id = 0;
     
     #pragma omp parallel num_threads(nthread)
     {
@@ -725,10 +728,11 @@ int *R_sel_id, int *R_marg_id){
             m = arr_rank[j][i];
           }
         }
-        gene_min_p[i] = m;
-        if(gene_min_p[i] < gene_min_p[0]){
+        gene_min_p[i].stat = m;
+        gene_min_p[i].id = i;
+        if(gene_min_p[i].stat < gene_min_p[0].stat){
           subsum[tid] += 1;
-        }else if(gene_min_p[i] == gene_min_p[0]){
+        }else if(gene_min_p[i].stat == gene_min_p[0].stat){
           subtie[tid] += 1;
         }else{
           ;
@@ -745,17 +749,33 @@ int *R_sel_id, int *R_marg_id){
     R_gene_pval[g] += rep / 2.0;
     R_gene_pval[g] /= nperm + 1;
     
+    sort(gene_min_p.begin(), gene_min_p.end());
+    
+    int *gene_p_stat = new int[nperm + 1];
+    if(gene_p_stat == NULL){
+    	error("Out of memory in artp3_chr");
+    }
+    
+    #pragma omp parallel num_threads(nthread)
+    {
+    	#pragma omp for
+	    for(int i = 0; i < nperm + 1; ++i){
+	    	int id = gene_min_p[i].id;
+	    	gene_p_stat[id] = i;
+	    }
+	  }
+    VecMinp().swap(gene_min_p);
+    
     fstream gout(gene_out[g].c_str(), ios::out | ios::binary);
     if(!gout){
       error("Fail to write gene statistics to file");
     }
-    for(int i = 0; i < nperm + 1; ++i){
-      gout.write((char*)(&(gene_min_p[i])), sizeof(gene_min_p[i]));
-    }
+    
+    gout.write((char*)(gene_p_stat), sizeof(int) * (nperm + 1));
+    delete[] gene_p_stat;
     gout.close();
     
   }
-  
   
   delete[] file_prefix;
   
@@ -1043,70 +1063,78 @@ double *R_pathway_pval, int *R_arr_rank, double *R_gene_pval){
   
   string fprefix (file_prefix);
   svec gene_out (ngene, fprefix);
+  vector<shared_ptr<fstream> > gin;
   for(int g = 0; g < ngene; ++g){
     ostringstream cid;
     cid << group_id[g];
     ostringstream gid;
     gid << gene_id[g];
     gene_out[g] = gene_out[g] + string(".CID.") + cid.str() + string(".GID.") + gid.str() + string(".bin");
+    gin.push_back(make_shared<fstream> (gene_out[g].c_str(), ios::in | ios::binary));
   }
   
-  vector<VecMinp> gene_stat (ngene, VecMinp(nperm + 1, MINP0));
-  imat gene_p_stat (ngene, ivec(nperm + 1, -1));
-  #pragma omp parallel num_threads(min(nthread, ngene))
-  {
-    #pragma omp for
-    for(int g = 0; g < ngene; ++g){
-      fstream gin(gene_out[g].c_str(), ios::in | ios::binary);
-      //ivec zero_loc;
-      for(int i = 0; i < nperm + 1; ++i){
-        gin.read((char*)(&(gene_stat[g][i].stat)), sizeof(gene_stat[g][i].stat));
-        gene_stat[g][i].id = i;
-      }
-      gin.close();
-      if(remove(gene_out[g].c_str())){
-        error("Cannot delete gene output file");
-      }
-      sort(gene_stat[g].begin(), gene_stat[g].end());
-      for(int i = 0; i < nperm + 1; ++i){
-        int id = gene_stat[g][i].id;
-        gene_p_stat[g][id] = i;
-      }
-      VecMinp().swap(gene_stat[g]);
-    }
+  //add
+  vector<VecStat> stat(ncp, VecStat (nperm + 1, STAT0));
+  int maxlines = 10000;
+  int rem = nperm + 1;
+  int inp = -1;
+  while(rem > 0){
+  	int nlines = (rem > maxlines) ? maxlines : rem;
+  	
+  	fmat s(nlines, fvec(ngene, .0f));
+  	#pragma omp parallel num_threads(nthread)
+  	{
+  		#pragma omp for
+	  	for(int g = 0; g < ngene; ++g){
+	  		int *buffer = new int[nlines];
+	  		if(buffer == NULL){
+	  			error("Out of memory in artp3");
+	  		}
+	  		
+	  		(*(gin[g])).read((char*) buffer, nlines * sizeof(int));
+	  		if(inp == -1){
+	  			R_gene_pval[g] = (buffer[0] + 1.0) / (nperm + 1);
+	  		}
+	  		
+	  		for(int nl = 0; nl < nlines; ++nl){
+	  			s[nl][g] = (float) log((buffer[nl] + 1.0) / (nperm + 1));
+	  		}
+	  		delete[] buffer;
+	  	}
+	  	
+  		#pragma omp for
+	  	for(int nl = 0; nl < nlines; ++nl){
+	  		if(ngene > 1){
+	  			sort(s[nl].begin(), s[nl].end());
+	  			for(int g = 1; g <= max_cutpoint; ++g){
+	  				s[nl][g] += s[nl][g - 1];
+	  			}
+	  		}
+				
+				for(int k = 0; k < ncp; ++k){
+					float u = -s[nl][pathway_cutpoint[k]];
+					stat[k][inp + nl + 1].stat = u;
+					stat[k][inp + nl + 1].id = inp + nl + 1;
+				}
+				
+				fvec().swap(s[nl]);
+	  	}
+	  }
+	  
+	  inp += nlines;
+  	
+  	fmat().swap(s);
+  	
+  	rem -= nlines;
   }
-  
-  vector<VecMinp>().swap(gene_stat);
   
   for(int g = 0; g < ngene; ++g){
-    R_gene_pval[g] = (gene_p_stat[g][0] + 1.0) / (nperm + 1);
+  	(*(gin[g])).close();
+  	if(remove(gene_out[g].c_str())){
+  		error("Cannot delete gene output file");
+  	}
   }
-  
-  vector<VecStat> stat(ncp, VecStat (nperm + 1, STAT0));
-  #pragma omp parallel num_threads(nthread)
-  {
-    #pragma omp for
-    for(int i = 0; i < nperm + 1; ++i){
-      fvec s(ngene, .0f);
-      for(int g = 0; g < ngene; ++g){
-        s[g] = (float) log((gene_p_stat[g][i] + 1.0) / (nperm + 1));
-      }
-      if(ngene > 1){
-        sort(s.begin(), s.end());
-        for(int g = 1; g <= max_cutpoint; ++g){
-          s[g] += s[g - 1];
-        }
-      }
-      
-      for(int k = 0; k < ncp; ++k){
-        float u = -s[pathway_cutpoint[k]];
-        stat[k][i].stat = u;
-        stat[k][i].id = i;
-      }
-    }
-  }
-  
-  imat().swap(gene_p_stat);
+  //add
   
   imat arr_rank(ncp, ivec (nperm + 1, 0));
   #pragma omp parallel num_threads(min(nthread, ncp))
@@ -1166,7 +1194,7 @@ double *R_pathway_pval, int *R_arr_rank, double *R_gene_pval){
   *R_pathway_pval += rep / 2.0;
   *R_pathway_pval /= nperm + 1;
   
-  
+  cout << "v0.8.26" << endl;
   delete[] file_prefix;
   
   
@@ -1332,7 +1360,7 @@ int *R_sel_id, int *R_marg_id){
   		}
   		gout.close();
   	}
-	  //fmat().swap(null);
+	  fmat().swap(null);
   }
   
   // read null statistics (per gene)
@@ -1350,6 +1378,7 @@ int *R_sel_id, int *R_marg_id){
   			stat[j][i].id = i;
   		}
   	}
+    
   	gin.close();
     
     if(remove(gene_out[g].c_str())){
@@ -1363,11 +1392,12 @@ int *R_sel_id, int *R_marg_id){
 				int id = stat[j][i].id;
 				arr_rank[j][id] = i;
 			}
+			VecStat().swap(stat[j]);
 		}
   	
   	vector<VecStat>().swap(stat);
     
-    ivec gene_min_p (nperm + 1, -1);
+    VecMinp gene_min_p (nperm + 1, MINP0);
     ivec subsum(nthread, 0);
     ivec subtie(nthread, 0);
     int m = nperm + 1;
@@ -1378,7 +1408,8 @@ int *R_sel_id, int *R_marg_id){
         m = arr_rank[j][0];
       }
     }
-    gene_min_p[0] = m;
+    gene_min_p[0].stat = m;
+    gene_min_p[0].id = 0;
     
     for(int i = 1; i < nperm + 1; ++i){
       int tid = 0;
@@ -1388,10 +1419,11 @@ int *R_sel_id, int *R_marg_id){
           m = arr_rank[j][i];
         }
       }
-      gene_min_p[i] = m;
-      if(gene_min_p[i] < gene_min_p[0]){
+      gene_min_p[i].stat = m;
+      gene_min_p[i].id = i;
+      if(gene_min_p[i].stat < gene_min_p[0].stat){
         subsum[tid] += 1;
-      }else if(gene_min_p[i] == gene_min_p[0]){
+      }else if(gene_min_p[i].stat == gene_min_p[0].stat){
         subtie[tid] += 1;
       }else{
         ;
@@ -1407,13 +1439,26 @@ int *R_sel_id, int *R_marg_id){
     R_gene_pval[g] += rep / 2.0;
     R_gene_pval[g] /= nperm + 1;
     
+    sort(gene_min_p.begin(), gene_min_p.end());
+    
+    int *gene_p_stat = new int[nperm + 1];
+    if(gene_p_stat == NULL){
+    	error("Out of memory in artp3_chr");
+    }
+    
+    for(int i = 0; i < nperm + 1; ++i){
+    	int id = gene_min_p[i].id;
+    	gene_p_stat[id] = i;
+    }
+    VecMinp().swap(gene_min_p);
+    
     fstream gout(gene_out[g].c_str(), ios::out | ios::binary);
     if(!gout){
       error("Fail to write gene statistics to file");
     }
-    for(int i = 0; i < nperm + 1; ++i){
-      gout.write((char*)(&(gene_min_p[i])), sizeof(gene_min_p[i]));
-    }
+    
+    gout.write((char*)(gene_p_stat), sizeof(int) * (nperm + 1));
+    delete[] gene_p_stat;
     gout.close();
     
   }
@@ -1689,63 +1734,73 @@ double *R_pathway_pval, int *R_arr_rank, double *R_gene_pval){
   
   string fprefix (file_prefix);
   svec gene_out (ngene, fprefix);
+  vector<shared_ptr<fstream> > gin;
   for(int g = 0; g < ngene; ++g){
     ostringstream cid;
     cid << group_id[g];
     ostringstream gid;
     gid << gene_id[g];
     gene_out[g] = gene_out[g] + string(".CID.") + cid.str() + string(".GID.") + gid.str() + string(".bin");
+    gin.push_back(make_shared<fstream> (gene_out[g].c_str(), ios::in | ios::binary));
   }
   
-  vector<VecMinp> gene_stat (ngene, VecMinp(nperm + 1, MINP0));
-  imat gene_p_stat (ngene, ivec(nperm + 1, -1));
-  
-  for(int g = 0; g < ngene; ++g){
-    fstream gin(gene_out[g].c_str(), ios::in | ios::binary);
-    //ivec zero_loc;
-    for(int i = 0; i < nperm + 1; ++i){
-      gin.read((char*)(&(gene_stat[g][i].stat)), sizeof(gene_stat[g][i].stat));
-      gene_stat[g][i].id = i;
-    }
-    gin.close();
-    if(remove(gene_out[g].c_str())){
-      error("Cannot delete gene output file");
-    }
-    sort(gene_stat[g].begin(), gene_stat[g].end());
-    for(int i = 0; i < nperm + 1; ++i){
-      int id = gene_stat[g][i].id;
-      gene_p_stat[g][id] = i;
-    }
-    VecMinp().swap(gene_stat[g]);
-  }
-  
-  vector<VecMinp>().swap(gene_stat);
-  
-  for(int g = 0; g < ngene; ++g){
-    R_gene_pval[g] = (gene_p_stat[g][0] + 1.0) / (nperm + 1);
-  }
   
   vector<VecStat> stat(ncp, VecStat (nperm + 1, STAT0));
-  for(int i = 0; i < nperm + 1; ++i){
-    fvec s(ngene, .0f);
-    for(int g = 0; g < ngene; ++g){
-      s[g] = (float) log((gene_p_stat[g][i] + 1.0) / (nperm + 1));
-    }
-    if(ngene > 1){
-      sort(s.begin(), s.end());
-      for(int g = 1; g <= max_cutpoint; ++g){
-        s[g] += s[g - 1];
-      }
-    }
-    
-    for(int k = 0; k < ncp; ++k){
-      float u = -s[pathway_cutpoint[k]];
-      stat[k][i].stat = u;
-      stat[k][i].id = i;
-    }
+  int maxlines = 10000;
+  int rem = nperm + 1;
+  int inp = -1;
+  while(rem > 0){
+  	int nlines = (rem > maxlines) ? maxlines : rem;
+  	
+  	fmat s(nlines, fvec(ngene, .0f));
+  	for(int g = 0; g < ngene; ++g){
+  		int *buffer = new int[nlines];
+  		if(buffer == NULL){
+  			error("Out of memory in artp3");
+  		}
+  		
+  		(*(gin[g])).read((char*) buffer, nlines * sizeof(int));
+      
+  		if(inp == -1){
+  			R_gene_pval[g] = (buffer[0] + 1.0) / (nperm + 1);
+  		}
+  		
+  		for(int nl = 0; nl < nlines; ++nl){
+  			s[nl][g] = (float) log((buffer[nl] + 1.0) / (nperm + 1));
+  		}
+  		delete[] buffer;
+  	}
+  	
+  	for(int nl = 0; nl < nlines; ++nl){
+  		if(ngene > 1){
+  			sort(s[nl].begin(), s[nl].end());
+  			for(int g = 1; g <= max_cutpoint; ++g){
+  				s[nl][g] += s[nl][g - 1];
+  			}
+  		}
+  		
+			++inp;
+			
+			for(int k = 0; k < ncp; ++k){
+				float u = -s[nl][pathway_cutpoint[k]];
+				stat[k][inp].stat = u;
+				stat[k][inp].id = inp;
+			}
+			
+			fvec().swap(s[nl]);
+  	}
+  	
+  	fmat().swap(s);
+  	
+  	rem -= nlines;
   }
   
-  imat().swap(gene_p_stat);
+  for(int g = 0; g < ngene; ++g){
+  	(*(gin[g])).close();
+  	if(remove(gene_out[g].c_str())){
+  		error("Cannot delete gene output file");
+  	}
+  }
   
   imat arr_rank(ncp, ivec (nperm + 1, 0));
   for(int k = 0; k < ncp; ++k){
@@ -1797,7 +1852,7 @@ double *R_pathway_pval, int *R_arr_rank, double *R_gene_pval){
   *R_pathway_pval += rep / 2.0;
   *R_pathway_pval /= nperm + 1;
   
-  
+  cout << "v0.8.26" << endl;
   delete[] file_prefix;
   
   
@@ -1805,4 +1860,9 @@ double *R_pathway_pval, int *R_arr_rank, double *R_gene_pval){
 
 }
 #endif
+
+
+
+
+
 
