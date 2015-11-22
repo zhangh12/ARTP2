@@ -1,7 +1,7 @@
 Package: ARTP3
 Type: Package
 Title: Pathway and gene level association test
-Version: 0.8.28
+Version: 0.8.29
 Date: 2015-11-19
 Author: Han Zhang, Bill Wheeler, Kai Yu, Yifan Yang
 Maintainer: Han Zhang <han.zhang2@nih.gov>

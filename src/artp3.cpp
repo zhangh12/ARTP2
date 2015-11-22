@@ -526,8 +526,8 @@ void read_in_buffer(const string &file, const int &nperm, const int &ncp, const 
   #if __PARALLEL__
   #pragma omp parallel num_threads(nthread)
   {
-  #endif
     #pragma omp for
+    #endif
     for(int i = 0; i < nperm + 1; ++i){
       for(int j = 0; j < ncp; ++j){
         stat[j][i].stat = buffer_float[i * ncp + j];
@@ -1103,7 +1103,7 @@ double *R_pathway_pval, int *R_arr_rank, double *R_gene_pval){
   
   //add
   vector<VecStat> stat(ncp, VecStat (nperm + 1, STAT0));
-  int maxlines = 10000;
+  int maxlines = 50000;
   int rem = nperm + 1;
   int inp = -1;
   while(rem > 0){

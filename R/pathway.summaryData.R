@@ -9,10 +9,6 @@ pathway.summaryData <- function(summary.files, pathway, reference, lambda, ncase
   
   test <- norm.stat.test(setup)
   
-  if(setup$options$save.setup){
-    setup <- NULL
-  }
-  
   list(pathway.pvalue = test$pathway.pvalue, gene.pvalue = test$gene.pvalue, 
        model = test$model, most.sig.genes = test$most.sig.genes, 
        accurate = test$accurate, test.timing = test$test.timing, 
