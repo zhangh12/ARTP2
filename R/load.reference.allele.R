@@ -18,6 +18,8 @@ load.reference.allele <- function(reference, snps.in.pathway, options){
     bim <- read.table(file, header = FALSE, as.is = TRUE, colClasses = col.class)
     colnames(bim) <- c("SNP", "RefAllele", "EffectAllele")
     bim <- bim[bim$SNP %in% snps.in.pathway, ]
+    bim$RefAllele <- toupper(bim$RefAllele)
+    bim$EffectAllele <- toupper(bim$EffectAllele)
     allele.info <- rbind(allele.info, bim)
     rm(bim)
     gc()

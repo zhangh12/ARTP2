@@ -100,6 +100,8 @@ load.summary.statistics <- function(summary.files, snps.in.pathway, options){
     st$N <- sapply(tmp, function(x, ss = options$sample.size[[i]]){sum(ss[x != '?'])})
     st$N1 <- sapply(tmp, function(x, ss = options$ncases[[i]]){sum(ss[x != '?'])})
     st$N0 <- sapply(tmp, function(x, ss = options$ncontrols[[i]]){sum(ss[x != '?'])})
+    st$RefAllele <- toupper(st$RefAllele)
+    st$EffectAllele <- toupper(st$EffectAllele)
     
     rm(tmp)
     gc()

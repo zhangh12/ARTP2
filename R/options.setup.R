@@ -86,6 +86,14 @@ options.setup <- function(options, lambda, ncases, ncontrols){
     rm(excluded.regions)
   }
   
+  if(!is.null(options$excluded.subs)){
+  	options$excluded.subs <- as.character(options$excluded.subs)
+  }
+  
+  if(!is.null(options$selected.subs)){
+  	options$selected.subs <- as.character(options$selected.subs)
+  }
+  
   if(!is.null(options$excluded.subs) && !is.null(options$selected.subs)){
     options$selected.subs <- setdiff(options$selected.subs, options$excluded.subs)
     options$excluded.subs <- NULL

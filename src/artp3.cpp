@@ -716,9 +716,22 @@ int *R_sel_id, int *R_marg_id){
   int irk = -1;
   for(int g = 0; g < ngene; ++g){
   	int ncp = cutpoint[g].size();
-  	vector<VecStat> stat;
     
+    vector<VecStat> stat(ncp, VecStat (nperm + 1, STAT0));
+    fstream gin(gene_out[g].c_str(), ios::in | ios::binary);
+    for(int i = 0; i < nperm + 1; ++i){
+  		for(int j = 0; j < ncp; ++j){
+  			float s = .0f;
+  			gin.read((char*)(&s), sizeof(s));
+  			stat[j][i].stat = s;
+  			stat[j][i].id = i;
+  		}
+  	}
+    gin.close();
+    /*
+  	vector<VecStat> stat;
     read_in_buffer(gene_out[g], nperm, ncp, nthread, stat);
+    */
     
     if(remove(gene_out[g].c_str())){
       error("Cannot delete gene output file");
@@ -1394,9 +1407,22 @@ int *R_sel_id, int *R_marg_id){
   int irk = -1;
   for(int g = 0; g < ngene; ++g){
   	int ncp = cutpoint[g].size();
-  	vector<VecStat> stat;
     
+    vector<VecStat> stat(ncp, VecStat (nperm + 1, STAT0));
+    fstream gin(gene_out[g].c_str(), ios::in | ios::binary);
+    for(int i = 0; i < nperm + 1; ++i){
+  		for(int j = 0; j < ncp; ++j){
+  			float s = .0f;
+  			gin.read((char*)(&s), sizeof(s));
+  			stat[j][i].stat = s;
+  			stat[j][i].id = i;
+  		}
+  	}
+    gin.close();
+    /*
+  	vector<VecStat> stat;
     read_in_buffer(gene_out[g], nperm, ncp, nthread, stat);
+    */
     
     if(remove(gene_out[g].c_str())){
       error("Cannot delete gene output file");
