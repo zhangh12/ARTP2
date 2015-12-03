@@ -4,6 +4,7 @@ filter.reference.geno <- function(ref.geno, pathway, sum.stat, options){
   # initialize them in case all filters are turned off
   deleted.snps <- data.frame(SNP = NULL, reason = NULL, comment = NULL, stringsAsFactors = FALSE)
   deleted.genes <- data.frame(Gene = NULL, reason = NULL, stringsAsFactors = FALSE)
+  rs <- colnames(ref.geno)
   
   pathway <- pathway[pathway$SNP %in% colnames(ref.geno), ]
   
@@ -11,7 +12,6 @@ filter.reference.geno <- function(ref.geno, pathway, sum.stat, options){
     msg <- paste("Removing SNPs with high missing rate:", date())
     if(options$print) message(msg)
     
-    rs <- colnames(ref.geno)
     snp.miss.rate <- apply(ref.geno, 2, function(x){mean(is.na(x))})
     id <- which(snp.miss.rate > options$snp.miss.rate)
     if(length(id) > 0){
