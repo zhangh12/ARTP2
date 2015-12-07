@@ -154,6 +154,8 @@ ncontrols[[2]] <- 54319
 # 
 # ret$pathway.pvalue
 ## [1] 0.0289971  # Mac OS
+## [1] 0.03349665 # Linux 32 threads
+## [1] 0.04029597 # Linux 1 thread
 
 ## Mac OS
 # head(ret$gene.pvalue)
@@ -165,6 +167,16 @@ ncontrols[[2]] <- 54319
 ## 5   MRPL10  17    18 0.012648735
 ## 6    SCYL1  11     3 0.018298170
 
+## Linux 32 threads
+# head(ret$gene.pvalue)
+##       Gene Chr N.SNP      Pvalue
+## 1   UBE2D3   4     6 0.000849915
+## 2     BDH2   4    10 0.001049895
+## 3 PPP1R14D  15     9 0.003949605
+## 4     PBX2   6    22 0.004899510
+## 5   MRPL10  17    18 0.012798720
+## 6    SCYL1  11     3 0.015048495
+
 ## pathway test with each of two studies
 # ret1 <- pathway.summaryData(summary.files = study1, pathway, reference, lambda[1], ncases[1], ncontrols[1], options = options)
 
@@ -172,9 +184,13 @@ ncontrols[[2]] <- 54319
 
 # ret1$pathway.pvalue
 ## [1] 0.02639736 # Mac OS
+## [1] 0.03714629 # Linux 32 threads
+## [1] 0.02929707 # Linux 1 thread
 
 # ret2$pathway.pvalue
 ## [1] 0.3152685  # Mac OS
+## [1] 0.2974703  # Linux 32 threads
+## [1] 0.279772   # Linux 1 thread
 
 
 ##################################################
@@ -196,12 +212,14 @@ exc.reg1 <- data.frame(Chr = c(1, 1, 22),
                        Radius = c(5000, 0, 2000))
 options$excluded.regions <- exc.reg1
 
-# ret1 <- pathway.summaryData(summary.files = c(study1, study2), pathway, reference, lambda, ncases, ncontrols, options = options)
+# ret.exc1 <- pathway.summaryData(summary.files = c(study1, study2), pathway, reference, lambda, ncases, ncontrols, options = options)
 
-# ret1$pathway.pvalue
+# ret.exc1$pathway.pvalue
 ## [1] 0.03094691 # Mac OS
+## [1] 0.03409659 # Linux 32 threads
+## [1] 0.04179582 # Linux 1 thread
 
-# sum(ret1$deleted.snps$reason == 'RM_BY_REGIONS')
+# sum(ret.exc1$deleted.snps$reason == 'RM_BY_REGIONS')
 
 ## or equivalently
 exc.reg2 <- data.frame(Chr = c(1, 1, 22), 
@@ -209,8 +227,8 @@ exc.reg2 <- data.frame(Chr = c(1, 1, 22),
                        End = c(1711160, 11979231, 51054379))
 options$excluded.regions <- exc.reg2
 
-# ret2 <- pathway.summaryData(summary.files = c(study1, study2), pathway, reference, lambda, ncases, ncontrols, options = options)
-# ret1$pathway.pvalue == ret2$pathway.pvalue
+# ret.exc2 <- pathway.summaryData(summary.files = c(study1, study2), pathway, reference, lambda, ncases, ncontrols, options = options)
+# ret.exc1$pathway.pvalue == ret.exc2$pathway.pvalue
 
 #################
 
@@ -225,5 +243,7 @@ options$excluded.regions <- NULL
 # ret.s <- pathway.summaryData(summary.files = c(study1, study2), pathway, reference, lambda, ncases, ncontrols, options = options)
 # ret.s$pathway.pvalue
 ## [1] 0.03274673 # Mac OS
+## [1] 0.03614639 # Linux 32 threads
+## [1] 0.04109589 # Linux 1 thread
 
 }

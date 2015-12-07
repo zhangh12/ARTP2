@@ -9,6 +9,12 @@
 #define __PARALLEL__ false
 #endif
 
+#if __PARALLEL__
+#define __NO_PARALLEL__ false
+#else
+#define __NO_PARALLEL__ true
+#endif
+
 #include <R.h>
 #include <Rmath.h>
 #include <R_ext/Print.h>

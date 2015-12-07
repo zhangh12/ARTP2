@@ -70,6 +70,9 @@ rawData.dataframe.setup <- function(formula, data, pathway, family, lambda, subs
   
   control.id <- which(null[, resp.var] == 0)
   
+  msg <- paste("Filtering SNPs:", date())
+  if(options$print) message(msg)
+  
   uni.gene <- unique(pathway$Gene)
   for(g in uni.gene){
     gid <- which(pathway$Gene == g)

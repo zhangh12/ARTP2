@@ -61,6 +61,10 @@ rawData.plinkfiles.setup <- function(formula, null, pathway, family, geno.files,
   score0 <- list()
   raw.geno <- NULL
   name <- NULL
+  
+  msg <- paste("Filtering SNPs:", date())
+  if(options$print) message(msg)
+  
   for(i in 1:length(uni.chr)){
     cid <- which(pathway$Chr == uni.chr[i])
     
