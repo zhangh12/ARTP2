@@ -287,7 +287,7 @@ void search2(fvec &stat, ivec &sel_id, int &marg_id, const fvec &S, const fmat &
   int id1 = -1;
   int id2 = -1;
   max_stat = -1.0;
-  for(int j = 0; j < ns; ++j){
+  for(int j = 0; j < ns - 1; ++j){
     for(int k = j + 1; k < ns; ++k){
       double a = Sigma[j][j];
       double b = Sigma[j][k];
@@ -1026,6 +1026,7 @@ int *R_sel_id, int *R_marg_id){
 	  			fvec s;
           ivec sel_id;
           int marg_id;
+          
           if(method == 1){
             search1(s, sel_id, marg_id, S, Sigma, mc);
           }else{
@@ -1171,7 +1172,6 @@ int *R_sel_id, int *R_marg_id){
     gout.close();
     
   }
-  
   
   delete[] file_prefix;
   

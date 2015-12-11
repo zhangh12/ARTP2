@@ -143,7 +143,7 @@ bim <- system.file("extdata", package = "ARTP3", "raw.bim")
 fam <- system.file("extdata", package = "ARTP3", "raw.fam")
 geno.files <- data.frame(fam, bim, bed, stringsAsFactors = FALSE)
 
-## column SUBID must be included in data, in this example, first column is SUBID
+## a column SUBID must be included in data, in this example, first column is SUBID
 # ret3 <- pathway.rawData(formula, data = data[, 1:6], pathway, family, geno.files, options = options)
 # ret3$pathway.pvalue == ret1$pathway.pvalue
 

@@ -1,17 +1,34 @@
 
-options.setup <- function(options, lambda, ncases, ncontrols){
+options.setup <- function(options, family, lambda, ncases, ncontrols, nsamples){
   
   opt.default <- options.default() # valid and default options
   
+  opt.default$family <- family
   opt.default$lambda <- lambda
-  opt.default$ncases <- ncases
-  opt.default$ncontrols <- ncontrols
   
-  if(!is.null(ncases) && !is.null(ncontrols)){
-    opt.default$sample.size <- list()
-    for(i in 1:length(ncases)){
-      opt.default$sample.size[[i]] <- ncases[[i]] + ncontrols[[i]]
+  raw <- all(is.null(nsamples), is.null(ncases), is.null(ncontrols))
+  
+  if(!raw){ # call by pathway.summaryData
+    if(family == 'binomial'){
+      opt.default$ncases <- ncases
+      opt.default$ncontrols <- ncontrols
+      opt.default$nsamples <- list()
+      for(i in 1:length(ncases)){
+        opt.default$nsamples[[i]] <- ncases[[i]] + ncontrols[[i]]
+      }
+    }else{
+      opt.default$nsamples <- nsamples
+      opt.default$ncases <- list()
+      opt.default$ncontrols <- list()
+      for(i in 1:length(nsamples)){
+        opt.default$ncases[[i]] <- ceiling(nsamples[[i]]/2)
+        opt.default$ncontrols[[i]] <- opt.default$nsamples[[i]] - opt.default$ncases[[i]]
+      }
     }
+  }else{
+    opt.default$nsamples <- NULL
+    opt.default$ncases <- NULL
+    opt.default$ncontrols <- NULL
   }
   
   spec.opt <- names(options)

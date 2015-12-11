@@ -6,8 +6,8 @@
 Calculate gene and pathway p-values using the ARTP test and summary data. 
 }
 \usage{
-pathway.summaryData(summary.files, pathway, reference, lambda, 
-                    ncases, ncontrols, options = NULL)
+pathway.summaryData(summary.files, pathway, family, reference, lambda, 
+                    ncases, ncontrols, nsamples, options = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -17,6 +17,9 @@ a character vector of file names containing the summary results of SNPs included
   \item{pathway}{
 a character of the name of file containing definition of a pathway. It must be able to be read by \code{\link[utils]{read.table}} and have columns called "SNP", "Gene", and "Chr". It can also be a data frame with the three columns. 
 }
+  \item{family}{
+a character taking values of "\code{gaussian}" or "\code{binomial}". 
+}
   \item{reference}{
 a data.frame containing the paths of binary PLINK files of reference dataset. It must have columns called "bed", "bim" and "fam". The current version allows users to specify multiple sets of bed/bim/fam PLINK files as separate rows of the data frame. 
 }
@@ -24,10 +27,13 @@ a data.frame containing the paths of binary PLINK files of reference dataset. It
 a numeric vector of inflation factors. Each file of \code{summary.files} should have one inflation factor specified in \code{lambda}. 
 }
   \item{ncases}{
-a list of numeric vectors specifying sample sizes of cases of participating studies. See \code{Examples}. 
+a list of numeric vectors specifying sample sizes of cases of participating studies. This argument should be specified only if \code{family == 'binomial'}, otherwise \code{list()}. See \code{Examples}. 
 }
   \item{ncontrols}{
-a list of numeric vectors specifying sample sizes of controls of participating studies. See \code{Examples}. 
+a list of numeric vectors specifying sample sizes of controls of participating studies. This argument should be specified only if \code{family == 'binomial'}, otherwise \code{list()}. See \code{Examples}. 
+}
+  \item{nsamples}{
+a list of numeric vectors specifying total sample sizes of participating studies. This argument should be specified only if \code{family == 'gaussian'}, otherwise \code{list()}. See \code{Examples}. 
 }
   \item{options}{
 a list of options to control the test procedure. If \code{NULL}, default options will be used. See \code{\link{options}}.
@@ -149,8 +155,11 @@ ncontrols[[1]] <- c(53810, 3052)
 ncases[[2]] <- 7638
 ncontrols[[2]] <- 54319
 
+# logistic regression is used in base model, thus ncases and ncontrols should be specified. 
+family <- 'binomial'
+
 ## pathway test with two study files
-# ret <- pathway.summaryData(summary.files = c(study1, study2), pathway, reference, lambda, ncases, ncontrols, options = options)
+# ret <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, reference, lambda, ncases, ncontrols, options = options)
 # 
 # ret$pathway.pvalue
 ## [1] 0.0289971  # Mac OS
@@ -178,9 +187,9 @@ ncontrols[[2]] <- 54319
 ## 6    SCYL1  11     3 0.015048495
 
 ## pathway test with each of two studies
-# ret1 <- pathway.summaryData(summary.files = study1, pathway, reference, lambda[1], ncases[1], ncontrols[1], options = options)
+# ret1 <- pathway.summaryData(summary.files = study1, pathway, family, reference, lambda[1], ncases[1], ncontrols[1], options = options)
 
-# ret2 <- pathway.summaryData(summary.files = study2, pathway, reference, lambda[2], ncases[2], ncontrols[2], options = options)
+# ret2 <- pathway.summaryData(summary.files = study2, pathway, family, reference, lambda[2], ncases[2], ncontrols[2], options = options)
 
 # ret1$pathway.pvalue
 ## [1] 0.02639736 # Mac OS
@@ -201,7 +210,7 @@ bim <- system.file("extdata", package = "ARTP3", "ref.bim")
 fam <- system.file("extdata", package = "ARTP3", "ref.fam")
 
 reference <- data.frame(fam, bim, bed)
-# ret.comb <- pathway.summaryData(summary.files = c(study1, study2), pathway, reference, lambda, ncases, ncontrols, options = options)
+# ret.comb <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, reference, lambda, ncases, ncontrols, options = options)
 # ret.comb$pathway.pvalue == ret$pathway.pvalue
 
 ################
@@ -212,7 +221,7 @@ exc.reg1 <- data.frame(Chr = c(1, 1, 22),
                        Radius = c(5000, 0, 2000))
 options$excluded.regions <- exc.reg1
 
-# ret.exc1 <- pathway.summaryData(summary.files = c(study1, study2), pathway, reference, lambda, ncases, ncontrols, options = options)
+# ret.exc1 <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, reference, lambda, ncases, ncontrols, options = options)
 
 # ret.exc1$pathway.pvalue
 ## [1] 0.03094691 # Mac OS
@@ -227,7 +236,7 @@ exc.reg2 <- data.frame(Chr = c(1, 1, 22),
                        End = c(1711160, 11979231, 51054379))
 options$excluded.regions <- exc.reg2
 
-# ret.exc2 <- pathway.summaryData(summary.files = c(study1, study2), pathway, reference, lambda, ncases, ncontrols, options = options)
+# ret.exc2 <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, reference, lambda, ncases, ncontrols, options = options)
 # ret.exc1$pathway.pvalue == ret.exc2$pathway.pvalue
 
 #################
@@ -240,8 +249,8 @@ head(subj.id)
 options$selected.subs <- subj.id
 options$excluded.regions <- NULL
 
-# ret.s <- pathway.summaryData(summary.files = c(study1, study2), pathway, reference, lambda, ncases, ncontrols, options = options)
-# ret.s$pathway.pvalue
+# ret.sel <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, reference, lambda, ncases, ncontrols, options = options)
+# ret.sel$pathway.pvalue
 ## [1] 0.03274673 # Mac OS
 ## [1] 0.03614639 # Linux 32 threads
 ## [1] 0.04109589 # Linux 1 thread

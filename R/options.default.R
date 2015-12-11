@@ -36,7 +36,7 @@ options.default <- function(){
                       huge.chr.size = 2000, 
                       huge.gene.R2 = .85, 
                       huge.chr.R2 = .85, 
-                      version = '0.8.12')
+                      version = '0.8.33')
   
   opt.default
   

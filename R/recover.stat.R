@@ -4,7 +4,7 @@ recover.stat <- function(sum.stat, pathway, ref.geno, allele.info, options){
   msg <- paste("Recovering test statistics:", date())
   if(options$print) message(msg)
   
-  sample.size <- sum.stat$sample.size
+  nsamples <- sum.stat$nsamples
   sum.info <- sum.stat$stat
   all.snp <- sort(sum.stat$snps.in.study)
   rm(sum.stat)
@@ -88,7 +88,7 @@ recover.stat <- function(sum.stat, pathway, ref.geno, allele.info, options){
       }
       colnames(tmp) <- sum.info[[k]][ks, "SNP"]
       
-      es <- t(tmp) %*% (tmp * sample.size[[k]])
+      es <- t(tmp) %*% (tmp * nsamples[[k]])
       se <- sum.info[[k]][ks, "SE"]
       
       wt[[i]][ks, ks] <- wt[[i]][ks, ks] + es * outer(diag(es), diag(es), "*")^(-.5) / outer(se, se, "*")

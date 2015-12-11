@@ -1,4 +1,5 @@
-summaryData.setup <- function(summary.files, pathway, reference, lambda, ncases, ncontrols, options){
+summaryData.setup <- function(summary.files, pathway, family, reference, lambda, 
+                              ncases, ncontrols, nsamples, options){
   
   start.time <- date()
   
@@ -6,16 +7,17 @@ summaryData.setup <- function(summary.files, pathway, reference, lambda, ncases,
   reference <- reformat.reference.path(reference)
   
   # validate the format of main inputs
-  validate.summary.input(summary.files, pathway, reference, lambda, ncases, ncontrols)
+  validate.summary.input(summary.files, pathway, family, reference, lambda, 
+                         ncases, ncontrols, nsamples)
   
   # merge and reset options
-  options <- options.setup(options, lambda, ncases, ncontrols)
+  options <- options.setup(options, family, lambda, ncases, ncontrols, nsamples)
   
   # load definition of pathway
   pathway <- load.pathway.definition(pathway, options)
   
   # load and check summary statistics
-  sum.stat <- load.summary.statistics(summary.files, pathway$SNP, options)
+  sum.stat <- load.summary.statistics(summary.files, family, pathway$SNP, options)
   
   # deleted snps and their reason
   deleted.snps <- data.frame(SNP = NULL, reason = NULL, comment = NULL, stringsAsFactors = FALSE)
@@ -102,6 +104,11 @@ summaryData.setup <- function(summary.files, pathway, reference, lambda, ncases,
   
   end.time <- date()
   setup.timing <- as.integer(difftime(strptime(end.time, "%c"), strptime(start.time, "%c"), units = "secs"))
+  
+  if(family == 'gaussian'){
+    options$ncases <- NULL
+    options$ncontrols <- NULL
+  }
   
   setup <- list(deleted.snps = deleted.snps, deleted.genes = deleted.genes, 
                 options = options, 

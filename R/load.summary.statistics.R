@@ -1,5 +1,5 @@
 
-load.summary.statistics <- function(summary.files, snps.in.pathway, options){
+load.summary.statistics <- function(summary.files, family, snps.in.pathway, options){
   
   snps.in.pathway <- unique(snps.in.pathway)
   
@@ -15,7 +15,7 @@ load.summary.statistics <- function(summary.files, snps.in.pathway, options){
   # summary.files is a vector of file names
   stat <- list()
   lambda <- NULL
-  sample.size <- list()
+  nsamples <- list()
   ncases <- list()
   ncontrols <- list()
   fid <- 0
@@ -40,7 +40,7 @@ load.summary.statistics <- function(summary.files, snps.in.pathway, options){
     }
     
     if(!("Direction" %in% colnames(st))){
-      st$Direction <- paste(rep('+', length(options$sample.size[[i]])), collapse = '', sep = '')
+      st$Direction <- paste(rep('+', length(options$nsamples[[i]])), collapse = '', sep = '')
       msg <- paste0('Direction is not found in ', summary.files[i], '. ARTP3 assumes equal sample size of SNPs in the study. ')
       warning(msg)
     }
@@ -90,16 +90,19 @@ load.summary.statistics <- function(summary.files, snps.in.pathway, options){
     
     len <- len[1]
     
-    if(len != length(options$sample.size[[i]])){
-      msg <- paste0('Invalid sample.size for study in ', summary.files[i])
+    if(len != length(options$nsamples[[i]])){
+      msg <- paste0('Invalid nsamples for studies in ', summary.files[i])
       stop(msg)
     }
     
     fid <- fid + 1
+    
     st$Direction <- sapply(tmp, function(x){paste(ifelse(x=='?',0,1),sep='',collapse = '')})
-    st$N <- sapply(tmp, function(x, ss = options$sample.size[[i]]){sum(ss[x != '?'])})
+    
+    st$N <- sapply(tmp, function(x, ss = options$nsamples[[i]]){sum(ss[x != '?'])})
     st$N1 <- sapply(tmp, function(x, ss = options$ncases[[i]]){sum(ss[x != '?'])})
     st$N0 <- sapply(tmp, function(x, ss = options$ncontrols[[i]]){sum(ss[x != '?'])})
+	  
     st$RefAllele <- toupper(st$RefAllele)
     st$EffectAllele <- toupper(st$EffectAllele)
     
@@ -110,7 +113,7 @@ load.summary.statistics <- function(summary.files, snps.in.pathway, options){
     stat[[fid]] <- st
     snps.in.study <- unique(c(snps.in.study, st$SNP))
     lambda[fid] <- options$lambda[i]
-    sample.size[[fid]] <- options$sample.size[[i]]
+    nsamples[[fid]] <- options$nsamples[[i]]
     ncases[[fid]] <- options$ncases[[i]]
     ncontrols[[fid]] <- options$ncontrols[[i]]
     
@@ -126,16 +129,17 @@ load.summary.statistics <- function(summary.files, snps.in.pathway, options){
   snps.in.study <- unique(snps.in.study)
   nsnps <- length(snps.in.study)
   SNP.sample.size <- data.frame(N = rep(0, nsnps), N0 = rep(0, nsnps), N1 = rep(0, nsnps))
+  
   rownames(SNP.sample.size) <- snps.in.study
   
   for(i in 1:length(stat)){
     snps <- stat[[i]]$SNP
     SNP.sample.size[snps, ] <- SNP.sample.size[snps, ] + stat[[i]][, c('N', 'N0', 'N1')]
   }
+  
   list(stat = stat, snps.in.study = snps.in.study, lambda = lambda, 
-       sample.size = sample.size, ncases = ncases, ncontrols = ncontrols, 
+       nsamples = nsamples, ncases = ncases, ncontrols = ncontrols, 
        SNP.sample.size = SNP.sample.size)
   
-
 }
 

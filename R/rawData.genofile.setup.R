@@ -3,10 +3,11 @@ rawData.genofiles.setup <- function(formula, null, pathway, family, geno.files, 
   
   start.time <- date()
   
+  validate.family(family)
   validate.lambda.rawData(lambda)
   
   # merge and reset options
-  options <- options.setup(options, lambda, NULL, NULL)
+  options <- options.setup(options, family, lambda, NULL, NULL, NULL)
   
   # encoding the row numbers of phenotype data so that I can extract proper subset of genotype data
   rownames(null) <- paste0('SID-', 1:nrow(null))

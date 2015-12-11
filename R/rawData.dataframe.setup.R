@@ -3,10 +3,11 @@ rawData.dataframe.setup <- function(formula, data, pathway, family, lambda, subs
   
   start.time <- date()
   
+  validate.family(family)
   validate.lambda.rawData(lambda)
   
   # merge and reset options
-  options <- options.setup(options, lambda, NULL, NULL)
+  options <- options.setup(options, family, lambda, NULL, NULL, NULL)
   
   # subset of data
   data <- data.subset(data, subset, options)
