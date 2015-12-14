@@ -33,6 +33,7 @@ load.summary.statistics <- function(summary.files, family, snps.in.pathway, opti
     col.class <- sapply(st, class)
     col.id <- which(colnames(st) %in% complete.header)
     col.class[-col.id] <- "NULL"
+    col.class[c('SNP', 'RefAllele', 'EffectAllele')] <- 'character'
     st <- read.table(summary.files[i], header = TRUE, as.is = TRUE, colClasses = col.class)
     st <- st[st$SNP %in% snps.in.pathway, , drop = FALSE]
     if(nrow(st) == 0){
