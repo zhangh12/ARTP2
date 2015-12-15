@@ -4,15 +4,14 @@ load.summary.files <- function(summary.files, options){
   msg <- paste("Loading summary files:", date())
   if(options$print) message(msg)
   
-  header <- c('SNP', 'RefAllele', 'EffectAllele', 'BETA', 'N') # columns that must be provided by users
+  header <- c('SNP', 'RefAllele', 'EffectAllele', 'BETA') # columns that must be provided by users
   opt.header <- c('P', 'SE')
-  opt.header2 <- c('Chr', 'Pos')
   
-  complete.header <- c(header, opt.header, opt.header2)
+  complete.header <- c(header, opt.header)
   
   nfiles <- length(summary.files)
   stat <- list()
-  fid <- 0
+  
   for(i in 1:nfiles){
     st <- read.table(summary.files[i], header = TRUE, as.is = TRUE, nrows = 1e4)
     tmp <- (header %in% colnames(st))
@@ -27,7 +26,8 @@ load.summary.files <- function(summary.files, options){
     col.class[c('SNP', 'RefAllele', 'EffectAllele')] <- 'character'
     st <- read.table(summary.files[i], header = TRUE, as.is = TRUE, colClasses = col.class)
     if(nrow(st) == 0){
-      next
+      msg <- paste0('Cannot load file ', summary.files[i])
+      stop(msg)
     }
     
     if(!any(opt.header %in% colnames(st))){
@@ -42,14 +42,6 @@ load.summary.files <- function(summary.files, options){
     
     if(!('SE' %in% colnames(st))){
       st$SE <- NA
-    }
-    
-    if(!('Chr' %in% colnames(st))){
-      st$Chr <- NA
-    }
-    
-    if(!('Pos' %in% colnames(st))){
-      st$Pos <- NA
     }
     
     st <- st[, complete.header]
@@ -70,9 +62,20 @@ load.summary.files <- function(summary.files, options){
     st$RefAllele <- toupper(st$RefAllele)
     st$EffectAllele <- toupper(st$EffectAllele)
     
-    fid <- fid + 1
+    id.no.SE <- which(is.na(st$SE))
+    id.no.P <- which(is.na(st$P))
+    
+    if(length(id.no.SE) > 0){
+      z2 <- qchisq(st$P[id.no.SE], df = 1, lower.tail = FALSE)
+      st$SE[id.no.SE] <- abs(st$BETA[id.no.SE]/sqrt(z2))
+    }
+    
+    if(length(id.no.P) > 0){
+      st$P[id.no.P] <- pchisq((st$BETA[id.no.P]/st$SE[id.no.P])^2, df = 1, lower.tail = FALSE)
+    }
+    
     rownames(st) <- st$SNP
-    stat[[fid]] <- st
+    stat[[i]] <- st
     rm(st)
     gc()
     

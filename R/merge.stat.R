@@ -58,10 +58,31 @@ merge.stat <- function(stat, lambda){
   P <- pchisq(BETA^2/SE^2, df = 1, lower.tail = FALSE)
   
   SNP <- names(BETA)
-  sum.stat <- data.frame(SNP = SNP, RefAllele = RefAllele[SNP], EffectAllele = EffectAllele[SNP], BETA = BETA[SNP], SE = SE[SNP], P = P[SNP], stringsAsFactors = FALSE)
-  rownames(sum.stat) <- NULL
+  meta.stat <- data.frame(SNP = SNP, RefAllele = RefAllele[SNP], EffectAllele = EffectAllele[SNP], BETA = BETA[SNP], SE = SE[SNP], P = P[SNP], stringsAsFactors = FALSE)
+  rownames(meta.stat) <- NULL
   
-  sum.stat
+  header <- c('SNP', 'RefAllele', 'EffectAllele', 'BETA', 'SE', 'P')
+  meta.stat <- meta.stat[, header]
+  
+  for(i in 1:nstudy){
+    stat[[i]] <- stat[[i]][, header]
+    stat[[i]][, 'SE'] <- stat[[i]][, 'SE'] / sqrt(lambda[i])
+    rownames(stat[[i]]) <- NULL
+    colnames(stat[[i]]) <- c('SNP', paste(header[-1], 'Study', i, sep = '.'))
+  }
+  
+  for(i in 1:nstudy){
+    meta.stat <- merge(meta.stat, stat[[i]], by = 'SNP', all = TRUE)
+  }
+  
+  if(!is.null(rm.snp)){
+    meta.stat$Conflictive.Allele <- (meta.stat$SNP %in% rm.snp)
+  }
+  
+  meta.stat <- meta.stat[order(meta.stat$P), ]
+  
+  meta.stat
+  
   
 }
 
