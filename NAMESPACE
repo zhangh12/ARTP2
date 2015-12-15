@@ -1,4 +1,4 @@
 import(parallel, Formula, data.table)
 useDynLib(ARTP3)
 export(pathway.summaryData, pathway.warm.start, pathway.rawData, 
-       read.bed, options.default)
+       read.bed, meta, options.default)
