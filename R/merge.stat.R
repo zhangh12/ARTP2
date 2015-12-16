@@ -1,54 +1,27 @@
 
 
-merge.stat <- function(stat, lambda){
+merge.stat <- function(stat, ref.allele, conf.snps, lambda){
   
-  snps <- NULL
-  nstudy <- length(stat)
-  for(i in 1:nstudy){
-    snps <- unique(c(snps, stat[[i]][, 'SNP']))
-  }
+  msg <- paste("Merging summary statistics:", date())
+  message(msg)
   
+  RefAllele <- ref.allele$RefAllel
+  EffectAllele <- ref.allele$EffectAllele
+  
+  snps <- names(RefAllele)
   nsnp <- length(snps)
-  
-  RefAllele <- rep(NA, nsnp)
-  EffectAllele <- rep(NA, nsnp)
-  names(RefAllele) <- snps
-  names(EffectAllele) <- snps
-  
-  rm.snp <- NULL
-  for(s in snps){
-    for(i in 1:nstudy){
-      ra <- stat[[i]][s, 'RefAllele']
-      ea <- stat[[i]][s, 'EffectAllele']
-      if(!is.na(ra) && !is.na(ea)){
-        if(is.na(RefAllele[s]) && is.na(EffectAllele[s])){
-          RefAllele[s] <- ra
-          EffectAllele[s] <- ea
-        }else{
-          if(!setequal(c(RefAllele[s], EffectAllele[s]), c(ra, ea))){
-            rm.snp <- c(rm.snp, s)
-          }
-        }
-        break
-      }
-    }
-  }
-  
-  if(!is.null(rm.snp)){
-    for(i in 1:nstudy){
-      stat[[i]] <- stat[[i]][!(stat[[i]]$SNP %in% rm.snp), ]
-    }
-  }
   
   BETA <- rep(0, nsnp)
   SE <- rep(0, nsnp)
   names(BETA) <- snps
   names(SE) <- snps
   
+  nstudy <- length(stat)
   for(i in 1:nstudy){
     s <- stat[[i]][, 'SNP']
     stat[[i]]$sgn <- ifelse(stat[[i]][, 'RefAllele'] == RefAllele[s] & stat[[i]][, 'EffectAllele'] == EffectAllele[s], 1, -1)
     stat[[i]][, 'SE'] <- stat[[i]][, 'SE'] * sqrt(lambda[i])
+    stat[[i]][, 'P'] <- pchisq(stat[[i]][, 'BETA']^2/stat[[i]][, 'SE']^2, df = 1, lower.tail = FALSE)
     BETA[s] <- BETA[s] + stat[[i]][, 'sgn'] * stat[[i]][, 'BETA']/stat[[i]][, 'SE']^2
     SE[s] <- SE[s] + 1/stat[[i]][, 'SE']^2
   }
@@ -66,7 +39,6 @@ merge.stat <- function(stat, lambda){
   
   for(i in 1:nstudy){
     stat[[i]] <- stat[[i]][, header]
-    stat[[i]][, 'SE'] <- stat[[i]][, 'SE'] / sqrt(lambda[i])
     rownames(stat[[i]]) <- NULL
     colnames(stat[[i]]) <- c('SNP', paste(header[-1], 'Study', i, sep = '.'))
   }
@@ -75,11 +47,12 @@ merge.stat <- function(stat, lambda){
     meta.stat <- merge(meta.stat, stat[[i]], by = 'SNP', all = TRUE)
   }
   
-  if(!is.null(rm.snp)){
-    meta.stat$Conflictive.Allele <- (meta.stat$SNP %in% rm.snp)
+  if(!is.null(conf.snps)){
+    meta.stat$Conflictive.Allele <- (meta.stat$SNP %in% conf.snps)
   }
   
   meta.stat <- meta.stat[order(meta.stat$P), ]
+  rownames(meta.stat) <- NULL
   
   meta.stat
   

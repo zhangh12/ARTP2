@@ -1,8 +1,8 @@
 
-load.summary.files <- function(summary.files, options){
+load.summary.files <- function(summary.files, lambda, sel.snps){
   
   msg <- paste("Loading summary files:", date())
-  if(options$print) message(msg)
+  message(msg)
   
   header <- c('SNP', 'RefAllele', 'EffectAllele', 'BETA') # columns that must be provided by users
   opt.header <- c('P', 'SE')
@@ -11,7 +11,9 @@ load.summary.files <- function(summary.files, options){
   
   nfiles <- length(summary.files)
   stat <- list()
+  lam <- NULL
   
+  fid <- 0
   for(i in 1:nfiles){
     st <- read.table(summary.files[i], header = TRUE, as.is = TRUE, nrows = 1e4)
     tmp <- (header %in% colnames(st))
@@ -25,9 +27,12 @@ load.summary.files <- function(summary.files, options){
     col.class[-col.id] <- "NULL"
     col.class[c('SNP', 'RefAllele', 'EffectAllele')] <- 'character'
     st <- read.table(summary.files[i], header = TRUE, as.is = TRUE, colClasses = col.class)
+    if(!is.null(sel.snps)){
+      st <- st[st$SNP %in% sel.snps, ]
+    }
+    
     if(nrow(st) == 0){
-      msg <- paste0('Cannot load file ', summary.files[i])
-      stop(msg)
+      next
     }
     
     if(!any(opt.header %in% colnames(st))){
@@ -74,8 +79,12 @@ load.summary.files <- function(summary.files, options){
       st$P[id.no.P] <- pchisq((st$BETA[id.no.P]/st$SE[id.no.P])^2, df = 1, lower.tail = FALSE)
     }
     
+    fid <- fid + 1
+    lam <- c(lam, lambda[i])
     rownames(st) <- st$SNP
-    stat[[i]] <- st
+    st <- st[complete.cases(st), ]
+    
+    stat[[fid]] <- st
     rm(st)
     gc()
     
@@ -86,7 +95,9 @@ load.summary.files <- function(summary.files, options){
     stop(msg)
   }
   
-  stat
+  lambda <- lam
+  
+  list(stat = stat, lambda = lambda)
   
 }
 

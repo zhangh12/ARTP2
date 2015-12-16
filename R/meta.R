@@ -1,14 +1,22 @@
 
-meta <- function(summary.files, lambda = rep(1.0, length(summary.files))){
+meta <- function(summary.files, lambda = NULL, sel.snps = NULL){
   
   validate.summary.files(summary.files)
   
-  validate.lambda.summaryData(summary.files, lambda)
+  lambda <- validate.lambda.summaryData(summary.files, lambda)
   
-  stat <- load.summary.files(summary.files, list(print = TRUE))
+  sf <- load.summary.files(summary.files, lambda, sel.snps)
   
-  meta.stat <- merge.stat(stat, lambda)
+  ref.allele <- extract.reference.allele(sf$stat)
+  
+  conf.snps <- extract.conflictive.snps(sf$stat, ref.allele)
+  
+  rcs <- remove.conflictive.snps(sf$stat, ref.allele, conf.snps)
+  
+  meta.stat <- merge.stat(rcs$stat, rcs$ref.allele, conf.snps, sf$lambda)
   
   meta.stat
   
 }
+
+

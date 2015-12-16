@@ -24,7 +24,7 @@ a character taking values of "\code{gaussian}" or "\code{binomial}".
 a data.frame containing the paths of binary PLINK files of reference dataset. It must have columns called "bed", "bim" and "fam". The current version allows users to specify multiple sets of bed/bim/fam PLINK files as separate rows of the data frame. 
 }
   \item{lambda}{
-a numeric vector of inflation factors. Each file of \code{summary.files} should have one inflation factor specified in \code{lambda}. 
+a numeric vector of inflation factors. Each file in \code{summary.files} should have one inflation factor specified in \code{lambda}. 
 }
   \item{ncases}{
 a list of numeric vectors specifying sample sizes of cases of participating studies. This argument should be specified only if \code{family == 'binomial'}, otherwise \code{list()}. See \code{Examples}. 
