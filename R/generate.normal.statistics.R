@@ -37,7 +37,7 @@ generate.normal.statistics <- function(resp.var, null, raw.geno, pathway, family
       tmp <- try(V[[i]] <- t(G[[i]])%*% (A * G[[i]]) - t(G[[i]])%*% (A * X) %*% solve(t(X) %*% (A * X)) %*% t(X) %*% (A * G[[i]]), silent = TRUE)
       
       if(error.try(tmp)){
-        msg <- "Potential existence of multicollinearity detected and ARTP3 cannot automatically deal with it right now. Please check your covariates specified in formula"
+        msg <- "Potential existence of multicollinearity detected and ARTP2 cannot automatically deal with it right now. Please check your covariates specified in formula"
         stop(msg)
       }
       
@@ -55,7 +55,7 @@ generate.normal.statistics <- function(resp.var, null, raw.geno, pathway, family
       tmp <- try(V[[i]] <- (t(G[[i]]) %*% G[[i]] - t(G[[i]]) %*% X %*% solve(t(X) %*% X) %*% t(X) %*% G[[i]]) / s2, silent = TRUE)
       
       if(error.try(tmp)){
-        msg <- "Potential existence of multicollinearity detected and ARTP3 cannot automatically deal with it right now. Please check your covariates specified in formula"
+        msg <- "Potential existence of multicollinearity detected and ARTP2 cannot automatically deal with it right now. Please check your covariates specified in formula"
         stop(msg)
       }
       

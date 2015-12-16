@@ -1,5 +1,5 @@
 
-artp3.chr <- function(group.setup, gene.cutpoint.setup, U, score0, V, options, cid){
+artp2.chr <- function(group.setup, gene.cutpoint.setup, U, score0, V, options, cid){
   
   ngene <- length(group.setup$GeneInGroup)
   nsnp <- length(score0)
@@ -24,7 +24,7 @@ artp3.chr <- function(group.setup, gene.cutpoint.setup, U, score0, V, options, c
   marg.id <- rep(-1, ngene)
   vsel.id <- rep(-1, length(group.setup$vGeneIdx))
   
-  METHOD <- c("adajoint_chr", "adajoint_chr", "artp3_chr")
+  METHOD <- c("adajoint_chr", "adajoint_chr", "artp2_chr")
   
   tmp <- .C(METHOD[method], as.character(file.prefix), as.integer(method), as.integer(nperm),
             as.integer(seed), as.integer(nthread), as.integer(nsnp), 

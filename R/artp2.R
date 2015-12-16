@@ -1,5 +1,5 @@
 
-artp3 <- function(group.id, gene.id, pathway.cutpoint, gene.name, options){
+artp2 <- function(group.id, gene.id, pathway.cutpoint, gene.name, options){
   
   msg <- paste("Computing pathway p-value:", date())
   if(options$print) message(msg)
@@ -15,7 +15,7 @@ artp3 <- function(group.id, gene.id, pathway.cutpoint, gene.name, options){
   pathway.pvalue <- -1.0
   arr.rank <- rep(0, ncp)
   gene.pval <- rep(0, ngene)
-  tmp <- .C("artp3", as.character(file.prefix), as.integer(nperm),
+  tmp <- .C("artp2", as.character(file.prefix), as.integer(nperm),
             as.integer(nthread), as.integer(ngene), 
             as.integer(group.id), as.integer(gene.id), 
             as.integer(pathway.cutpoint), as.integer(ncp), 

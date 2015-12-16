@@ -545,7 +545,7 @@ void read_in_buffer(const string &file, const int &nperm, const int &ncp, const 
 
 extern "C" {
 
-void artp3_chr(char **R_file_prefix, int *R_method,
+void artp2_chr(char **R_file_prefix, int *R_method,
 int *R_nperm, int *R_seed, 
 int *R_nthread, int *R_nsnp, int *R_ngene, 
 double *R_vU, double *R_score0, double *R_vV, 
@@ -836,7 +836,7 @@ int *R_sel_id, int *R_marg_id){
     
     int *gene_p_stat = new int[nperm + 1];
     if(gene_p_stat == NULL){
-    	error("Out of memory in artp3_chr");
+    	error("Out of memory in artp2_chr");
     }
     
     #if __PARALLEL__
@@ -1145,7 +1145,7 @@ int *R_sel_id, int *R_marg_id){
     
     int *gene_p_stat = new int[nperm + 1];
     if(gene_p_stat == NULL){
-    	error("Out of memory in artp3_chr");
+    	error("Out of memory in artp2_chr");
     }
     
     #if __PARALLEL__
@@ -1177,7 +1177,7 @@ int *R_sel_id, int *R_marg_id){
   
 }
 
-void artp3(char **R_file_prefix, int *R_nperm, int *R_nthread, 
+void artp2(char **R_file_prefix, int *R_nperm, int *R_nthread, 
 int *R_ngene, int *R_group_id, int *R_gene_id, 
 int *R_pathway_cutpoint, int *R_ncp, 
 double *R_pathway_pval, int *R_arr_rank, double *R_gene_pval){
@@ -1235,7 +1235,7 @@ double *R_pathway_pval, int *R_arr_rank, double *R_gene_pval){
 	  	for(int g = 0; g < ngene; ++g){
 	  		int *buffer = new int[nlines];
 	  		if(buffer == NULL){
-	  			error("Out of memory in artp3");
+	  			error("Out of memory in artp2");
 	  		}
 	  		
 	  		(*(gin[g])).read((char*) buffer, nlines * sizeof(int));

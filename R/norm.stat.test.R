@@ -37,7 +37,7 @@ norm.stat.test <- function(setup){
     ngene <- length(group.setup$GeneInGroup)
     gene.id <- c(gene.id, 1:ngene)
     group.id <- c(group.id, rep(g, ngene))
-    gpv <- artp3.chr(group.setup, gene.cutpoint.setup, U, sc, V[[g]], options, g)
+    gpv <- artp2.chr(group.setup, gene.cutpoint.setup, U, sc, V[[g]], options, g)
     gene.pval <- c(gene.pval, gpv$gene.pval)
     model <- c(model, gpv$model)
   }
@@ -47,7 +47,7 @@ norm.stat.test <- function(setup){
   
   pathway.cutpoint <- create.pathway.cutpoint(pathway, options)
   
-  ppv <- artp3(group.id, gene.id, pathway.cutpoint, gene.name, options)
+  ppv <- artp2(group.id, gene.id, pathway.cutpoint, gene.name, options)
   
   pathway.pvalue <- ppv$pathway.pvalue
   most.sig.genes <- ppv$most.sig.genes

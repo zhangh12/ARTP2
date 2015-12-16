@@ -35,9 +35,9 @@ A data frame of genotypes of specified subjects in the plink files.
 
 # Load the sample data
 
-bed <- system.file("extdata", package = 'ARTP3', 'chr1.bed')
-bim <- system.file("extdata", package = 'ARTP3', 'chr1.bim')
-fam <- system.file("extdata", package = 'ARTP3', 'chr1.fam')
+bed <- system.file("extdata", package = 'ARTP2', 'chr1.bed')
+bim <- system.file("extdata", package = 'ARTP2', 'chr1.bim')
+fam <- system.file("extdata", package = 'ARTP2', 'chr1.fam')
 
 ## first five SNPs
 b <- read.table(bim, header = FALSE, as.is = TRUE, nrows = 5)

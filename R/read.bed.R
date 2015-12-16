@@ -31,7 +31,7 @@ read.bed <- function(bed, bim, fam, sel.snps = NULL, sel.subs = NULL){
   
   tmp <- .C("ReadBED", as.character(bed), as.integer(nsub), 
             as.integer(nsnp), as.integer(nsel), as.integer(sel.snp.id), 
-            geno = as.integer(geno), PACKAGE = "ARTP3")
+            geno = as.integer(geno), PACKAGE = "ARTP2")
   
   geno <- as.data.frame(matrix(tmp$geno, nrow = nsub, byrow = FALSE))
   rownames(geno) <- sid

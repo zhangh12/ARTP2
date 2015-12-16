@@ -40,12 +40,12 @@ a list of options to control the test procedure. If \code{NULL}, default options
 This function computes gene and pathway p-values when raw genotype data is available. The ARTP test modified from Yu et al. (2009) and AdaJoint test from Zhang et al. (2014) are released with this package. ARTP is the Adaptive Rank Truncated Product test.
 }
 \value{
-\code{pathway.rawData} returns an object of class \code{"ARTP3"}. It is a list containing the following components: 
+\code{pathway.rawData} returns an object of class \code{"ARTP2"}. It is a list containing the following components: 
 \item{pathway.pvalue}{final pathway p-value accounting for multiple comparisons. }
 \item{gene.pvalue}{a data frame containing gene name, number of SNPs in the gene that were included in the analysis, chromosome name, and the p-value for the gene accounting for multiple comparisons. }
 \item{pathway}{a data frame defining the pathway that was actually tested after various filters applied. }
 \item{model}{a list containing detailed information of selected SNPs in each gene. }
-\item{most.sig.genes}{a character vector of genes selected by \code{ARTP3}. They are the most promising candidates, although their statistical significance is not guaranteed. }
+\item{most.sig.genes}{a character vector of genes selected by \code{ARTP2}. They are the most promising candidates, although their statistical significance is not guaranteed. }
 \item{deleted.snps}{a data frame containing SNPs excluded from the analysis and their reasons. }
 \item{deleted.genes}{a data frame containing genes excluded from the analysis because they are subsets of other remaining genes. Set \code{options$rm.gene.subset} to be \code{FALSE} to include all genes even if they are subsets of other genes. }
 \item{options}{a list of options used in the analysis. See \code{\link{options}}. }
@@ -69,15 +69,15 @@ Zhang H, Shi J, Liang F, Wheeler W, Stolzenberg-Solomon R, Yu K.  (2014) A fast 
 }
 \examples{
 
-library(ARTP3)
+library(ARTP2)
 
 ## Load the sample data
-data(data, package = "ARTP3")
+data(data, package = "ARTP2")
 head(data[, 1:7])
 
 ## Load a build-in data frame containing pathway definition
 ## it can also be the path of the file
-data(pathway, package = "ARTP3")
+data(pathway, package = "ARTP2")
 head(pathway)
 
 ## Define the formula of base risk model
@@ -122,11 +122,11 @@ options <- list(inspect.snp.n = 5, nperm = 1e5,
 ##################################################
 ## Another way to use this function
 ## Load a vector 'geno' containing file names of genotype
-data(geno, package = 'ARTP3')
+data(geno, package = 'ARTP2')
 
 ## Set the paths of genotype files
 ## in this example, each file contains SNPs in a gene
-geno.files <- system.file("extdata", package = "ARTP3", geno)
+geno.files <- system.file("extdata", package = "ARTP2", geno)
 
 ## data contains outcome, covariates
 ## Genotypes are instead included in files specified in geno.files
@@ -138,9 +138,9 @@ geno.files <- system.file("extdata", package = "ARTP3", geno)
 ##################################################
 ## The third way
 ## Genotypes are instead stored as binary PLINK files (bed, bim, and fam)
-bed <- system.file("extdata", package = "ARTP3", "raw.bed")
-bim <- system.file("extdata", package = "ARTP3", "raw.bim")
-fam <- system.file("extdata", package = "ARTP3", "raw.fam")
+bed <- system.file("extdata", package = "ARTP2", "raw.bed")
+bim <- system.file("extdata", package = "ARTP2", "raw.bim")
+fam <- system.file("extdata", package = "ARTP2", "raw.fam")
 geno.files <- data.frame(fam, bim, bed, stringsAsFactors = FALSE)
 
 ## a column SUBID must be included in data, in this example, first column is SUBID

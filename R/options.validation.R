@@ -59,7 +59,7 @@ options.validation <- function(options){
           stop(msg)
         }
       }else{
-        msg <- 'Invalid options$excluded.regions. Please refer to ?ARTP3::options'
+        msg <- 'Invalid options$excluded.regions. Please refer to ?ARTP2::options'
         stop(msg)
       }
     }

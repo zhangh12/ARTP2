@@ -5,7 +5,7 @@
 pathway.warm.start
 }
 \description{
-This function is designed to accelerate the \code{ARTP3} test in practice. It uses pre-calculated and reusable statistics as input and allow the users to try different testing configuration more efficiently. See \code{Details} for more information. 
+This function is designed to accelerate the \code{ARTP2} test in practice. It uses pre-calculated and reusable statistics as input and allow the users to try different testing configuration more efficiently. See \code{Details} for more information. 
 }
 \usage{
 pathway.warm.start(setup, nperm = NULL, lambda = 1.0, nthread = NULL)
@@ -18,9 +18,9 @@ pathway.warm.start(setup, nperm = NULL, lambda = 1.0, nthread = NULL)
   \item{nthread}{number of threads to be used in permutation. \code{NULL} if \code{setup$options$nthread} is used. }
 }
 \details{
-An \code{ARTP3} test has two major steps in testing an association. The first step applys data clean criteria and creates necessary and reusable statistics, which can be time-consuming for large pathways. The second step performs the testing procedure to estimate the pathway or gene-level p-value. \code{pathway.warm.start} focuses on the second step. 
+An \code{ARTP2} test has two major steps in testing an association. The first step applys data clean criteria and creates necessary and reusable statistics, which can be time-consuming for large pathways. The second step performs the testing procedure to estimate the pathway or gene-level p-value. \code{pathway.warm.start} focuses on the second step. 
 
-The first step can be done by using \code{\link{pathway.summaryData}} or \code{\link{pathway.rawData}} if their \code{options$only.setup} is set as \code{TRUE}. Their output object, \code{setup}, can be used as the first argument of \code{pathway.warm.start}. With \code{pathway.warm.start}, users can try different configurations to perform various tests allowed by the \code{ARTP3} framework, but avoid long waiting time for data cleaning. Commonly used options in \code{setup$options} include \code{method}, \code{inspect.snp.n}, \code{inspect.gene.n}, \code{nperm}, etc. 
+The first step can be done by using \code{\link{pathway.summaryData}} or \code{\link{pathway.rawData}} if their \code{options$only.setup} is set as \code{TRUE}. Their output object, \code{setup}, can be used as the first argument of \code{pathway.warm.start}. With \code{pathway.warm.start}, users can try different configurations to perform various tests allowed by the \code{ARTP2} framework, but avoid long waiting time for data cleaning. Commonly used options in \code{setup$options} include \code{method}, \code{inspect.snp.n}, \code{inspect.gene.n}, \code{nperm}, etc. 
 
 Note that both \code{\link{pathway.summaryData}} and \code{\link{pathway.rawData}} can produce the final p-value directly if \code{options$only.setup} is \code{FALSE}. 
 
@@ -29,12 +29,12 @@ The \code{setup} is supposed to have all components defined in \code{\link{pathw
 Except for \code{setup$options}, all other components in \code{setup} should not be modified by users. 
 }
 \value{
-\code{pathway.warm.start} returns an object of class \code{"ARTP3"}. It is a list containing the following components: 
+\code{pathway.warm.start} returns an object of class \code{"ARTP2"}. It is a list containing the following components: 
 \item{pathway.pvalue}{final pathway p-value accounting for multiple comparisons.}
 \item{gene.pvalue}{a data frame containing gene name, number of SNPs in the gene that were included in the analysis, chromosome name, and the p-value for the gene accounting for multiple comparisons.}
 \item{pathway}{a data frame defining the pathway that was actually tested after various filters applied. }
 \item{model}{a list containing detailed information of selected SNPs in each gene. }
-\item{most.sig.genes}{a character vector of genes selected by \code{ARTP3}. They are the most promising candidates, although their statistical significance is not guaranteed. }
+\item{most.sig.genes}{a character vector of genes selected by \code{ARTP2}. They are the most promising candidates, although their statistical significance is not guaranteed. }
 \item{deleted.snps}{a data frame containing SNPs excluded from the analysis and their reasons.}
 \item{deleted.genes}{a data frame containing genes excluded from the analysis because they are subsets of other remaining genes. }
 \item{options}{a list of options used in the analysis. See \code{\link{options}}}
@@ -47,6 +47,9 @@ is satisfied.
 \references{
 Yu K, Li Q, Bergen AW, Pfeiffer RM, Rosenberg PS, Caporaso N, Kraft P, Chatterjee N. (2009) Pathway analysis by adaptive combination of P-values. 
 Genet Epidemiol 33(8): 700 - 709
+
+Zhang H, Shi J, Liang F, Wheeler W, Stolzenberg-Solomon R, Yu K.  (2014) A fast multilocus test with adaptive SNP selection for large-scale genetic association studies. European Journal of Human Genetics, 22, 696 - 702
+
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
@@ -60,19 +63,19 @@ Genet Epidemiol 33(8): 700 - 709
 ## users can adjust the second round inflation in pathway.warm.start
 ## the first round inflation can be study-specific and adjusted in pathway.rawData or pathway.summaryData
 
-library(ARTP3)
-study1 <- system.file("extdata", package = "ARTP3", "study1.txt.gz")
-study2 <- system.file("extdata", package = "ARTP3", "study2.txt.gz")
-pathway <- system.file("extdata", package = "ARTP3", "pathway.txt.gz")
+library(ARTP2)
+study1 <- system.file("extdata", package = "ARTP2", "study1.txt.gz")
+study2 <- system.file("extdata", package = "ARTP2", "study2.txt.gz")
+pathway <- system.file("extdata", package = "ARTP2", "pathway.txt.gz")
 chr <- 1:22
 nchr <- length(chr)
 fam <- vector("character", nchr)
 bim <- vector("character", nchr)
 bed <- vector("character", nchr)
 for(i in 1:nchr){
-  fam[i] <- system.file("extdata", package = "ARTP3", paste("chr", chr[i], ".fam", sep = ""))
-  bim[i] <- system.file("extdata", package = "ARTP3", paste("chr", chr[i], ".bim", sep = ""))
-  bed[i] <- system.file("extdata", package = "ARTP3", paste("chr", chr[i], ".bed", sep = ""))
+  fam[i] <- system.file("extdata", package = "ARTP2", paste("chr", chr[i], ".fam", sep = ""))
+  bim[i] <- system.file("extdata", package = "ARTP2", paste("chr", chr[i], ".bim", sep = ""))
+  bed[i] <- system.file("extdata", package = "ARTP2", paste("chr", chr[i], ".bed", sep = ""))
 }
 reference <- data.frame(fam, bim, bed)
 options <- list(inspect.snp.n = 2, nperm = 1e4, 
@@ -91,16 +94,18 @@ ncontrols[[1]] <- c(53810, 3052)
 ncases[[2]] <- 7638
 ncontrols[[2]] <- 54319
 
+family <- 'binomial'
+
 ## do not run permutation
 options$only.setup <- TRUE
 ## the first round study-specific inflation is adjusted as lambda = c(1.10, 1.08)
-# setup <- pathway.summaryData(summary.files = c(study1, study2), pathway, reference, lambda, ncases, ncontrols, options = options)
+# setup <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, reference, lambda, ncases, ncontrols, options = options)
 
 ## the two rounds of inflation is adjusted as lambda2 = c(1.17370, 1.15236)
 lambda2 <- lambda * 1.067
 ## run permutation to calculate p-value
 options$only.setup <- FALSE
-# ret1 <- pathway.summaryData(summary.files = c(study1, study2), pathway, reference, lambda2, ncases, ncontrols, options = options)
+# ret1 <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, reference, lambda2, ncases, ncontrols, options = options)
 
 ## or adjust the second round of inflation in pathway.warm.start
 # ret2 <- pathway.warm.start(setup, lambda = 1.067)
@@ -112,10 +117,9 @@ options$only.setup <- FALSE
 ###############################################################
 ## modify or specify the method
 # setup$options$method <- 2
-# setup$options$inspect.snp.n <- 5
+# setup$options$inspect.snp.n <- 3
 
 # ret3 <- pathway.warm.start(setup, nperm = 1e5, nthread = 2)
-
 
 }
 

@@ -1,6 +1,6 @@
-\name{ARTP3-package}
-\alias{ARTP3-package}
-\alias{ARTP3}
+\name{ARTP2-package}
+\alias{ARTP2-package}
+\alias{ARTP2}
 \docType{package}
 \title{
 Calculate gene and pathway p-values using the ARTP Test and summary data
@@ -10,7 +10,7 @@ Calculate gene and pathway p-values using the ARTP Test and summary data
 }
 \details{
 \tabular{ll}{
-Package: \tab ARTP3\cr
+Package: \tab ARTP2\cr
 Type: \tab Package\cr
 Version: \tab 0.8.10\cr
 Date: \tab 2015-10-27\cr
@@ -32,8 +32,13 @@ Han Zhang, Bill Wheeler, Kai Yu, Yifan Yang
 Maintainer: Han Zhang <han.zhang2@nih.gov>
 }
 \references{
+Zhang H, Wheeler W, Shi J, Hyland P, Yang Y, Chatterjee N, Yu K. A powerful procedure for pathway meta-analysis using summary statistics identifies multiple pathways associated with type 2 diabetes. 
+
 Yu K, Li Q, Bergen AW, Pfeiffer RM, Rosenberg PS, Caporaso N, Kraft P, Chatterjee N. (2009) Pathway analysis by adaptive combination of P-values. 
 Genet Epidemiol 33(8): 700 - 709
+
+Zhang H, Shi J, Liang F, Wheeler W, Stolzenberg-Solomon R, Yu K.  (2014) A fast multilocus test with adaptive SNP selection for large-scale genetic association studies. European Journal of Human Genetics, 22, 696 - 702
+
 }
 
 \keyword{pathway}

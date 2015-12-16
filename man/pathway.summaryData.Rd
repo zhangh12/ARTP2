@@ -68,12 +68,12 @@ Another two optional columns "Chr" and "Pos" are needed if \code{excluded.region
 The order of columns in files \code{summary.files}, \code{pathway} or in data frame \code{reference} are arbitrary, and all unnecessary columns (if any) are discarded in the analysis. 
 }
 \value{
-\code{pathway.summaryData} returns an object of class \code{"ARTP3"}. It is a list containing the following components: 
+\code{pathway.summaryData} returns an object of class \code{"ARTP2"}. It is a list containing the following components: 
 \item{pathway.pvalue}{final pathway p-value accounting for multiple comparisons.}
 \item{gene.pvalue}{a data frame containing gene name, number of SNPs in the gene that were included in the analysis, chromosome name, and the p-value for the gene accounting for multiple comparisons.}
 \item{pathway}{a data frame defining the pathway that was actually tested after various filters applied. }
 \item{model}{a list containing detailed information of selected SNPs in each gene. }
-\item{most.sig.genes}{a character vector of genes selected by \code{ARTP3}. They are the most promising candidates, although their statistical significance is not guaranteed. }
+\item{most.sig.genes}{a character vector of genes selected by \code{ARTP2}. They are the most promising candidates, although their statistical significance is not guaranteed. }
 \item{deleted.snps}{a data frame containing SNPs excluded from the analysis and their reasons.}
 \item{deleted.genes}{a data frame containing genes excluded from the analysis because they are subsets of other remaining genes. Set \code{options$rm.gene.subset} to be \code{FALSE} to include all genes even if they are subsets of other genes. }
 \item{options}{a list of options used in the analysis. See \code{\link{options}}}
@@ -84,6 +84,9 @@ is satisfied.
 \item{setup}{a list containing necessary input for \code{\link{pathway.warm.start}}. It can be written to a file by using the function \code{\link[base]{save}}, then its path can be the input of \code{\link{pathway.warm.start}}. Loading from \code{reference}, it also contains a data frame of genotypes of used SNPs (\code{setup$ref.geno}), if \code{options$keep.geno} is \code{TRUE}. }
 }
 \references{
+
+Zhang H, Wheeler W, Shi J, Hyland P, Yang Y, Chatterjee N, Yu K. A powerful procedure for pathway meta-analysis using summary statistics identifies multiple pathways associated with type 2 diabetes. 
+
 Yu K, Li Q, Bergen AW, Pfeiffer RM, Rosenberg PS, Caporaso N, Kraft P, Chatterjee N. (2009) Pathway analysis by adaptive combination of P-values. 
 Genet Epidemiol 33(8): 700 - 709
 
@@ -97,15 +100,15 @@ Zhang H, Shi J, Liang F, Wheeler W, Stolzenberg-Solomon R, Yu K.  (2014) A fast 
 }
 \examples{
 
-library(ARTP3)
+library(ARTP2)
 
 ## Path of files containing summary statistics
 ## Only required columns will be loaded
-study1 <- system.file("extdata", package = "ARTP3", "study1.txt.gz")
-study2 <- system.file("extdata", package = "ARTP3", "study2.txt.gz")
+study1 <- system.file("extdata", package = "ARTP2", "study1.txt.gz")
+study2 <- system.file("extdata", package = "ARTP2", "study2.txt.gz")
 
 ## Path of a build-in file containing pathway definition
-pathway <- system.file("extdata", package = "ARTP3", "pathway.txt.gz")
+pathway <- system.file("extdata", package = "ARTP2", "pathway.txt.gz")
 
 ## Create data frame containing paths of build-in PLINK files that are going to used as reference
 ## As an example, use all chromosomes
@@ -117,9 +120,9 @@ bim <- vector("character", nchr)
 bed <- vector("character", nchr)
 
 for(i in 1:nchr){
-  fam[i] <- system.file("extdata", package = "ARTP3", paste("chr", chr[i], ".fam", sep = ""))
-  bim[i] <- system.file("extdata", package = "ARTP3", paste("chr", chr[i], ".bim", sep = ""))
-  bed[i] <- system.file("extdata", package = "ARTP3", paste("chr", chr[i], ".bed", sep = ""))
+  fam[i] <- system.file("extdata", package = "ARTP2", paste("chr", chr[i], ".fam", sep = ""))
+  bim[i] <- system.file("extdata", package = "ARTP2", paste("chr", chr[i], ".bim", sep = ""))
+  bed[i] <- system.file("extdata", package = "ARTP2", paste("chr", chr[i], ".bed", sep = ""))
 }
 
 reference <- data.frame(fam, bim, bed, stringsAsFactors = FALSE)
@@ -205,9 +208,9 @@ family <- 'binomial'
 ##################################################
 ## The reference genotype data can also be merged into a single set of PLINK files
 
-bed <- system.file("extdata", package = "ARTP3", "ref.bed")
-bim <- system.file("extdata", package = "ARTP3", "ref.bim")
-fam <- system.file("extdata", package = "ARTP3", "ref.fam")
+bed <- system.file("extdata", package = "ARTP2", "ref.bed")
+bim <- system.file("extdata", package = "ARTP2", "ref.bim")
+fam <- system.file("extdata", package = "ARTP2", "ref.fam")
 
 reference <- data.frame(fam, bim, bed)
 # ret.comb <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, reference, lambda, ncases, ncontrols, options = options)
@@ -244,7 +247,7 @@ options$excluded.regions <- exc.reg2
 ## select a subset of subjects in plink files as the reference
 ## options$selected.subs should be in the same format as the first column of fam file
 ## load character vector subj.id of 400 subjects from build-in dataset
-data(subj.id, package = "ARTP3")
+data(subj.id, package = "ARTP2")
 head(subj.id)
 options$selected.subs <- subj.id
 options$excluded.regions <- NULL
