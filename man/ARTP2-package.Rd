@@ -32,7 +32,7 @@ Han Zhang, Bill Wheeler, Kai Yu, Yifan Yang
 Maintainer: Han Zhang <han.zhang2@nih.gov>
 }
 \references{
-Zhang H, Wheeler W, Shi J, Hyland P, Yang Y, Chatterjee N, Yu K. A powerful procedure for pathway meta-analysis using summary statistics identifies multiple pathways associated with type 2 diabetes. 
+Zhang H, Wheeler W, Hyland P, Yang Y, Shi J, Chatterjee N, Yu K. A powerful procedure for pathway-based meta-analysis using summary statistics provides insight to genetic architecture of type II diabetes. 
 
 Yu K, Li Q, Bergen AW, Pfeiffer RM, Rosenberg PS, Caporaso N, Kraft P, Chatterjee N. (2009) Pathway analysis by adaptive combination of P-values. 
 Genet Epidemiol 33(8): 700 - 709
