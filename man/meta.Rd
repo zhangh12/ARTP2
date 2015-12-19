@@ -8,7 +8,7 @@
   Perform the single-marker meta-analysis. 
 }
 \usage{
-  meta(summary.files, lambda = NULL, sel.snps = NULL)
+  meta(summary.files, lambda = NULL, sel.snps = NULL, only.meta = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -20,6 +20,9 @@ a numeric vector of inflation factors. Each file in \code{summary.files} should 
 }
   \item{sel.snps}{
 a character vector of SNPs to be used in meta-analysis. The default is \code{NULL}, i.e., all SNPs are used. 
+}
+  \item{only.meta}{
+\code{TRUE} if do not returned individual summary data. The default is \code{TRUE}. 
 }
 }
 \details{

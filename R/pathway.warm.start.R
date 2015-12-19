@@ -12,8 +12,8 @@ pathway.warm.start <- function(setup, nperm = NULL, lambda = 1.0, nthread = NULL
   list(pathway.pvalue = test$pathway.pvalue, gene.pvalue = test$gene.pvalue, 
        model = test$model, most.sig.genes = test$most.sig.genes, 
        accurate = test$accurate, test.timing = test$test.timing, 
-       pathway = setup$pathway, deleted.snps = setup$deleted.snps, 
-       deleted.genes = setup$deleted.genes, 
+       pathway = setup$pathway, meta.stat = setup$meta.stat, 
+       deleted.snps = setup$deleted.snps, deleted.genes = setup$deleted.genes, 
        options = setup$options, setup.timing = setup$setup.timing)
   
 }

@@ -43,6 +43,7 @@ The list to describe the options that are used in \code{\link{pathway.summaryDat
     \item{\code{excluded.subs}}{character vector of subject IDs to be excluded in the analysis. These IDs must match with those in the second column (Individual ID) of the \code{fam} files in \code{reference}. The default is \code{NULL}. }
     \item{\code{selected.subs}}{character vector of subject IDs to be selected in the analysis. These IDs must match with those in the second column (Individual ID) of the \code{fam} files in \code{reference}. The default is \code{NULL}. }
     \item{\code{excluded.genes}}{character vector of genes to be excluded in the analysis. \code{NULL} if no gene is excluded. The default is \code{NULL}. }
+    \item{\code{meta}}{\code{TRUE} if returned meta-analysis summary data. The default is \code{TRUE}. }
     }
   
   \bold{Options for handling huge pathways: }

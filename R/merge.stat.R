@@ -1,6 +1,6 @@
 
 
-merge.stat <- function(stat, ref.allele, conf.snps, lambda){
+merge.stat <- function(stat, ref.allele, conf.snps, lambda, only.meta){
   
   msg <- paste("Merging summary statistics:", date())
   message(msg)
@@ -37,18 +37,20 @@ merge.stat <- function(stat, ref.allele, conf.snps, lambda){
   header <- c('SNP', 'RefAllele', 'EffectAllele', 'BETA', 'SE', 'P')
   meta.stat <- meta.stat[, header]
   
-  for(i in 1:nstudy){
-    stat[[i]] <- stat[[i]][, header]
-    rownames(stat[[i]]) <- NULL
-    colnames(stat[[i]]) <- c('SNP', paste(header[-1], 'Study', i, sep = '.'))
-  }
-  
-  for(i in 1:nstudy){
-    meta.stat <- merge(meta.stat, stat[[i]], by = 'SNP', all = TRUE)
-  }
-  
-  if(!is.null(conf.snps)){
-    meta.stat$Conflictive.Allele <- (meta.stat$SNP %in% conf.snps)
+  if(!only.meta){
+    for(i in 1:nstudy){
+      stat[[i]] <- stat[[i]][, header]
+      rownames(stat[[i]]) <- NULL
+      colnames(stat[[i]]) <- c('SNP', paste(header[-1], 'Study', i, sep = '.'))
+    }
+    
+    for(i in 1:nstudy){
+      meta.stat <- merge(meta.stat, stat[[i]], by = 'SNP', all = TRUE)
+    }
+    
+    if(!is.null(conf.snps)){
+      meta.stat$Conflictive.Allele <- (meta.stat$SNP %in% conf.snps)
+    }
   }
   
   meta.stat <- meta.stat[order(meta.stat$P), ]

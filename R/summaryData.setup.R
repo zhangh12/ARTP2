@@ -110,8 +110,14 @@ summaryData.setup <- function(summary.files, pathway, family, reference, lambda,
     options$ncontrols <- NULL
   }
   
+  if(options$meta){
+    meta.stat <- meta(summary.files, lambda, sel.snps = unique(pathway$SNP), only.meta = FALSE)
+  }else{
+    meta.stat <- NULL
+  }
+  
   setup <- list(deleted.snps = deleted.snps, deleted.genes = deleted.genes, 
-                options = options, 
+                options = options, meta.stat = meta.stat, 
                 pathway = pathway, norm.stat = norm.stat, 
                 ref.geno = ref.geno, setup.timing = setup.timing)
   

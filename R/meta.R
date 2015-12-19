@@ -1,5 +1,5 @@
 
-meta <- function(summary.files, lambda = NULL, sel.snps = NULL){
+meta <- function(summary.files, lambda = NULL, sel.snps = NULL, only.meta = TRUE){
   
   validate.summary.files(summary.files)
   
@@ -13,7 +13,7 @@ meta <- function(summary.files, lambda = NULL, sel.snps = NULL){
   
   rcs <- remove.conflictive.snps(sf$stat, ref.allele, conf.snps)
   
-  meta.stat <- merge.stat(rcs$stat, rcs$ref.allele, conf.snps, sf$lambda)
+  meta.stat <- merge.stat(rcs$stat, rcs$ref.allele, conf.snps, sf$lambda, only.meta)
   
   meta.stat
   
