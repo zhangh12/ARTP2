@@ -47,17 +47,16 @@ merge.stat <- function(stat, ref.allele, conf.snps, lambda, only.meta){
     for(i in 1:nstudy){
       meta.stat <- merge(meta.stat, stat[[i]], by = 'SNP', all = TRUE)
     }
-    
-    if(!is.null(conf.snps)){
-      meta.stat$Conflictive.Allele <- (meta.stat$SNP %in% conf.snps)
-    }
+  }
+  
+  if(!is.null(conf.snps)){
+    meta.stat <- meta.stat[!(meta.stat$SNP %in% conf.snps), ]
   }
   
   meta.stat <- meta.stat[order(meta.stat$P), ]
   rownames(meta.stat) <- NULL
   
-  meta.stat
-  
+  list(meta.stat = meta.stat, conf.snps = conf.snps)
   
 }
 

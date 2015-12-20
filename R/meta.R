@@ -13,9 +13,7 @@ meta <- function(summary.files, lambda = NULL, sel.snps = NULL, only.meta = TRUE
   
   rcs <- remove.conflictive.snps(sf$stat, ref.allele, conf.snps)
   
-  meta.stat <- merge.stat(rcs$stat, rcs$ref.allele, conf.snps, sf$lambda, only.meta)
-  
-  meta.stat
+  merge.stat(rcs$stat, rcs$ref.allele, conf.snps, sf$lambda, only.meta)
   
 }
 
