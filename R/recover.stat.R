@@ -98,10 +98,12 @@ recover.stat <- function(sum.stat, pathway, ref.geno, allele.info, options){
     score0[[i]] <- score0[[i]][colnames(V[[i]])]
   }
   
+  max.total.N <- sum(unlist(nsamples))
+  
   for(i in 1:length(V)){
     rs <- sort(names(score0[[i]]))
-    score0[[i]] <- score0[[i]][rs]
-    V[[i]] <- V[[i]][rs, rs, drop = FALSE]
+    score0[[i]] <- score0[[i]][rs] / sqrt(max.total.N)
+    V[[i]] <- V[[i]][rs, rs, drop = FALSE] / max.total.N
   }
   
   names(V) <- as.character(chr)

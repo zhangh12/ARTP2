@@ -47,7 +47,8 @@ options.setup <- function(options, family, lambda, ncases, ncontrols, nsamples){
       opt.default[[opt]] <- options[[opt]]
     }
   }
-  options <- opt.default
+  
+  options <- turn.off.SNP.filters(opt.default)
   
   if(is.null(options$path.setup)){
     options$path.setup <- paste(options$out.dir, "/setup.", options$id.str, ".rda", sep = "")

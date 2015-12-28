@@ -13,6 +13,7 @@ options.default <- function(){
                       gene.miss.rate = 1.0, 
                       huge.gene = 1000, 
                       rm.gene.subset = TRUE, 
+                      turn.off.filters = FALSE, 
                       delete = TRUE, 
                       print = TRUE, 
                       tidy = TRUE, 
@@ -37,7 +38,7 @@ options.default <- function(){
                       huge.chr.size = 2000, 
                       huge.gene.R2 = .85, 
                       huge.chr.R2 = .85, 
-                      version = '0.9.0')
+                      version = packageVersion('ARTP2'))
   
   opt.default
   
