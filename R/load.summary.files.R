@@ -7,7 +7,7 @@ load.summary.files <- function(summary.files, lambda, sel.snps){
   header <- c('SNP', 'RefAllele', 'EffectAllele', 'BETA') # columns that must be provided by users
   opt.header <- c('P', 'SE')
   
-  complete.header <- c(header, opt.header)
+  complete.header <- c(header, opt.header, 'Direction')
   
   nfiles <- length(summary.files)
   stat <- list()
