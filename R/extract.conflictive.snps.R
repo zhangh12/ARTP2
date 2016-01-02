@@ -21,6 +21,9 @@ extract.conflictive.snps <- function(stat, ref.allele){
     s <- stat[[i]][, 'SNP']
     names(a) <- s
     b <- which(a != A1[s] & a != A2[s])
+    if(length(b) == 0){
+      next
+    }
     conf.snps <- c(conf.snps, names(b))
   }
   
