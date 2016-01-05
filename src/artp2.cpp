@@ -1369,13 +1369,215 @@ double *R_pathway_pval, int *R_arr_rank, double *R_gene_pval){
   
   delete[] file_prefix;
   
+}
+
+void artp2_select_genes(char **R_file_prefix, int *R_nperm, int *R_nthread, 
+int *R_ngene, int *R_group_id, int *R_gene_id, 
+int *R_pathway_cutpoint, int *R_ncp, 
+double *R_pathway_pval, int *R_arr_rank, double *R_gene_pval, 
+double *R_pathway_pval_stat){
   
-}
+  int len_file_prefix = strlen(*R_file_prefix);
+  char *file_prefix = new char[len_file_prefix + 1];
+  file_prefix[0] = '\0';
+  strcat(file_prefix, *R_file_prefix);
+  
+  int nperm = *R_nperm;
+  int nthread = *R_nthread;
+  int ngene = *R_ngene;
+  int ncp = *R_ncp;
+  
+  #if __NO_PARALLEL__
+    assert(nthread == 1);
+  #endif
+  
+  ivec group_id;
+  load_group_id(R_group_id, group_id, ngene);
+  
+  ivec gene_id;
+  load_gene_id(R_gene_id, gene_id, ngene);
+  
+  ivec pathway_cutpoint;
+  load_pathway_cutpoint(R_pathway_cutpoint, pathway_cutpoint, ncp);
+  int max_cutpoint = pathway_cutpoint[ncp - 1];
+  
+  string fprefix (file_prefix);
+  svec gene_out (ngene, fprefix);
+  vector<shared_ptr<fstream> > gin;
+  for(int g = 0; g < ngene; ++g){
+    ostringstream cid;
+    cid << group_id[g];
+    ostringstream gid;
+    gid << gene_id[g];
+    gene_out[g] = gene_out[g] + string(".CID.") + cid.str() + string(".GID.") + gid.str() + string(".bin");
+    gin.push_back(make_shared<fstream> (gene_out[g].c_str(), ios::in | ios::binary));
+  }
+  
+  
+  vector<VecStat> stat(ncp, VecStat (nperm + 1, STAT0));
+  int maxlines = 50000;
+  int rem = nperm + 1;
+  int inp = -1;
+  while(rem > 0){
+    int nlines = (rem > maxlines) ? maxlines : rem;
+    
+    fmat s(nlines, fvec(ngene, .0f));
+    
+    #if __PARALLEL__
+    #pragma omp parallel num_threads(nthread)
+    {
+    #pragma omp for
+    #endif
+    for(int g = 0; g < ngene; ++g){
+      int *buffer = new int[nlines];
+      if(buffer == NULL){
+        error("Out of memory in artp2");
+      }
+      
+      (*(gin[g])).read((char*) buffer, nlines * sizeof(int));
+      if(inp == -1){
+        R_gene_pval[g] = (buffer[0] + 1.0) / (nperm + 1);
+      }
+      
+      for(int nl = 0; nl < nlines; ++nl){
+        s[nl][g] = (float) log((buffer[nl] + 1.0) / (nperm + 1));
+      }
+      delete[] buffer;
+    }
+    
+    #if __PARALLEL__
+    #pragma omp for
+    #endif
+    for(int nl = 0; nl < nlines; ++nl){
+      if(ngene > 1){
+        sort(s[nl].begin(), s[nl].end());
+        for(int g = 1; g <= max_cutpoint; ++g){
+          s[nl][g] += s[nl][g - 1];
+        }
+      }
+      #if __PARALLEL__
+      for(int k = 0; k < ncp; ++k){
+        float u = -s[nl][pathway_cutpoint[k]];
+        stat[k][inp + nl + 1].stat = u;
+        stat[k][inp + nl + 1].id = inp + nl + 1;
+      }
+      #else
+      ++inp;
+      for(int k = 0; k < ncp; ++k){
+        float u = -s[nl][pathway_cutpoint[k]];
+        stat[k][inp].stat = u;
+        stat[k][inp].id = inp;
+      }
+      #endif
+      
+      fvec().swap(s[nl]);
+    }
+    #if __PARALLEL__
+    }
+    #endif
+    
+    #if __PARALLEL__
+    inp += nlines;
+    #endif
+    
+    fmat().swap(s);
+    
+    rem -= nlines;
+  }
+  
+  imat arr_rank(ncp, ivec (nperm + 1, 0));
+  #if __PARALLEL__
+  #pragma omp parallel num_threads(min(nthread, ncp))
+  {
+  #pragma omp for
+  #endif
+  for(int k = 0; k < ncp; ++k){
+    sort(stat[k].begin(), stat[k].end(), descending);
+    for(int i = 0; i < nperm + 1; ++i){
+      int id = stat[k][i].id;
+      arr_rank[k][id] = i;
+    }
+    VecStat().swap(stat[k]);
+  }
+  #if __PARALLEL__
+  }
+  #endif
+  vector<VecStat>().swap(stat);
+  
+  ivec pathway_min_p(nperm + 1, -1);
+  ivec subsum(nthread, 0);
+  ivec subtie(nthread, 0);
+  int m = nperm + 1;
+  for(int k = 0; k < ncp; ++k){
+    R_arr_rank[k] = arr_rank[k][0];
+    if(arr_rank[k][0] < m){
+      m = arr_rank[k][0];
+    }
+  }
+  pathway_min_p[0] = m;
+  
+  #if __PARALLEL__
+  #pragma omp parallel num_threads(nthread)
+  {
+  #pragma omp for
+  #endif
+  for(int i = 1; i < nperm + 1; ++i){
+    #if __PARALLEL__
+    int tid = omp_get_thread_num();
+    #else
+    int tid = 0;
+    #endif
+    int m = nperm + 1;
+    for(int k = 0; k < ncp; ++k){
+      if(arr_rank[k][i] < m){
+        m = arr_rank[k][i];
+      }
+    }
+    pathway_min_p[i] = m;
+    if(pathway_min_p[i] < pathway_min_p[0]){
+      subsum[tid] += 1;
+    }else if(pathway_min_p[i] == pathway_min_p[0]){
+      subtie[tid] += 1;
+    }else{
+      ;
+    }
+  }
+  #if __PARALLEL__
+  }
+  #endif
+  
+  *R_pathway_pval = 1.0;
+  int rep = 0;
+  for(int t = 0; t < nthread; ++t){
+    *R_pathway_pval += subsum[t];
+    rep += subtie[t];
+  }
+  *R_pathway_pval += rep / 2.0;
+  *R_pathway_pval /= nperm + 1;
+  
+  
+  ivec histogram(nperm + 1, 0);
+  ivec cum(nperm + 1, 0);
+  for(int i = 0; i < nperm + 1; ++i){
+    int j = pathway_min_p[i];
+    histogram[j]++;
+  }
+  for(int i = 1; i < nperm + 1; ++i){
+    cum[i] += cum[i - 1] + histogram[i - 1];
+  }
+  
+  for(int i = 0; i < nperm + 1; ++i){
+    int j = pathway_min_p[i];
+    int n_equal_stat = histogram[j];
+    int n_less_stat = cum[j];
+    R_pathway_pval_stat[i] = (0.5 + n_equal_stat / 2.0 + n_less_stat) / (nperm + 1);
+  }
+  
+  delete[] file_prefix;
 
 }
 
 
-
-
+}
 
 

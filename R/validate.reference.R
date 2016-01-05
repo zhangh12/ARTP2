@@ -19,6 +19,8 @@ validate.reference <- function(reference){
     stop(msg)
   }
   
+  reference <- reformat.reference.path(reference)
+  
   tmp <- !file.exists(reference$bed)
   if(any(tmp)){
     msg <- paste(c("Files below were not found: ", reference$bed[tmp]), collapse = "\n")

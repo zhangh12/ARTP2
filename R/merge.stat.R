@@ -39,12 +39,13 @@ merge.stat <- function(stat, ref.allele, conf.snps, lambda, only.meta){
   
   Direction <- rep('', nsnp)
   names(Direction) <- meta.stat$SNP
-  d0 <- rep('?', nsnp)
-  names(d0) <- meta.stat$SNP
   for(i in 1:nstudy){
-    d <- d0
-    d[stat[[i]][, 'SNP']] <- ifelse(stat[[i]][, 'BETA'] == 0, '0', ifelse(stat[[i]][, 'BETA'] > 0, '+', '-'))
+    nc <- nchar(stat[[i]][1, 'Direction'])
+    d <- rep(paste0(rep('?', nc), collapse = ''), nsnp)
+    names(d) <- meta.stat$SNP
+    d[stat[[i]][, 'SNP']] <- stat[[i]][, 'Direction']
     Direction <- paste(Direction, d, sep = '')
+    names(Direction) <- meta.stat$SNP
   }
   meta.stat$Direction <- Direction
   

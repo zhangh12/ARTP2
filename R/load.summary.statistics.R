@@ -41,7 +41,7 @@ load.summary.statistics <- function(summary.files, family, snps.in.pathway, opti
     }
     
     if(!("Direction" %in% colnames(st))){
-      st$Direction <- paste(rep('+', length(options$nsamples[[i]])), collapse = '', sep = '')
+      st$Direction <- paste(rep('*', length(options$nsamples[[i]])), collapse = '', sep = '')
       msg <- paste0('Direction is not found in ', summary.files[i], '. ARTP2 assumes equal sample size of SNPs in the study. ')
       warning(msg)
     }

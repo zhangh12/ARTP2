@@ -3,12 +3,12 @@ summaryData.setup <- function(summary.files, pathway, family, reference, lambda,
   
   start.time <- date()
   
-  # reformat reference to convert factor to character
-  reference <- reformat.reference.path(reference)
-  
   # validate the format of main inputs
   validate.summary.input(summary.files, pathway, family, reference, lambda, 
                          ncases, ncontrols, nsamples)
+  
+  # reformat reference to convert factor to character
+  reference <- reformat.reference.path(reference)
   
   # merge and reset options
   options <- options.setup(options, family, lambda, ncases, ncontrols, nsamples)

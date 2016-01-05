@@ -49,6 +49,18 @@ load.summary.files <- function(summary.files, lambda, sel.snps){
       st$SE <- NA
     }
     
+    if(!('Direction' %in% colnames(st))){
+      msg <- paste0('Direction is absent in ', summary.files[i], '. Function meta() assumed equal sample sizes for all SNPs in that study. Invalidation of this assumption can lead to false positive if summary data of this study is used in pathway analysis')
+      warning(msg)
+      st$Direction <- ifelse(st$BETA == 0, '0', ifelse(st$BETA > 0, '+', '-'))
+    }
+    
+    nc <- unique(nchar(st$Direction))
+    if(length(nc) != 1){
+      msg <- paste0('String lengths of Direction are unequal in ', summary.files[i])
+      stop(msg)
+    }
+    
     st <- st[, complete.header]
     
     dup <- duplicated(st$SNP)
