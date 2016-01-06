@@ -49,7 +49,7 @@ merge.stat <- function(stat, ref.allele, conf.snps, lambda, only.meta){
   }
   meta.stat$Direction <- Direction
   
-  if(!only.meta){
+  if(!only.meta && nstudy > 1){
     for(i in 1:nstudy){
       if('Direction' %in% colnames(stat[[i]])){
         stat[[i]] <- stat[[i]][, c(header, 'Direction')]

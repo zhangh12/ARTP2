@@ -111,7 +111,7 @@ summaryData.setup <- function(summary.files, pathway, family, reference, lambda,
   }
   
   if(options$meta){
-    meta.stat <- meta(summary.files, lambda, sel.snps = unique(pathway$SNP), only.meta = FALSE)
+    meta.stat <- meta(summary.files, lambda, sel.snps = unique(pathway$SNP), only.meta = options$only.meta)$meta.stat
   }else{
     meta.stat <- NULL
   }

@@ -30,6 +30,7 @@ options.default <- function(){
                       selected.subs = NULL, 
                       excluded.genes = NULL, 
                       meta = TRUE, 
+                      only.meta = TRUE, 
                       inspect.snp.n = 5, 
                       inspect.snp.percent = 0, 
                       inspect.gene.n = 10, 
