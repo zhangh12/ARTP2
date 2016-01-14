@@ -67,7 +67,7 @@ norm.stat.test <- function(setup){
   }
   
   gene.pvalue <- gene.pvalue[order(gene.pvalue$Pvalue), ]
-  rownames(gene.pvalue) <- 1:nrow(gene.pvalue)
+  rownames(gene.pvalue) <- NULL
   
   ac1 <- sqrt(pathway.pvalue * (1 - pathway.pvalue) / options$nperm) / pathway.pvalue
   min.gene.pvalue <- min(gene.pvalue$Pvalue)

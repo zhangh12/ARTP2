@@ -18,6 +18,7 @@ update.pathway.definition <- function(pathway, exc.snps, exc.genes = NULL){
     stop(msg)
   }
   pathway <- pathway[id, ]
+  rownames(pathway) <- NULL
   
   pathway
   

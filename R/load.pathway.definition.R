@@ -60,6 +60,8 @@ load.pathway.definition <- function(pathway, options){
     stop(msg)
   }
   
+  rownames(pathway) <- NULL
+  
   pathway
   
 }
