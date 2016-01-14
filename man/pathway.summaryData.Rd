@@ -85,7 +85,7 @@ is satisfied.
 }
 \references{
 
-Zhang H, Wheeler W, Hyland P, Yang Y, Shi J, Chatterjee N, Yu K. A powerful procedure for pathway-based meta-analysis using summary statistics provides insight to genetic architecture of type II diabetes. 
+Zhang H, Wheeler W, Hyland LP, Yang Y, Shi J, Chatterjee N, Yu K. A powerful procedure for pathway-based meta-analysis using summary statistics identifies multiple pathways associated with type II diabetes. 
 
 Yu K, Li Q, Bergen AW, Pfeiffer RM, Rosenberg PS, Caporaso N, Kraft P, Chatterjee N. (2009) Pathway analysis by adaptive combination of P-values. 
 Genet Epidemiol 33(8): 700 - 709
@@ -165,7 +165,7 @@ family <- 'binomial'
 # ret <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, reference, lambda, ncases, ncontrols, options = options)
 # 
 # ret$pathway.pvalue
-## [1] 0.0289971  # Mac OS
+## [1] 0.02864714  # Mac OS
 ## [1] 0.03349665 # Linux 32 threads
 ## [1] 0.04029597 # Linux 1 thread
 
@@ -200,7 +200,7 @@ family <- 'binomial'
 ## [1] 0.02929707 # Linux 1 thread
 
 # ret2$pathway.pvalue
-## [1] 0.3152685  # Mac OS
+## [1] 0.3167183  # Mac OS
 ## [1] 0.2974703  # Linux 32 threads
 ## [1] 0.279772   # Linux 1 thread
 
@@ -227,7 +227,7 @@ options$excluded.regions <- exc.reg1
 # ret.exc1 <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, reference, lambda, ncases, ncontrols, options = options)
 
 # ret.exc1$pathway.pvalue
-## [1] 0.03094691 # Mac OS
+## [1] 0.03084692 # Mac OS
 ## [1] 0.03409659 # Linux 32 threads
 ## [1] 0.04179582 # Linux 1 thread
 

@@ -6,20 +6,26 @@ filter.conflictive.snps <- function(sum.stat, allele.info, options){
 	sum.info <- sum.stat$stat
 	nstudy <- length(sum.info)
 	
+	foo <- function(x){
+	  paste(sort(x), collapse = '')
+	}
+	
+	ref.allele <- apply(allele.info[, c('RefAllele', 'EffectAllele')], 1, foo)
+	names(ref.allele) <- allele.info$SNP
+	
 	exc.snps <- NULL
 	for(k in 1:nstudy){
-		nsnps.in.study <- nrow(sum.info[[k]])
-		for(i in 1:nsnps.in.study){
-			rs <- sum.info[[k]][i, "SNP"]
-			nr <- which(allele.info$SNP == rs)
-			ai1 <- c(sum.info[[k]][i, "RefAllele"], sum.info[[k]][i, "EffectAllele"])
-			ai2 <- c(allele.info[nr, "RefAllele"], allele.info[nr, "EffectAllele"])
-			if(!setequal(ai1, ai2)){
-				exc.snps <- c(exc.snps, rs)
-			}
+		ord.allele <- apply(sum.info[[k]][, c('RefAllele', 'EffectAllele')], 1, foo)
+		rs <- names(ord.allele)
+		id <- which(ord.allele != ref.allele[rs])
+		if(length(id) > 0){
+		  exc.snps <- c(exc.snps, rs[id])
 		}
 	}
 	
+	exc.snps <- unique(exc.snps)
 	exc.snps
 
 }
+
+

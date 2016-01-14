@@ -3,11 +3,15 @@
 # lambda is different with the ones in pathway.rawData and pathway.summaryData, in which lambda is the study-specific first round inflation factor
 pathway.warm.start <- function(setup, nperm = NULL, lambda = 1.0, nthread = NULL){
   
+  options(warn = 1)
+  
   setup <- validate.setup(setup)
   
   setup <- update.setup(setup, nperm, lambda, nthread)
   
   test <- norm.stat.test(setup)
+  
+  options(warn = 0)
   
   list(pathway.pvalue = test$pathway.pvalue, gene.pvalue = test$gene.pvalue, 
        model = test$model, most.sig.genes = test$most.sig.genes, 

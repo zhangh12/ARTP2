@@ -3,6 +3,8 @@ pathway.summaryData <- function(summary.files, pathway, family, reference, lambd
                                 ncases = list(), ncontrols = list(), nsamples = list(), 
                                 options = NULL){
   
+  options(warn = 1)
+  
   setup <- summaryData.setup(summary.files, pathway, family, reference, lambda, 
                              ncases, ncontrols, nsamples, options)
   
@@ -11,6 +13,8 @@ pathway.summaryData <- function(summary.files, pathway, family, reference, lambd
   }
   
   test <- norm.stat.test(setup)
+  
+  options(warn = 0)
   
   list(pathway.pvalue = test$pathway.pvalue, gene.pvalue = test$gene.pvalue, 
        model = test$model, most.sig.genes = test$most.sig.genes, 

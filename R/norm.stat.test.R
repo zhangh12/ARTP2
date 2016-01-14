@@ -6,6 +6,7 @@ norm.stat.test <- function(setup){
   options <- setup$options
   norm.stat <- setup$norm.stat
   pathway <- setup$pathway
+  allele.info <- setup$allele.info
   rm(setup)
   gc()
   
@@ -23,7 +24,7 @@ norm.stat.test <- function(setup){
   model <- NULL
   unadj.pvalue <- NULL
   for(g in 1:ngrp){
-    msg <- paste("Permuting chromosome ", names(V)[[g]], ": ", date(), sep = "")
+    msg <- paste("Permuting group ", names(V)[[g]], ": ", date(), sep = "")
     if(options$print) message(msg)
     
     U <- cov.svd(V[[g]], names(V)[[g]])
@@ -52,7 +53,19 @@ norm.stat.test <- function(setup){
   pathway.pvalue <- ppv$pathway.pvalue
   most.sig.genes <- ppv$most.sig.genes
   
-  gene.pvalue <- data.frame(Gene = gene.name, Chr = chr, N.SNP = N.SNP, Pvalue = gene.pval, stringsAsFactors = FALSE)
+  gene.pvalue <- data.frame(Gene = gene.name, Group = as.integer(chr), N.SNP = N.SNP, Pvalue = gene.pval, stringsAsFactors = FALSE)
+  if(!is.null(allele.info)){
+    tmp <- merge(pathway[, c('SNP', 'Gene')], allele.info[, c('SNP', 'Chr')], by = 'SNP')[, c('Gene', 'Chr')]
+    tmp <- tmp[!duplicated(tmp), ]
+    gene.pvalue <- merge(gene.pvalue, tmp, by = 'Gene')
+    gene.pvalue <- gene.pvalue[, c('Gene', 'Chr', 'Group', 'N.SNP', 'Pvalue')]
+    if(all(gene.pvalue$Chr == gene.pvalue$Group)){
+      gene.pvalue <- gene.pvalue[, c('Gene', 'Chr', 'N.SNP', 'Pvalue')]
+    }
+  }else{
+    colnames(gene.pvalue) <- c('Gene', 'Chr', 'N.SNP', 'Pvalue')
+  }
+  
   gene.pvalue <- gene.pvalue[order(gene.pvalue$Pvalue), ]
   rownames(gene.pvalue) <- 1:nrow(gene.pvalue)
   

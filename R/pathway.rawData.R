@@ -1,6 +1,8 @@
 
 pathway.rawData <- function(formula, data, pathway, family, geno.files = NULL, lambda = 1.0, subset = NULL, options = NULL){
   
+  options(warn = 1)
+  
   it <- input.type(geno.files)
   
   if(it == 'data.frame'){
@@ -18,6 +20,8 @@ pathway.rawData <- function(formula, data, pathway, family, geno.files = NULL, l
   }
   
   test <- norm.stat.test(setup)
+  
+  options(warn = 0)
   
   list(pathway.pvalue = test$pathway.pvalue, gene.pvalue = test$gene.pvalue, 
        model = test$model, most.sig.genes = test$most.sig.genes, 

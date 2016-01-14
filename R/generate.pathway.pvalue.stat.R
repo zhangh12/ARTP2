@@ -25,7 +25,7 @@ generate.pathway.pvalue.stat <- function(setup){
   unadj.pvalue <- NULL
   gene.stat.file <- NULL
   for(g in 1:ngrp){
-    msg <- paste("Permuting chromosome ", names(V)[[g]], ": ", date(), sep = "")
+    msg <- paste("Permuting group ", names(V)[[g]], ": ", date(), sep = "")
     if(options$print) message(msg)
     
     U <- cov.svd(V[[g]], names(V)[[g]])
@@ -73,7 +73,7 @@ generate.pathway.pvalue.stat <- function(setup){
       pathway.pval.stat <- cbind(pathway.pval.stat, pps)
     }
     
-    gene.pvalue[[i]] <- data.frame(Gene = gene.name[gn], Chr = chr[gn], N.SNP = N.SNP[gn], Pvalue = gene.pval[gn], stringsAsFactors = FALSE)
+    gene.pvalue[[i]] <- data.frame(Gene = gene.name[gn], Chr = as.integer(chr[gn]), N.SNP = N.SNP[gn], Pvalue = gene.pval[gn], stringsAsFactors = FALSE)
     gene.pvalue[[i]] <- gene.pvalue[[i]][order(gene.pvalue[[i]]$Pvalue), ]
     rownames(gene.pvalue[[i]]) <- 1:nrow(gene.pvalue[[i]])
   }

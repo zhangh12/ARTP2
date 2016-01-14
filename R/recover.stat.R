@@ -20,6 +20,8 @@ recover.stat <- function(sum.stat, pathway, ref.geno, allele.info, options){
     grp.snps <- pathway$SNP[pathway$Chr == chr[i]]
     grp.snps <- unique(grp.snps)
     suppressWarnings(ref.cor[[i]] <- cor(ref.geno[, grp.snps, drop = FALSE], use = "pairwise.complete.obs", method = "pearson"))
+    id <- which(colnames(ref.geno) %in% grp.snps)
+    ref.geno <- ref.geno[, -id, drop = FALSE]
     ref.cor[[i]][is.na(ref.cor[[i]])] <- 0
   }
   names(ref.cor) <- as.character(chr)

@@ -45,6 +45,8 @@ is satisfied.
 }
 }
 \references{
+Zhang H, Wheeler W, Hyland LP, Yang Y, Shi J, Chatterjee N, Yu K. A powerful procedure for pathway-based meta-analysis using summary statistics identifies multiple pathways associated with type II diabetes. 
+
 Yu K, Li Q, Bergen AW, Pfeiffer RM, Rosenberg PS, Caporaso N, Kraft P, Chatterjee N. (2009) Pathway analysis by adaptive combination of P-values. 
 Genet Epidemiol 33(8): 700 - 709
 

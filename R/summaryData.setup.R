@@ -85,7 +85,10 @@ summaryData.setup <- function(summary.files, pathway, family, reference, lambda,
   ref.geno <- update.ref.geno(ref.geno, exc.snps)
   
   # estimate P and SE if they are not provided by users
-  sum.stat <- complete.sum.stat(sum.stat, ref.geno, options)
+  sum.stat <- complete.sum.stat(sum.stat, options)
+  
+  # redefine the pathway by introducing independent group to reduce computational burden
+  pathway <- split.pathway(pathway, allele.info, options$group.gap)
   
   # recover the summary statistics
   norm.stat <- recover.stat(sum.stat, pathway, ref.geno, allele.info, options)
@@ -117,14 +120,14 @@ summaryData.setup <- function(summary.files, pathway, family, reference, lambda,
   }
   
   setup <- list(deleted.snps = deleted.snps, deleted.genes = deleted.genes, 
-                options = options, meta.stat = meta.stat, 
+                options = options, meta.stat = meta.stat, allele.info = allele.info, 
                 pathway = pathway, norm.stat = norm.stat, 
                 ref.geno = ref.geno, setup.timing = setup.timing)
   
   if(options$save.setup){
+    save(setup, file = options$path.setup)
     msg <- paste0("setup file has been saved at ", options$path.setup)
     message(msg)
-    save(setup, file = options$path.setup)
   }
   
   setup

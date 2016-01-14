@@ -12,6 +12,7 @@ options.default <- function(){
                       gene.R2 = .95, 
                       gene.miss.rate = 1.0, 
                       huge.gene = 1000, 
+                      group.gap = NULL, 
                       rm.gene.subset = TRUE, 
                       turn.off.filters = FALSE, 
                       delete = TRUE, 

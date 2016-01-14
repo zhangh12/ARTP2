@@ -227,9 +227,9 @@ rawData.genofiles.setup <- function(formula, null, pathway, family, geno.files, 
                 setup.timing = setup.timing)
   
   if(options$save.setup){
+    save(setup, file = options$path.setup)
     msg <- paste0("setup file has been saved at ", options$path.setup)
     message(msg)
-    save(setup, file = options$path.setup)
   }
   
   setup

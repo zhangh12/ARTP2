@@ -12,15 +12,24 @@ load.reference.allele <- function(reference, snps.in.pathway, options){
   
   col.class <- rep("NULL", 6)
   col.class[c(2, 5, 6)] <- "character"
+  col.class[c(1, 4)] <- 'integer'
   bim.files <- reference$bim
+  nfiles <- length(bim.files)
   allele.info <- NULL
-  for(file in bim.files){
-    bim <- read.table(file, header = FALSE, as.is = TRUE, colClasses = col.class)
-    colnames(bim) <- c("SNP", "RefAllele", "EffectAllele")
+  for(i in 1:nfiles){
+    tmp <- try(bim <- read.table(bim.files[i], header = FALSE, as.is = TRUE, colClasses = col.class), silent = TRUE)
+    if(error.try(tmp)){
+      msg <- paste0('Cannot load ', bim.files[i])
+      stop(msg)
+    }
+    
+    colnames(bim) <- c("Chr", "SNP", "Pos", "RefAllele", "EffectAllele")
+    bim$Reference.ID <- i
     bim <- bim[bim$SNP %in% snps.in.pathway, ]
     bim$RefAllele <- toupper(bim$RefAllele)
     bim$EffectAllele <- toupper(bim$EffectAllele)
     allele.info <- rbind(allele.info, bim)
+    
     rm(bim)
     gc()
   }

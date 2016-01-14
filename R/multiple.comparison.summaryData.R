@@ -4,6 +4,8 @@ multiple.comparison.summaryData <- function(summary.files, pathway, family, refe
                                             ncases = list(), ncontrols = list(), nsamples = list(), 
                                             options = NULL){
   
+  options(warn = 1)
+  
   validate.summary.input(summary.files, NULL, family, reference, lambda, ncases, ncontrols, nsamples)
   
   reference <- reformat.reference.path(reference)
@@ -14,13 +16,24 @@ multiple.comparison.summaryData <- function(summary.files, pathway, family, refe
   
   super.pathway <- create.super.pathway(pathway)
   
-  setup <- summaryData.setup(summary.files, super.pathway, family, reference, lambda, 
-                             ncases, ncontrols, nsamples, options)
+  setup <- multiple.pathways.setup(summary.files, super.pathway, family, reference, lambda, 
+                                   ncases, ncontrols, nsamples, options)
   
   setup <- recreate.pathway(setup, pathway)
   
-  generate.pathway.pvalue.stat(setup)
+  save(setup, file = options$path.setup)
+  msg <- paste0("setup file has been saved at ", options$path.setup)
+  message(msg)
+  
+  ret <- generate.pathway.pvalue.stat(setup)
+  
+  options(warn = 0)
+  
+  ret
   
 }
+
+
+
 
 
