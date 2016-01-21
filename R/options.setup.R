@@ -3,6 +3,12 @@ options.setup <- function(options, family, lambda, ncases, ncontrols, nsamples){
   
   opt.default <- options.default() # valid and default options
   
+  redundant.opt <- setdiff(names(options), names(opt.default))
+  if(length(redundant.opt) > 0){
+    msg <- paste0('The following unidentified options are ignored: \n', paste(redundant.opt, collapse = ' '))
+    warning(msg)
+  }
+  
   opt.default$family <- family
   opt.default$lambda <- lambda
   
