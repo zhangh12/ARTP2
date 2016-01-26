@@ -29,7 +29,7 @@ The \code{setup} is supposed to have all components defined in \code{\link{pathw
 Except for \code{setup$options}, all other components in \code{setup} should not be modified by users. 
 }
 \value{
-\code{pathway.warm.start} returns an object of class \code{"ARTP2"}. It is a list containing the following components: 
+\code{pathway.warm.start} returns an object of class \code{ARTP2}. It is a list containing the following components: 
 \item{pathway.pvalue}{final pathway p-value accounting for multiple comparisons.}
 \item{gene.pvalue}{a data frame containing gene name, number of SNPs in the gene that were included in the analysis, chromosome name, and the p-value for the gene accounting for multiple comparisons.}
 \item{pathway}{a data frame defining the pathway that was actually tested after various filters applied. }

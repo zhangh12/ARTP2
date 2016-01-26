@@ -137,13 +137,13 @@ filter.reference.geno <- function(ref.geno, pathway, sum.stat, options){
       rm(N, N0, N1)
       gc()
       
-      if(length(snps.in.gene) > options$huge.gene){
+      if(length(snps.in.gene) > options$huge.gene.size && options$trim.huge.chr){
         tmp <- order(crt)
         cor2 <- cor2[tmp, tmp]
         cor2[lower.tri(cor2)] <- -1
         maf <- maf[tmp]
         snps.in.gene <- snps.in.gene[tmp]
-        count <- apply(cor2, 1, function(x){any(x > .5, na.rm = TRUE)})
+        count <- apply(cor2, 1, function(x){any(x > options$huge.gene.R2, na.rm = TRUE)})
         if(!any(count)){
           next
         }
@@ -343,13 +343,13 @@ filter.reference.geno <- function(ref.geno, pathway, sum.stat, options){
         rm(N, N0, N1)
         gc()
         
-        if(length(snps.in.gene) > options$huge.gene){
+        if(length(snps.in.gene) > options$huge.gene.size && options$trim.huge.chr){
           tmp <- order(crt)
           cor2 <- cor2[tmp, tmp]
           cor2[lower.tri(cor2)] <- -1
           maf <- maf[tmp]
           snps.in.gene <- snps.in.gene[tmp]
-          count <- apply(cor2, 1, function(x){any(x > .5, na.rm = TRUE)})
+          count <- apply(cor2, 1, function(x){any(x > options$huge.gene.R2, na.rm = TRUE)})
           if(!any(count)){
             next
           }

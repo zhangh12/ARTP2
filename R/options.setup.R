@@ -5,8 +5,8 @@ options.setup <- function(options, family, lambda, ncases, ncontrols, nsamples){
   
   redundant.opt <- setdiff(names(options), names(opt.default))
   if(length(redundant.opt) > 0){
-    msg <- paste0('The following unidentified options are ignored: \n', paste(redundant.opt, collapse = ' '))
-    warning(msg)
+    msg <- paste0('The following options are not supported: \n', paste(redundant.opt, collapse = ' '))
+    stop(msg)
   }
   
   opt.default$family <- family
@@ -37,21 +37,20 @@ options.setup <- function(options, family, lambda, ncases, ncontrols, nsamples){
     opt.default$ncontrols <- NULL
   }
   
-  spec.opt <- names(options)
-  if(('gene.R2' %in% spec.opt) && !('chr.R2' %in% spec.opt)){
-    options$chr.R2 <- options$gene.R2
-  }else{
-    if(!('gene.R2' %in% spec.opt) && ('chr.R2' %in% spec.opt)){
-      options$gene.R2 <- options$chr.R2
+  spec.opt <- names(options) # valid options specified by users
+  
+  if(length(spec.opt) > 0){
+    for(opt in spec.opt){
+      opt.default[[opt]] <- options[[opt]]
     }
   }
   
-  new.opt <- intersect(names(opt.default), names(options)) # valid options specified by users
+  if(!('huge.gene.R2' %in% spec.opt)){
+    opt.default$huge.gene.R2 <- opt.default$gene.R2 - .05
+  }
   
-  if(length(new.opt) > 0){
-    for(opt in new.opt){
-      opt.default[[opt]] <- options[[opt]]
-    }
+  if(!('huge.chr.R2' %in% spec.opt)){
+    opt.default$huge.chr.R2 <- opt.default$chr.R2 - .05
   }
   
   options <- turn.off.SNP.filters(opt.default)
@@ -66,11 +65,13 @@ options.setup <- function(options, family, lambda, ncases, ncontrols, nsamples){
   
   if(options$trim.huge.chr){
     if(options$huge.gene.R2 > options$gene.R2){
-      options$huge.gene.R2 <- max(options$gene.R2 - .1, 0)
+      msg <- 'huge.gene.R2 is supposed to be no larger than gene.R2'
+      stop(msg)
     }
     
     if(options$huge.chr.R2 > options$chr.R2){
-      options$huge.chr.R2 <- max(options$chr.R2 - .1, 0)
+      msg <- 'huge.chr.R2 is supposed to be no larger than chr.R2'
+      stop(msg)
     }
   }
   

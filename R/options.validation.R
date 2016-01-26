@@ -9,8 +9,12 @@ options.validation <- function(options){
     stop("method should be 1 (AdaJoint), 2 (AdaJoint2), or 3 (ARTP)")
   }
   
-  if(!is.numeric(options$huge.gene) || options$huge.gene < 0){
-    stop("huge.gene should be non-negative integer")
+  if(!is.numeric(options$huge.gene.size) || options$huge.gene.size < 0){
+    stop("huge.gene.size should be non-negative integer")
+  }
+  
+  if(!is.numeric(options$huge.chr.size) || options$huge.chr.size < 0){
+    stop("huge.chr.size should be non-negative integer")
   }
   
   if(is.null(options$nperm)){

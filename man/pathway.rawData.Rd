@@ -18,10 +18,10 @@ an object of class \code{\link[stats]{formula}}: a symbolic description of basic
 a data frame containing the variables specified in \code{formula}. If \code{geno.files} is not \code{NULL}, then it also contains genotypes. 
 }
   \item{pathway}{
-a character of the name of file containing definition of a pathway. It must be able to be read by \code{\link[utils]{read.table}} and have columns called "SNP", "Gene", "Chr". It also can be a data frame with the three columns. 
+a character of the name of file containing definition of a pathway. It must be able to be read by \code{\link[utils]{read.table}} and have columns called \code{SNP}, \code{Gene}, \code{Chr}. It also can be a data frame with the three columns. 
 }
   \item{family}{
-a character taking values of "\code{gaussian}" or "\code{binomial}". 
+a character taking values of \code{'gaussian'} or \code{'binomial'}. 
 }
   \item{geno.files}{
 a character vector containing paths of plain text files containing  the genotype data. Those files can be compressed as gz files and are able to be read by \code{read.table}. It can be a data frame with columns \code{bed}, \code{bim}, and \code{fam}. The data frame contains paths of (multiple sets of) PLINK files containing the genotype data. It can be \code{NULL} if all genotype data are put in \code{data}. 
@@ -40,7 +40,7 @@ a list of options to control the test procedure. If \code{NULL}, default options
 This function computes gene and pathway p-values when raw genotype data is available. The ARTP test modified from Yu et al. (2009) and AdaJoint test from Zhang et al. (2014) are released with this package. ARTP is the Adaptive Rank Truncated Product test.
 }
 \value{
-\code{pathway.rawData} returns an object of class \code{"ARTP2"}. It is a list containing the following components: 
+\code{pathway.rawData} returns an object of class \code{ARTP2}. It is a list containing the following components: 
 \item{pathway.pvalue}{final pathway p-value accounting for multiple comparisons. }
 \item{gene.pvalue}{a data frame containing gene name, number of SNPs in the gene that were included in the analysis, chromosome name, and the p-value for the gene accounting for multiple comparisons. }
 \item{pathway}{a data frame defining the pathway that was actually tested after various filters applied. }

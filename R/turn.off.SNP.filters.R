@@ -8,6 +8,9 @@ turn.off.SNP.filters <- function(options){
     options$chr.R2 <- 1
     options$huge.gene.R2 <- 1
     options$huge.chr.R2 <- 1
+    options$trim.huge.chr <- FALSE
+    options$huge.gene.size <- Inf
+    options$huge.chr.size <- Inf
     options$HWE.p <- 0
   }
   

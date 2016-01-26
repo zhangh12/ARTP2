@@ -189,13 +189,13 @@ filter.raw.geno <- function(raw.geno, pathway, options, control.id = NULL, print
       gc()
       names(maf) <- snps.in.gene
       
-      if(length(snps.in.gene) > options$huge.gene){
+      if(length(snps.in.gene) > options$huge.gene.size && options$trim.huge.chr){
         tmp <- order(maf)
         cor2 <- cor2[tmp, tmp]
         cor2[lower.tri(cor2)] <- -1
         maf <- maf[tmp]
         snps.in.gene <- snps.in.gene[tmp]
-        count <- apply(cor2, 1, function(x){any(x > .5, na.rm = TRUE)})
+        count <- apply(cor2, 1, function(x){any(x > options$huge.gene.R2, na.rm = TRUE)})
         if(!any(count)){
           next
         }
@@ -381,13 +381,13 @@ filter.raw.geno <- function(raw.geno, pathway, options, control.id = NULL, print
         maf <- apply(rg, 2, function(x){m <- mean(x, na.rm = TRUE)/2; pmin(m, 1-m)})
         names(maf) <- snps.in.gene
         
-        if(length(snps.in.gene) > options$huge.gene){
+        if(length(snps.in.gene) > options$huge.gene.size){
           tmp <- order(maf)
           cor2 <- cor2[tmp, tmp]
           cor2[lower.tri(cor2)] <- -1
           maf <- maf[tmp]
           snps.in.gene <- snps.in.gene[tmp]
-          count <- apply(cor2, 1, function(x){any(x > .5, na.rm = TRUE)})
+          count <- apply(cor2, 1, function(x){any(x > options$huge.gene.R2, na.rm = TRUE)})
           if(!any(count)){
             next
           }
