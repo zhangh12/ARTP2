@@ -24,6 +24,7 @@ load.summary.statistics <- function(summary.files, family, snps.in.pathway, opti
   
   for(i in 1:nfiles){
     st <- read.table(summary.files[i], header = TRUE, as.is = TRUE, nrows = 1e4)
+    colnames(st) <- convert.header(colnames(st), complete.header)
     tmp <- (header %in% colnames(st))
     if(!all(tmp)){
       msg <- paste0("Columns below were not found in ", summary.files[i], ":\n", paste(header[!tmp], collapse = " "))
@@ -35,6 +36,7 @@ load.summary.statistics <- function(summary.files, family, snps.in.pathway, opti
     col.class[-col.id] <- "NULL"
     col.class[c('SNP', 'RefAllele', 'EffectAllele')] <- 'character'
     st <- read.table(summary.files[i], header = TRUE, as.is = TRUE, colClasses = col.class)
+    colnames(st) <- convert.header(colnames(st), complete.header)
     st <- st[st$SNP %in% snps.in.pathway, , drop = FALSE]
     if(nrow(st) == 0){
       next

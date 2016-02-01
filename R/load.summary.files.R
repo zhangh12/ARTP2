@@ -16,6 +16,7 @@ load.summary.files <- function(summary.files, lambda, sel.snps){
   fid <- 0
   for(i in 1:nfiles){
     st <- read.table(summary.files[i], header = TRUE, as.is = TRUE, nrows = 1e4)
+    colnames(st) <- convert.header(colnames(st), complete.header)
     tmp <- (header %in% colnames(st))
     if(!all(tmp)){
       msg <- paste0("Columns below were not found in ", summary.files[i], ":\n", paste(header[!tmp], collapse = " "))
@@ -27,6 +28,7 @@ load.summary.files <- function(summary.files, lambda, sel.snps){
     col.class[-col.id] <- "NULL"
     col.class[c('SNP', 'RefAllele', 'EffectAllele')] <- 'character'
     st <- read.table(summary.files[i], header = TRUE, as.is = TRUE, colClasses = col.class)
+    colnames(st) <- convert.header(colnames(st), complete.header)
     if(!is.null(sel.snps)){
       st <- st[st$SNP %in% sel.snps, ]
     }
