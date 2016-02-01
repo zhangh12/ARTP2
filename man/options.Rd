@@ -16,7 +16,7 @@ The list to describe the options that are used in \code{\link{pathway.summaryDat
   
   \bold{Options for testing an association: }
   \describe{
-  \item{\code{method}}{1 = AdaJoint, 2 = AdaJoint2, 3 = ARTP. The default is 3. }
+  \item{\code{method}}{1 = AdaJoint, 2 = AdaJoint2, 3 = ARTP. The default is 3. \code{ARTP} was the proposed in Yu et al. (2009) Genet Epi, while \code{AdaJoint} and \code{AdaJoint2} were proposed in Zhang et al. (2014) EJHG. Note that \code{AdaJoint2} could be more powerful if (1) two functional SNPs are negative correlated and have effects in the same direction; or (2) two functional SNPs are positively correlated and have opposite directions of their effects. }
   \item{\code{nperm}}{the number of permutations. The default is 1E5. }
   \item{\code{nthread}}{the number of threads for multi-threaded processors in Unix/Linux OS. The default is \code{detectCores()} to use all available processors. }
   }
