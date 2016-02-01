@@ -91,6 +91,9 @@ options.setup <- function(options, family, lambda, ncases, ncontrols, nsamples){
     options$huge.chr.R2 <- 1
   }
   
+  
+  options$method <- convert.method(options$method)
+  
   options.validation(options)
   
   if(!is.null(options$excluded.regions)){ # format of excluded.regions has been validated in options.validation
