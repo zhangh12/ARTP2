@@ -33,6 +33,6 @@ artp2 <- function(group.id, gene.id, pathway.cutpoint, gene.name, options){
   id <- which.min(arr.rank)
   most.sig.genes <- names(gene.pval)[1:pathway.cutpoint[id]]
   
-  list(pathway.pvalue = pathway.pvalue, most.sig.genes = most.sig.genes)
+  list(pathway.pvalue = pathway.pvalue, most.sig.genes = most.sig.genes, arr.rank = arr.rank)
   
 }

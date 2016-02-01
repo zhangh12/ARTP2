@@ -70,7 +70,7 @@ options.validation <- function(options){
   }
   
   
-  if(options$snp.miss.rate > .1){
+  if(options$snp.miss.rate > .1 && !options$turn.off.filters){
     msg <- paste0("options$snp.miss.rate = ", options$snp.miss.rate, " might be too large")
     warning(msg)
   }

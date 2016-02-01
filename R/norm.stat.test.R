@@ -52,6 +52,7 @@ norm.stat.test <- function(setup){
   
   pathway.pvalue <- ppv$pathway.pvalue
   most.sig.genes <- ppv$most.sig.genes
+  arr.rank <- ppv$arr.rank
   
   gene.pvalue <- data.frame(Gene = gene.name, Group = as.integer(chr), N.SNP = N.SNP, Pvalue = gene.pval, stringsAsFactors = FALSE)
   if(!is.null(allele.info)){
@@ -78,7 +79,7 @@ norm.stat.test <- function(setup){
   test.timing <- as.integer(difftime(strptime(end.time, "%c"), strptime(start.time, "%c"), units = "secs"))
   
   list(gene.pvalue = gene.pvalue, pathway.pvalue = pathway.pvalue, most.sig.genes = most.sig.genes, 
-       model = model, accurate = accurate, test.timing = test.timing)
+       model = model, accurate = accurate, test.timing = test.timing, arr.rank = arr.rank)
   
 }
 

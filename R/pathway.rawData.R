@@ -24,7 +24,7 @@ pathway.rawData <- function(formula, data, pathway, family, geno.files = NULL, l
   options(warn = 0)
   
   list(pathway.pvalue = test$pathway.pvalue, gene.pvalue = test$gene.pvalue, 
-       model = test$model, most.sig.genes = test$most.sig.genes, 
+       model = test$model, most.sig.genes = test$most.sig.genes, arr.rank = test$arr.rank, 
        accurate = test$accurate, test.timing = test$test.timing, 
        pathway = setup$pathway, deleted.snps = setup$deleted.snps, 
        deleted.genes = setup$deleted.genes, 
