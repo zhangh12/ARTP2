@@ -1,7 +1,7 @@
 
 split.pathway <- function(pathway, allele.info, group.gap){
   
-  if(is.null(group.gap) || group.gap == 0){
+  if(is.null(group.gap) || group.gap == 0 || all(is.na(allele.info$Pos))){
     return(pathway)
   }
   

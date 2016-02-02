@@ -12,6 +12,10 @@ validate.reference <- function(reference){
     }
   }
   
+  if(reference.type(reference) == 'ref.geno'){
+    return(NULL)
+  }
+  
   header <- c("bed", "bim", "fam")
   tmp <- (header %in% colnames(reference))
   if(!any(tmp)){

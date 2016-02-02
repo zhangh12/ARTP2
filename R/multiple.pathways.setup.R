@@ -31,7 +31,7 @@ multiple.pathways.setup <- function(summary.files, pathway, family, reference, l
   sum.stat <- split.sum.stat(sum.stat, sub.pathway)
   
   # load SNPs and their reference and effect alleles in reference genotype
-  allele.info <- load.reference.allele(reference, pathway$SNP, options)
+  allele.info <- load.reference.allele(reference, pathway, options)
   
   setup <- create.super.pathway.setup(sum.stat, allele.info, reference, sub.pathway, options)
   

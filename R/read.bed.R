@@ -1,8 +1,9 @@
 
-read.bed <- function(bed, bim, fam, sel.snps = NULL, sel.subs = NULL){
+read.bed <- function(bed, bim, fam, sel.snps = NULL, sel.subs = NULL, encode012 = TRUE){
   
   col.class <- c("NULL", "character", "NULL", "NULL", "character", "character")
   bim.file <- read.table(bim, header = FALSE, as.is = TRUE, colClasses = col.class)
+  colnames(bim.file) <- c('SNP', 'RefAllele', 'EffectAllele')
   nsnp <- nrow(bim.file)
   
   if(is.null(sel.snps)){
@@ -48,6 +49,21 @@ read.bed <- function(bed, bim, fam, sel.snps = NULL, sel.subs = NULL){
   }
   
   geno[geno == -1] <- NA
+  
+  if(encode012){
+    return(geno)
+  }
+  
+  geno <- geno[, bim.file$SNP, drop = FALSE]
+  
+  for(i in 1:ncol(geno)){
+    rs <- bim.file$SNP[i]
+    g <- geno[, rs]
+    ra <- bim.file$RefAllele[i]
+    ea <- bim.file$EffectAllele[i]
+    code <- paste0(c(ra, ra, ea), c(ra, ea, ea))
+    geno[, rs] <- ifelse(is.na(g), NA, code[g + 1])
+  }
   
   geno
   

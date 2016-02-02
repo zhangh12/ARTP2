@@ -1,6 +1,12 @@
 
 reformat.reference.path <- function(reference){
   
+  reference <- as.data.frame(reference)
+  
+  if(reference.type(reference) == 'ref.geno'){
+    return(reference)
+  }
+  
   if("bed" %in% colnames(reference)){
     reference$bed <- as.character(reference$bed)
   }

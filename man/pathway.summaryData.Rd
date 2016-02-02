@@ -188,6 +188,13 @@ family <- 'binomial'
 # ret2$pathway.pvalue
 ## [1] 0.3187681  # Mac OS
 
+##################################################
+## The reference is passed as an individual-level genotype data frame
+
+data(ref.geno)
+# ret.ref <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, ref.geno, lambda, ncases, ncontrols, options = options)
+
+# ret.ref$pathway.pvalue == ret$pathway.pvalue
 
 ##################################################
 ## The reference genotype data can also be merged into a single set of PLINK files

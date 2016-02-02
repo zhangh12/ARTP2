@@ -42,7 +42,7 @@ summaryData.setup <- function(summary.files, pathway, family, reference, lambda,
   sum.stat <- update.sum.stat(sum.stat, exc.snps)
   
   # load SNPs and their reference and effect alleles in reference genotype
-  allele.info <- load.reference.allele(reference, pathway$SNP, options)
+  allele.info <- load.reference.allele(reference, pathway, options)
   ref.snps <- allele.info$SNP
   
   # update with valid/available SNPs
@@ -65,6 +65,16 @@ summaryData.setup <- function(summary.files, pathway, family, reference, lambda,
   
   # load genotypes in reference
   ref.geno <- load.reference.geno(reference, pathway$SNP, options)
+  exc.snps <- setdiff(pathway$SNP, colnames(ref.geno))
+  deleted.snps <- update.deleted.snps(deleted.snps, exc.snps, reason = "SNP_CONST", comment = "")
+  pathway <- update.pathway.definition(pathway, exc.snps)
+  sum.stat <- update.sum.stat(sum.stat, exc.snps)
+  allele.info <- update.allele.info(allele.info, exc.snps)
+  ref.snps <- update.ref.snps(ref.snps, exc.snps)
+  
+  ar <- align.reference(ref.geno, allele.info, options)
+  ref.geno <- ar$ref.geno
+  allele.info <- ar$allele.info
   
   # SNP filtering based on options
   filtered.data <- filter.reference.geno(ref.geno, pathway, sum.stat, options)

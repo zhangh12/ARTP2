@@ -6,7 +6,7 @@
 Loads genotype data from plink format files .bed, .bim, and .fam.
 }
 \usage{
-read.bed(bed, bim, fam, sel.snps = NULL, sel.subs = NULL)
+read.bed(bed, bim, fam, sel.snps = NULL, sel.subs = NULL, encode012 = TRUE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -24,6 +24,9 @@ a character vector of SNPs to be extracted from the plink files. The default is 
 }
   \item{sel.subs}{
 an optional vector specifying a subset of subject IDs to be extracted from the plink files. These IDs should be matched with the second column of \code{fam} files. The default is \code{NULL}, i.e., all subjects are extracted. 
+}
+  \item{encode012}{
+logical. Encode the genotypes using symbols of the reference and effect alleles if \code{TRUE}. The default is \code{TRUE}. 
 }
 }
 \value{
