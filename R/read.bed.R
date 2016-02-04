@@ -9,6 +9,11 @@ read.bed <- function(bed, bim, fam, sel.snps = NULL, sel.subs = NULL, encode012 
   if(is.null(sel.snps)){
     sel.snps <- bim.file[, 1]
   }else{
+    sel.snps <- as.character(sel.snps)
+    if(any(duplicated(sel.snps))){
+      msg <- 'Duplicated SNPs are detected and removed from sel.snps'
+      warning(msg)
+    }
     sel.snps <- unique(sel.snps)
     sel.snps <- intersect(bim.file[, 1], sel.snps)
   }
@@ -26,6 +31,10 @@ read.bed <- function(bed, bim, fam, sel.snps = NULL, sel.subs = NULL, encode012 
   col.class <- rep("NULL", 6)
   col.class[2] <- "character"
   sid <- read.table(fam, header = FALSE, as.is = TRUE, colClasses = col.class)[, 1]
+  if(any(duplicated(sid))){
+    msg <- paste0('Duplicated subjects exist in fam file: \n', fam)
+    warning(msg)
+  }
   nsub <- length(sid)
   
   geno <- rep(-1, nsub * nsel)
@@ -39,6 +48,11 @@ read.bed <- function(bed, bim, fam, sel.snps = NULL, sel.subs = NULL, encode012 
   colnames(geno) <- sel.snps
   
   if(!is.null(sel.subs)){
+    if(any(duplicated(sel.subs))){
+      msg <- 'Duplicated subjects exist in sel.subs and are returnsed as duplicated lines'
+      warning(msg)
+    }
+    sel.subs <- as.character(sel.subs)
     id <- which(sel.subs %in% rownames(geno))
     if(length(id) == 0){
       msg <- paste("No subjects were left in \n", bed)
