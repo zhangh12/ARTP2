@@ -22,7 +22,7 @@ options.validation <- function(options){
   }
   
   if(!is.null(options$nperm) && options$nperm < 1000){
-    stop("nperm is too small")
+    warning("nperm is too small")
   }
   
   if(!is.null(options$excluded.regions)){
