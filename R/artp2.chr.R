@@ -15,6 +15,8 @@ artp2.chr <- function(group.setup, gene.cutpoint.setup, U, score0, V, options, c
   ngap <- min(10000, nperm);
   nblock = nperm %/% ngap;
   seed <- options$seed + (cid - 1) * nthread * nblock
+  if(options$os == 'windows_or_mac') set.seed(seed)
+  
   out.dir <- options$out.dir
   id.str <- options$id.str
   file.prefix <- paste0(out.dir, "/", id.str, ".CID.", cid - 1, ".")
@@ -26,19 +28,49 @@ artp2.chr <- function(group.setup, gene.cutpoint.setup, U, score0, V, options, c
   
   METHOD <- c("adajoint_chr", "adajoint_chr", "artp2_chr")
   
-  tmp <- .C(METHOD[method], as.character(file.prefix), as.integer(method), as.integer(nperm),
-            as.integer(seed), as.integer(nthread), as.integer(nsnp), 
-            as.integer(ngene), as.double(vU), as.double(score0), as.double(vV), 
-            as.integer(group.setup$vGeneIdx), 
-            as.integer(group.setup$GeneStartEnd[, "Start"]), 
-            as.integer(group.setup$GeneStartEnd[, "End"]), 
-            as.integer(gene.cutpoint.setup$vGeneCutPoint), 
-            as.integer(gene.cutpoint.setup$GeneCutPointStartEnd[, "Start"]), 
-            as.integer(gene.cutpoint.setup$GeneCutPointStartEnd[, "End"]), 
-            gene.pval = as.double(gene.pval), 
-            arr.rank = as.integer(arr.rank), 
-            vsel.id = as.integer(vsel.id), 
-            marg.id = as.integer(marg.id))
+  if(method %in% 1:2){
+    tmp <- .C('adajoint_chr', as.character(file.prefix), as.integer(method), as.integer(nperm),
+              as.integer(seed), as.integer(nthread), as.integer(nsnp), 
+              as.integer(ngene), as.double(vU), as.double(score0), as.double(vV), 
+              as.integer(group.setup$vGeneIdx), 
+              as.integer(group.setup$GeneStartEnd[, "Start"]), 
+              as.integer(group.setup$GeneStartEnd[, "End"]), 
+              as.integer(gene.cutpoint.setup$vGeneCutPoint), 
+              as.integer(gene.cutpoint.setup$GeneCutPointStartEnd[, "Start"]), 
+              as.integer(gene.cutpoint.setup$GeneCutPointStartEnd[, "End"]), 
+              gene.pval = as.double(gene.pval), 
+              arr.rank = as.integer(arr.rank), 
+              vsel.id = as.integer(vsel.id), 
+              marg.id = as.integer(marg.id))
+  }else{
+    tmp <- .C('artp2_chr', as.character(file.prefix), as.integer(method), as.integer(nperm),
+              as.integer(seed), as.integer(nthread), as.integer(nsnp), 
+              as.integer(ngene), as.double(vU), as.double(score0), as.double(vV), 
+              as.integer(group.setup$vGeneIdx), 
+              as.integer(group.setup$GeneStartEnd[, "Start"]), 
+              as.integer(group.setup$GeneStartEnd[, "End"]), 
+              as.integer(gene.cutpoint.setup$vGeneCutPoint), 
+              as.integer(gene.cutpoint.setup$GeneCutPointStartEnd[, "Start"]), 
+              as.integer(gene.cutpoint.setup$GeneCutPointStartEnd[, "End"]), 
+              gene.pval = as.double(gene.pval), 
+              arr.rank = as.integer(arr.rank), 
+              vsel.id = as.integer(vsel.id), 
+              marg.id = as.integer(marg.id))
+  }
+  
+#   tmp <- .C(METHOD[method], as.character(file.prefix), as.integer(method), as.integer(nperm),
+#             as.integer(seed), as.integer(nthread), as.integer(nsnp), 
+#             as.integer(ngene), as.double(vU), as.double(score0), as.double(vV), 
+#             as.integer(group.setup$vGeneIdx), 
+#             as.integer(group.setup$GeneStartEnd[, "Start"]), 
+#             as.integer(group.setup$GeneStartEnd[, "End"]), 
+#             as.integer(gene.cutpoint.setup$vGeneCutPoint), 
+#             as.integer(gene.cutpoint.setup$GeneCutPointStartEnd[, "Start"]), 
+#             as.integer(gene.cutpoint.setup$GeneCutPointStartEnd[, "End"]), 
+#             gene.pval = as.double(gene.pval), 
+#             arr.rank = as.integer(arr.rank), 
+#             vsel.id = as.integer(vsel.id), 
+#             marg.id = as.integer(marg.id))
   
   gene.pval <- tmp$gene.pval
   names(gene.pval) <- group.setup$GeneInGroup

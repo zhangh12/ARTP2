@@ -63,7 +63,8 @@ Zhang H, Shi J, Liang F, Wheeler W, Stolzenberg-Solomon R, Yu K.  (2014) A fast 
 
 ## firstly, run the example in pathway.summaryData
 ## users can adjust the second round inflation in pathway.warm.start
-## the first round inflation can be study-specific and adjusted in pathway.rawData or pathway.summaryData
+## the first round inflation can be study-specific and adjusted in pathway.rawData 
+## or pathway.summaryData
 
 library(ARTP2)
 study1 <- system.file("extdata", package = "ARTP2", "study1.txt.gz")
@@ -101,13 +102,15 @@ family <- 'binomial'
 ## do not run permutation
 options$only.setup <- TRUE
 ## the first round study-specific inflation is adjusted as lambda = c(1.10, 1.08)
-# setup <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, reference, lambda, ncases, ncontrols, options = options)
+# setup <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, 
+#                              reference, lambda, ncases, ncontrols, options = options)
 
 ## the two rounds of inflation is adjusted as lambda2 = c(1.17370, 1.15236)
 lambda2 <- lambda * 1.067
 ## run permutation to calculate p-value
 options$only.setup <- FALSE
-# ret1 <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, reference, lambda2, ncases, ncontrols, options = options)
+# ret1 <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, 
+#                             reference, lambda2, ncases, ncontrols, options = options)
 
 ## or adjust the second round of inflation in pathway.warm.start
 # ret2 <- pathway.warm.start(setup, lambda = 1.067)

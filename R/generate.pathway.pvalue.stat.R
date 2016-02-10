@@ -10,6 +10,8 @@ generate.pathway.pvalue.stat <- function(setup){
   rm(setup)
   gc()
   
+  options <- check.os(options)
+  
   V <- norm.stat$V
   score0 <- norm.stat$score0
   

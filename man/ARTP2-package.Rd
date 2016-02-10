@@ -3,17 +3,17 @@
 \alias{ARTP2}
 \docType{package}
 \title{
-Calculate gene and pathway p-values using the ARTP Test and summary data
+Pathway and Gene-Level Association Test
 }
 \description{
-Calculate gene and pathway p-values using the ARTP Test and summary data
+Pathway and gene level association test using raw data or summary statistics. 
 }
 \details{
 \tabular{ll}{
 Package: \tab ARTP2\cr
 Type: \tab Package\cr
-Version: \tab 0.9.9\cr
-Date: \tab 2016-01-07\cr
+Version: \tab 0.9.20\cr
+Date: \tab 2016-02-10\cr
 License: \tab MIT + file LICENSE\cr
 }
 

@@ -100,20 +100,19 @@ options <- list(inspect.snp.n = 5, nperm = 1e5,
 # ret1 <- pathway.rawData(formula, data = data, pathway, family, options = options)
 
 # ret1$pathway.pvalue 
-## [1] 0.02600974 # Mac OS
+## [1] 0.03218968 # Mac OS
 ## [1] 0.03455965 # Linux with 32 threads
-## [1] 0.02189978 # Linux with 1 thread
-## [1] 0.02443976 # Windows 7
+## [1] 0.02188978 # Linux with 1 thread
 
 ## Mac OS
 # head(ret1$gene.pvalue)
-##     Gene Chr N.SNP     Pvalue
-## 1  USP30  12    18 0.00103999
-## 2  DCAF7  17     9 0.07084429
-## 3   CANX   5    13 0.26769232
-## 4  SOX12  20    15 0.35028150
-## 5 CDKN2C   1     6 0.35601144
-## 6   FEN1  11     4 0.41482585
+##     Gene Chr N.SNP      Pvalue
+## 1  USP30  12    18 0.001319987
+## 2  DCAF7  17     9 0.071644284
+## 3   CANX   5    13 0.266337337
+## 4  SOX12  20    15 0.349406506
+## 5 CDKN2C   1     6 0.358031420
+## 6   FEN1  11     4 0.415345847
 
 # table(ret1$deleted.snps$reason)
 # head(ret1$deleted.genes)
@@ -131,7 +130,8 @@ geno.files <- system.file("extdata", package = "ARTP2", geno)
 ## data contains outcome, covariates
 ## Genotypes are instead included in files specified in geno.files
 ## geno.files are plain text files (or .gz file), which can be read by read.table
-# ret2 <- pathway.rawData(formula, data = data[, 2:6], pathway, family, geno.files, options = options)
+# ret2 <- pathway.rawData(formula, data = data[, 2:6], pathway, family, geno.files, 
+#                         options = options)
 # ret2$pathway.pvalue == ret1$pathway.pvalue
 
 
@@ -144,7 +144,8 @@ fam <- system.file("extdata", package = "ARTP2", "raw.fam")
 geno.files <- data.frame(fam, bim, bed, stringsAsFactors = FALSE)
 
 ## a column SUBID must be included in data, in this example, first column is SUBID
-# ret3 <- pathway.rawData(formula, data = data[, 1:6], pathway, family, geno.files, options = options)
+# ret3 <- pathway.rawData(formula, data = data[, 1:6], pathway, family, geno.files, 
+#                         options = options)
 # ret3$pathway.pvalue == ret1$pathway.pvalue
 
 

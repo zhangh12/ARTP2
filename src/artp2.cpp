@@ -449,8 +449,10 @@ void rnorm(int n, fvec &v){
 		float u1, u2, s;
 		double r1, r2;
 		do{
-			r1 = rand() / ((double) RAND_MAX);
-			r2 = rand() / ((double) RAND_MAX);
+			//r1 = rand() / ((double) RAND_MAX);
+			//r2 = rand() / ((double) RAND_MAX);
+			r1 = runif(0.0, 1.0);
+			r2 = runif(0.0, 1.0);
 			u1 = 2.0f * (float) r1 - 1.0f;
 			u2 = 2.0f * (float) r2 - 1.0f;
 			s = u1 * u1 + u2 * u2;
@@ -516,7 +518,7 @@ void read_in_buffer(const string &file, const int &nperm, const int &ncp, const 
   }
   
   size_t status = fread(buffer, 1, lsize, gFile);
-  if(status != lsize){
+  if(status != (size_t) lsize){
     error("Gene output file might be modified by other jobs in queue. Please check options$id.str and options$out.dir");
   }
   
@@ -567,7 +569,9 @@ int *R_sel_id, int *R_marg_id){
   }
   
   int nperm = *R_nperm;
+  #if __PARALLEL__
   int seed = *R_seed;
+  #endif
   int nthread = *R_nthread;
   int nsnp = *R_nsnp;
   int ngene = *R_ngene;
@@ -659,7 +663,8 @@ int *R_sel_id, int *R_marg_id){
   int nblock = nperm / ngap;
   
 	#if __NO_PARALLEL__
-  srand(seed);
+  //srand(seed);
+  GetRNGstate();
 	#endif
 	
   for(int b = 0; b < nblock; ++b){
@@ -690,9 +695,14 @@ int *R_sel_id, int *R_marg_id){
 	  			null[i][j] = pchisq(null[i][j], 1, false, true);
 	  		}
 	  	}
+  		
 		#if __PARALLEL__
 	  }
 		#endif
+	  
+    #if __NO_PARALLEL__
+	  PutRNGstate();
+	  #endif
 	  
 	  // write null statistics to local files (per gene)
 		#if __PARALLEL__
@@ -748,6 +758,7 @@ int *R_sel_id, int *R_marg_id){
   			stat[j][i].id = i;
   		}
   	}
+    
     gin.close();
     /*
   	vector<VecStat> stat;
@@ -887,7 +898,9 @@ int *R_sel_id, int *R_marg_id){
   assert(method == 1 || method == 2);
   
   int nperm = *R_nperm;
+  #if __PARALLEL__
   int seed = *R_seed;
+  #endif
   int nthread = *R_nthread;
   int nsnp = *R_nsnp;
   int ngene = *R_ngene;
@@ -969,8 +982,10 @@ int *R_sel_id, int *R_marg_id){
   int nblock = nperm / ngap;
   
   #if __NO_PARALLEL__
-  srand(seed);
-  #endif
+  //srand(seed);
+  GetRNGstate();
+	#endif
+	
   for(int b = 0; b < nblock; ++b){
   	fmat null(ngap, fvec (nsnp, .0f));
   	#if __PARALLEL__
@@ -999,6 +1014,10 @@ int *R_sel_id, int *R_marg_id){
 	  	}
 	  #if __PARALLEL__
 	  }
+	  #endif
+	  
+	  #if __NO_PARALLEL__
+	  PutRNGstate();
 	  #endif
 	  
 	  // write null statistics to local files (per gene)
@@ -1246,6 +1265,7 @@ double *R_pathway_pval, int *R_arr_rank, double *R_gene_pval){
 	  		for(int nl = 0; nl < nlines; ++nl){
 	  			s[nl][g] = (float) log((buffer[nl] + 1.0) / (nperm + 1));
 	  		}
+	  		
 	  		delete[] buffer;
 	  	}
 	  	

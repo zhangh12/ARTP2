@@ -140,7 +140,9 @@ options <- list(inspect.snp.n = 2, nperm = 1e4,
 lambda <- c(1.10, 1.08)
 
 ## two summary files, so there are two elements in each of two lists ncases and ncontrols
-## the first summary file includes data calculated from meta-analysis of two sub-studies, each with sample size 63390 (9580 cases and 53810 controls) and 5643 (2591 cases and 3052 controls)
+## the first summary file includes data calculated from meta-analysis of two sub-studies, 
+## each with sample size 63390 (9580 cases and 53810 controls) and 5643 (2591 cases and 
+## 3052 controls)
 ## see a few rows in study1
 # s <- read.table(study1, header = TRUE, as.is = TRUE, nrows = 10)
 # s$Direction
@@ -154,7 +156,8 @@ ncontrols <- list()
 ncases[[1]] <- c(9580, 2591)
 ncontrols[[1]] <- c(53810, 3052)
 
-## the second summary file includes data calculated from one sub-studies with sample size 61957 (7638 cases and 54319 controls)
+## the second summary file includes data calculated from one sub-studies with sample size 
+## 61957 (7638 cases and 54319 controls)
 ncases[[2]] <- 7638
 ncontrols[[2]] <- 54319
 
@@ -162,37 +165,63 @@ ncontrols[[2]] <- 54319
 family <- 'binomial'
 
 ## pathway test with two study files
-# ret <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, reference, lambda, ncases, ncontrols, options = options)
-# 
+# ret <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, reference, 
+#                            lambda, ncases, ncontrols, options = options)
+
 # ret$pathway.pvalue
-## [1] 0.02724728  # Mac OS
+## [1] 0.03994601  # Mac OS
+## [1] 0.04014599  # Linux with 1 thread
+## [1] 0.03419658  # Linux with 32 threads
 
 ## Mac OS
 # head(ret$gene.pvalue)
 ##       Gene Chr N.SNP      Pvalue
-## 1     BDH2   4    10 0.000349965
-## 2   UBE2D3   4     6 0.001599840
-## 3 PPP1R14D  15     9 0.003549645
-## 4     PBX2   6    22 0.003749625
-## 5   MRPL10  17    18 0.012648735
-## 6    SCYL1  11     3 0.018298170
+## 1     BDH2   4    10 0.000749925
+## 2   UBE2D3   4     6 0.001849815
+## 3     PBX2   6    22 0.003849615
+## 4 PPP1R14D  15     9 0.003849615
+## 5   MRPL10  17    18 0.011448855
+## 6    SCYL1  11     3 0.019848015
+
+## Linux with 1 thread
+# head(ret$gene.pvalue)
+##       Gene Chr N.SNP      Pvalue
+## 1     BDH2   4    10 0.000949905
+## 2   UBE2D3   4     6 0.001699830
+## 3 PPP1R14D  15     9 0.003949605
+## 4     PBX2   6    22 0.004299570
+## 5   MRPL10  17    18 0.012448755
+## 6    SCYL1  11     3 0.017148285
+
+## Linux with 32 threads
+# head(ret$gene.pvalue)
+##       Gene Chr N.SNP      Pvalue
+## 1   UBE2D3   4     6 0.000849915
+## 2     BDH2   4    10 0.001049895
+## 3 PPP1R14D  15     9 0.003949605
+## 4     PBX2   6    22 0.004899510
+## 5   MRPL10  17    18 0.012798720
+## 6    SCYL1  11     3 0.015048495
 
 ## pathway test with each of two studies
-# ret1 <- pathway.summaryData(summary.files = study1, pathway, family, reference, lambda[1], ncases[1], ncontrols[1], options = options)
+# ret1 <- pathway.summaryData(summary.files = study1, pathway, family, reference, 
+#                             lambda[1], ncases[1], ncontrols[1], options = options)
 
-# ret2 <- pathway.summaryData(summary.files = study2, pathway, family, reference, lambda[2], ncases[2], ncontrols[2], options = options)
+# ret2 <- pathway.summaryData(summary.files = study2, pathway, family, reference, 
+#                             lambda[2], ncases[2], ncontrols[2], options = options)
 
 # ret1$pathway.pvalue
-## [1] 0.02724728 # Mac OS
+## [1] 0.03554645 # Mac OS
 
 # ret2$pathway.pvalue
-## [1] 0.3187681  # Mac OS
+## [1] 0.3028197  # Mac OS
 
 ##################################################
 ## The reference is passed as an individual-level genotype data frame
 
 data(ref.geno)
-# ret.ref <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, ref.geno, lambda, ncases, ncontrols, options = options)
+# ret.ref <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, 
+#                                ref.geno, lambda, ncases, ncontrols, options = options)
 
 # ret.ref$pathway.pvalue == ret$pathway.pvalue
 
@@ -204,7 +233,8 @@ bim <- system.file("extdata", package = "ARTP2", "ref.bim")
 fam <- system.file("extdata", package = "ARTP2", "ref.fam")
 
 reference <- data.frame(fam, bim, bed)
-# ret.comb <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, reference, lambda, ncases, ncontrols, options = options)
+# ret.comb <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, 
+#                                 reference, lambda, ncases, ncontrols, options = options)
 # ret.comb$pathway.pvalue == ret$pathway.pvalue
 
 ################
@@ -215,10 +245,11 @@ exc.reg1 <- data.frame(Chr = c(1, 1, 22),
                        Radius = c(5000, 0, 2000))
 options$excluded.regions <- exc.reg1
 
-# ret.exc1 <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, reference, lambda, ncases, ncontrols, options = options)
+# ret.exc1 <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, 
+#                                 reference, lambda, ncases, ncontrols, options = options)
 
 # ret.exc1$pathway.pvalue
-## [1] 0.03074693 # Mac OS
+## [1] 0.0380462 # Mac OS
 
 # sum(ret.exc1$deleted.snps$reason == 'RM_BY_REGIONS')
 
@@ -228,7 +259,8 @@ exc.reg2 <- data.frame(Chr = c(1, 1, 22),
                        End = c(1711160, 11979231, 51054379))
 options$excluded.regions <- exc.reg2
 
-# ret.exc2 <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, reference, lambda, ncases, ncontrols, options = options)
+# ret.exc2 <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, 
+#                                 reference, lambda, ncases, ncontrols, options = options)
 # ret.exc1$pathway.pvalue == ret.exc2$pathway.pvalue
 
 #################
@@ -241,8 +273,9 @@ head(subj.id)
 options$selected.subs <- subj.id
 options$excluded.regions <- NULL
 
-# ret.sel <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, reference, lambda, ncases, ncontrols, options = options)
+# ret.sel <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, 
+#                                reference, lambda, ncases, ncontrols, options = options)
 # ret.sel$pathway.pvalue
-## [1] 0.03229677 # Mac OS
+## [1] 0.02944706 # Mac OS
 
 }
