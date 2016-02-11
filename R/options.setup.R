@@ -14,7 +14,7 @@ options.setup <- function(options, family, lambda, ncases, ncontrols, nsamples){
   
   raw <- all(is.null(nsamples), is.null(ncases), is.null(ncontrols))
   
-  if(!raw){ # call by pathway.summaryData
+  if(!raw){ # call by sARTP
     if(family == 'binomial'){
       opt.default$ncases <- ncases
       opt.default$ncontrols <- ncontrols

@@ -1,4 +1,3 @@
-import(parallel, Formula, data.table, stats, utils)
+import(Formula, data.table, parallel, stats, utils)
 useDynLib(ARTP2)
-export(pathway.summaryData, pathway.warm.start, pathway.rawData, 
-       read.bed, meta, options.default)
+export(rARTP, sARTP, warm.start, read.bed, meta, options.default)

@@ -7,7 +7,7 @@ validate.lambda.rawData <- function(lambda){
   }
   
   if(length(lambda) > 1){
-    msg <- 'lambda should be a numeric number when using pathway.rawData'
+    msg <- 'lambda should be a numeric number when using ARTP'
     stop(msg)
   }
   

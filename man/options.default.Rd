@@ -5,7 +5,7 @@
 options.default
 }
 \description{
-A function to return default \code{\link{options}} in \code{\link{pathway.summaryData}} and \code{\link{pathway.rawData}}. This page is for illustration. Users do not need to call this function explicitly.
+A function to return default \code{\link{options}} in \code{\link{sARTP}} and \code{\link{rARTP}}. This page is for illustration. Users do not need to call this function explicitly.
 }
 \usage{
 options.default()

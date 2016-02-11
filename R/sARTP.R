@@ -1,5 +1,5 @@
 
-pathway.summaryData <- function(summary.files, pathway, family, reference, lambda, 
+sARTP <- function(summary.files, pathway, family, reference, lambda, 
                                 ncases = list(), ncontrols = list(), nsamples = list(), 
                                 options = NULL){
   

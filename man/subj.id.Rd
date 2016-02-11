@@ -2,7 +2,7 @@
 \alias{subj.id}
 \docType{data}
 \title{
-  A vector of subject IDs used in example of \code{pathway.summaryData}. 
+  A vector of subject IDs used in example of \code{sARTP}. 
 }
 \description{
   Subject IDs of 400 samples. 

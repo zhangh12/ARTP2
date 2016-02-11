@@ -1,13 +1,13 @@
-\name{pathway.rawData}
-\alias{pathway.rawData}
+\name{rARTP}
+\alias{rARTP}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{ARTP test for raw data}
 \description{
 Calculate gene and pathway p-values using the ARTP test and raw genotype data
 }
 \usage{
-pathway.rawData(formula, data, pathway, family, geno.files = NULL, 
-                lambda = 1.0, subset = NULL, options = NULL)
+rARTP(formula, data, pathway, family, geno.files = NULL, lambda = 1.0, 
+      subset = NULL, options = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -40,7 +40,7 @@ a list of options to control the test procedure. If \code{NULL}, default options
 This function computes gene and pathway p-values when raw genotype data is available. The ARTP test modified from Yu et al. (2009) and AdaJoint test from Zhang et al. (2014) are released with this package. ARTP is the Adaptive Rank Truncated Product test.
 }
 \value{
-\code{pathway.rawData} returns an object of class \code{ARTP2}. It is a list containing the following components: 
+\code{rARTP} returns an object of class \code{ARTP2}. It is a list containing the following components: 
 \item{pathway.pvalue}{final pathway p-value accounting for multiple comparisons. }
 \item{gene.pvalue}{a data frame containing gene name, number of SNPs in the gene that were included in the analysis, chromosome name, and the p-value for the gene accounting for multiple comparisons. }
 \item{pathway}{a data frame defining the pathway that was actually tested after various filters applied. }
@@ -53,7 +53,7 @@ This function computes gene and pathway p-values when raw genotype data is avail
 \code{sqrt(pvalue*(1-pvalue)/nperm)/pvalue < 0.1}
 is satisfied.
 }
-\item{setup}{a list containing necessary input for \code{\link{pathway.warm.start}}. It can be written to a file by using the function \code{\link[base]{save}}, then its path can be the input of \code{\link{pathway.warm.start}}. It also contains a data frame of outcome and covariates that are specified in \code{formula} (\code{setup$yx}), a data frame of genotypes of SNPs in \code{pathway} (\code{setup$raw.geno}), and a formula object \code{setup$formula} corresponding to \code{setup$yx}, if \code{options$keep.geno} is \code{TRUE}. }
+\item{setup}{a list containing necessary input for \code{\link{warm.start}}. It can be written to a file by using the function \code{\link[base]{save}}, then its path can be the input of \code{\link{warm.start}}. It also contains a data frame of outcome and covariates that are specified in \code{formula} (\code{setup$yx}), a data frame of genotypes of SNPs in \code{pathway} (\code{setup$raw.geno}), and a formula object \code{setup$formula} corresponding to \code{setup$yx}, if \code{options$keep.geno} is \code{TRUE}. }
 }
 \references{
 Yu K, Li Q, Bergen AW, Pfeiffer RM, Rosenberg PS, Caporaso N, Kraft P, Chatterjee N. (2009) Pathway analysis by adaptive combination of P-values. 
@@ -65,7 +65,7 @@ Zhang H, Shi J, Liang F, Wheeler W, Stolzenberg-Solomon R, Yu K.  (2014) A fast 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{options}}, \code{\link{pathway.warm.start}}, \code{\link{pathway.summaryData}}, \code{\link{example}}. 
+\code{\link{options}}, \code{\link{warm.start}}, \code{\link{sARTP}}, \code{\link{example}}. 
 }
 \examples{
 
@@ -97,7 +97,7 @@ options <- list(inspect.snp.n = 5, nperm = 1e5,
 
 ## pathway test, can take a while
 ## data contains outcome, covariates and genotypes
-# ret1 <- pathway.rawData(formula, data = data, pathway, family, options = options)
+# ret1 <- rARTP(formula, data = data, pathway, family, options = options)
 
 # ret1$pathway.pvalue 
 ## [1] 0.03218968 # Mac OS
@@ -130,8 +130,8 @@ geno.files <- system.file("extdata", package = "ARTP2", geno)
 ## data contains outcome, covariates
 ## Genotypes are instead included in files specified in geno.files
 ## geno.files are plain text files (or .gz file), which can be read by read.table
-# ret2 <- pathway.rawData(formula, data = data[, 2:6], pathway, family, geno.files, 
-#                         options = options)
+# ret2 <- rARTP(formula, data = data[, 2:6], pathway, family, geno.files, 
+#               options = options)
 # ret2$pathway.pvalue == ret1$pathway.pvalue
 
 
@@ -144,8 +144,8 @@ fam <- system.file("extdata", package = "ARTP2", "raw.fam")
 geno.files <- data.frame(fam, bim, bed, stringsAsFactors = FALSE)
 
 ## a column SUBID must be included in data, in this example, first column is SUBID
-# ret3 <- pathway.rawData(formula, data = data[, 1:6], pathway, family, geno.files, 
-#                         options = options)
+# ret3 <- rARTP(formula, data = data[, 1:6], pathway, family, geno.files, 
+#               options = options)
 # ret3$pathway.pvalue == ret1$pathway.pvalue
 
 

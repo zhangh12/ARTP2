@@ -1,13 +1,13 @@
-\name{pathway.summaryData}
-\alias{pathway.summaryData}
+\name{sARTP}
+\alias{sARTP}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{ARTP test for summary data}
 \description{
 Calculate gene and pathway p-values using the ARTP test and summary data. 
 }
 \usage{
-pathway.summaryData(summary.files, pathway, family, reference, lambda, 
-                    ncases, ncontrols, nsamples, options = NULL)
+sARTP(summary.files, pathway, family, reference, lambda, 
+      ncases, ncontrols, nsamples, options = NULL)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -68,7 +68,7 @@ Another two optional columns \code{Chr} and \code{Pos} are needed if \code{exclu
 The order of columns in files \code{summary.files}, \code{pathway} or in data frame \code{reference} are arbitrary, and all unnecessary columns (if any) are discarded in the analysis. 
 }
 \value{
-\code{pathway.summaryData} returns an object of class \code{ARTP2}. It is a list containing the following components: 
+\code{sARTP} returns an object of class \code{ARTP2}. It is a list containing the following components: 
 \item{pathway.pvalue}{final pathway p-value accounting for multiple comparisons.}
 \item{gene.pvalue}{a data frame containing gene name, number of SNPs in the gene that were included in the analysis, chromosome name, and the p-value for the gene accounting for multiple comparisons.}
 \item{pathway}{a data frame defining the pathway that was actually tested after various filters applied. }
@@ -81,7 +81,7 @@ The order of columns in files \code{summary.files}, \code{pathway} or in data fr
 \code{sqrt(pvalue*(1-pvalue)/nperm)/pvalue < 0.1}
 is satisfied.
 }
-\item{setup}{a list containing necessary input for \code{\link{pathway.warm.start}}. It can be written to a file by using the function \code{\link[base]{save}}, then its path can be the input of \code{\link{pathway.warm.start}}. Loading from \code{reference}, it also contains a data frame of genotypes of used SNPs (\code{setup$ref.geno}), if \code{options$keep.geno} is \code{TRUE}. }
+\item{setup}{a list containing necessary input for \code{\link{warm.start}}. It can be written to a file by using the function \code{\link[base]{save}}, then its path can be the input of \code{\link{warm.start}}. Loading from \code{reference}, it also contains a data frame of genotypes of used SNPs (\code{setup$ref.geno}), if \code{options$keep.geno} is \code{TRUE}. }
 }
 \references{
 
@@ -96,7 +96,7 @@ Zhang H, Shi J, Liang F, Wheeler W, Stolzenberg-Solomon R, Yu K.  (2014) A fast 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
 \seealso{
-\code{\link{options}}, \code{\link{pathway.warm.start}}, \code{\link{pathway.rawData}}
+\code{\link{options}}, \code{\link{warm.start}}, \code{\link{rARTP}}
 }
 \examples{
 
@@ -165,8 +165,8 @@ ncontrols[[2]] <- 54319
 family <- 'binomial'
 
 ## pathway test with two study files
-# ret <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, reference, 
-#                            lambda, ncases, ncontrols, options = options)
+# ret <- sARTP(summary.files = c(study1, study2), pathway, family, reference, lambda, 
+#              ncases, ncontrols, options = options)
 
 # ret$pathway.pvalue
 ## [1] 0.03994601  # Mac OS
@@ -204,11 +204,11 @@ family <- 'binomial'
 ## 6    SCYL1  11     3 0.015048495
 
 ## pathway test with each of two studies
-# ret1 <- pathway.summaryData(summary.files = study1, pathway, family, reference, 
-#                             lambda[1], ncases[1], ncontrols[1], options = options)
+# ret1 <- sARTP(summary.files = study1, pathway, family, reference, lambda[1], 
+#               ncases[1], ncontrols[1], options = options)
 
-# ret2 <- pathway.summaryData(summary.files = study2, pathway, family, reference, 
-#                             lambda[2], ncases[2], ncontrols[2], options = options)
+# ret2 <- sARTP(summary.files = study2, pathway, family, reference, lambda[2], 
+#               ncases[2], ncontrols[2], options = options)
 
 # ret1$pathway.pvalue
 ## [1] 0.03554645 # Mac OS
@@ -220,8 +220,8 @@ family <- 'binomial'
 ## The reference is passed as an individual-level genotype data frame
 
 data(ref.geno)
-# ret.ref <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, 
-#                                ref.geno, lambda, ncases, ncontrols, options = options)
+# ret.ref <- sARTP(summary.files = c(study1, study2), pathway, family, ref.geno, lambda, 
+#                  ncases, ncontrols, options = options)
 
 # ret.ref$pathway.pvalue == ret$pathway.pvalue
 
@@ -233,8 +233,8 @@ bim <- system.file("extdata", package = "ARTP2", "ref.bim")
 fam <- system.file("extdata", package = "ARTP2", "ref.fam")
 
 reference <- data.frame(fam, bim, bed)
-# ret.comb <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, 
-#                                 reference, lambda, ncases, ncontrols, options = options)
+# ret.comb <- sARTP(summary.files = c(study1, study2), pathway, family, reference, lambda, 
+#                   ncases, ncontrols, options = options)
 # ret.comb$pathway.pvalue == ret$pathway.pvalue
 
 ################
@@ -245,8 +245,8 @@ exc.reg1 <- data.frame(Chr = c(1, 1, 22),
                        Radius = c(5000, 0, 2000))
 options$excluded.regions <- exc.reg1
 
-# ret.exc1 <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, 
-#                                 reference, lambda, ncases, ncontrols, options = options)
+# ret.exc1 <- sARTP(summary.files = c(study1, study2), pathway, family, reference, lambda, 
+#                   ncases, ncontrols, options = options)
 
 # ret.exc1$pathway.pvalue
 ## [1] 0.0380462 # Mac OS
@@ -259,8 +259,8 @@ exc.reg2 <- data.frame(Chr = c(1, 1, 22),
                        End = c(1711160, 11979231, 51054379))
 options$excluded.regions <- exc.reg2
 
-# ret.exc2 <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, 
-#                                 reference, lambda, ncases, ncontrols, options = options)
+# ret.exc2 <- sARTP(summary.files = c(study1, study2), pathway, family, reference, lambda, 
+#                   ncases, ncontrols, options = options)
 # ret.exc1$pathway.pvalue == ret.exc2$pathway.pvalue
 
 #################
@@ -273,8 +273,8 @@ head(subj.id)
 options$selected.subs <- subj.id
 options$excluded.regions <- NULL
 
-# ret.sel <- pathway.summaryData(summary.files = c(study1, study2), pathway, family, 
-#                                reference, lambda, ncases, ncontrols, options = options)
+# ret.sel <- sARTP(summary.files = c(study1, study2), pathway, family, reference, lambda, 
+#                  ncases, ncontrols, options = options)
 # ret.sel$pathway.pvalue
 ## [1] 0.02944706 # Mac OS
 

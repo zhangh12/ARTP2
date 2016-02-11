@@ -3,7 +3,7 @@
 \docType{data}
 \title{options}
 \description{
-The list to describe the options that are used in \code{\link{pathway.summaryData}}, \code{\link{pathway.rawData}}. It will be set by function \code{\link{options.default}} by default. 
+The list to describe the options that are used in \code{\link{sARTP}}, \code{\link{rARTP}}. It will be set by function \code{\link{options.default}} by default. 
 }
 \format{
   The format is a list. 
@@ -34,18 +34,18 @@ The list to describe the options that are used in \code{\link{pathway.summaryDat
     \item{\code{group.gap}}{an integer to regroup SNPs in a chromosome into independent groups. The unit is base-pair (bp). The position information will be collected from the fourth column of bim files. The default is \code{NULL}, i.e., regrouping is not performed. }
     \item{\code{delete}}{\code{TRUE} to delete temporary files containing the test statistics for each gene. The default is \code{TRUE}. }
     \item{\code{print}}{\code{TRUE} to print information to the console. The default is \code{TRUE}. }
-    \item{\code{tidy}}{the data frame \code{deleted.snps} in the returned object of \code{\link{pathway.summaryData}} containing information of SNPs excluded from the analysis and their reasons. Possible reason codes include \code{RM_BY_SNP_NAMES}, \code{RM_BY_REGIONS}, \code{NO_SUM_STAT}, \code{NO_RAW_GENO}, \code{NO_REF}, \code{SNP_MISS_RATE}, \code{SNP_LOW_MAF}, \code{SNP_CONST}, \code{SNP_HWE}, \code{GENE_R2}, \code{HUGE_GENE_R2}, \code{CHR_R2}, \code{HUGE_CHR}, \code{HUGE_CHR2}, \code{HUGE_CHR3}, \code{GENE_MISS_RATE}, \code{GENE_SUBSET}, \code{CONF_ALLELE_INFO}. Set \code{tidy} as \code{TRUE} to hide the SNPs with codes \code{NO_SUM_STAT} and \code{NO_REF}. The default is \code{TRUE}. }
+    \item{\code{tidy}}{the data frame \code{deleted.snps} in the returned object of \code{\link{sARTP}} containing information of SNPs excluded from the analysis and their reasons. Possible reason codes include \code{RM_BY_SNP_NAMES}, \code{RM_BY_REGIONS}, \code{NO_SUM_STAT}, \code{NO_RAW_GENO}, \code{NO_REF}, \code{SNP_MISS_RATE}, \code{SNP_LOW_MAF}, \code{SNP_CONST}, \code{SNP_HWE}, \code{GENE_R2}, \code{HUGE_GENE_R2}, \code{CHR_R2}, \code{HUGE_CHR}, \code{HUGE_CHR2}, \code{HUGE_CHR3}, \code{GENE_MISS_RATE}, \code{GENE_SUBSET}, \code{CONF_ALLELE_INFO}. Set \code{tidy} as \code{TRUE} to hide the SNPs with codes \code{NO_SUM_STAT} and \code{NO_REF}. The default is \code{TRUE}. }
     \item{\code{save.setup}}{\code{TRUE} to save necessary data, e.g., working options, observed scores and covariance matrix, to local to repeat the analysis more quicly (skip loading and filtering data). It will be set to be \code{TRUE} if \code{only.setup} is \code{TRUE}. The default is \code{TRUE}. }
-    \item{\code{path.setup}}{character string of file name to save the setup for \code{\link{pathway.warm.start}} if \code{save.setup} is \code{TRUE}. The default is \code{NULL} so that it is set as \code{paste(out.dir, "/setup.", id.str, ".rda", sep = "")}. }
-    \item{\code{only.setup}}{\code{TRUE} if only the setup is needed while the testing procedure is not. The R code to create the setup uses single thread but the testing procedure can be multi-threaded. The best practice to use \code{ARTP2} on a multi-threaded cluster is to firstly create the setup in single-thread mode, and then call the \code{\link{pathway.warm.start}} to compute the p-values in multiple-thread mode, which uses the saved setup at \code{path.setup} as input. \code{save.setup} will be set to be \code{TRUE} if \code{only.setup} is \code{TRUE}. The default is \code{FALSE}. }
+    \item{\code{path.setup}}{character string of file name to save the setup for \code{\link{warm.start}} if \code{save.setup} is \code{TRUE}. The default is \code{NULL} so that it is set as \code{paste(out.dir, "/setup.", id.str, ".rda", sep = "")}. }
+    \item{\code{only.setup}}{\code{TRUE} if only the setup is needed while the testing procedure is not. The R code to create the setup uses single thread but the testing procedure can be multi-threaded. The best practice to use \code{ARTP2} on a multi-threaded cluster is to firstly create the setup in single-thread mode, and then call the \code{\link{warm.start}} to compute the p-values in multiple-thread mode, which uses the saved setup at \code{path.setup} as input. \code{save.setup} will be set to be \code{TRUE} if \code{only.setup} is \code{TRUE}. The default is \code{FALSE}. }
     \item{\code{keep.geno}}{\code{TRUE} if the reference genotypes of SNPs in pathway is returned. The default is \code{FALSE}. }
     \item{\code{excluded.snps}}{character vector of SNPs to be excluded in the analysis. \code{NULL} if no SNP is excluded. The default is \code{NULL}. }
     \item{\code{selected.snps}}{character vector of SNPs to be selected in the analysis. \code{NULL} if all SNPs are selected but other filters may be applied. The default is \code{NULL}. }
-    \item{\code{excluded.regions}}{data frame with three columns \code{Chr}, \code{Start}, \code{End}, or three columns \code{Chr}, \code{Pos}, \code{Radius}. The unit is base-pair (bp). SNPs within \code{[Start, End]} or \code{[Pos - Radius, Pos + Radius]} will be excluded. See \code{Examples} in \code{pathway.summaryData}. This option is only available for \code{pathway.summaryData}. The default is \code{NULL}. }
+    \item{\code{excluded.regions}}{data frame with three columns \code{Chr}, \code{Start}, \code{End}, or three columns \code{Chr}, \code{Pos}, \code{Radius}. The unit is base-pair (bp). SNPs within \code{[Start, End]} or \code{[Pos - Radius, Pos + Radius]} will be excluded. See \code{Examples} in \code{sARTP}. This option is only available for \code{sARTP}. The default is \code{NULL}. }
     \item{\code{excluded.subs}}{character vector of subject IDs to be excluded in the analysis. These IDs must match with those in the second column (Individual ID) of the \code{fam} files in \code{reference}. The default is \code{NULL}. }
     \item{\code{selected.subs}}{character vector of subject IDs to be selected in the analysis. These IDs must match with those in the second column (Individual ID) of the \code{fam} files in \code{reference}. The default is \code{NULL}. }
     \item{\code{excluded.genes}}{character vector of genes to be excluded in the analysis. \code{NULL} if no gene is excluded. The default is \code{NULL}. }
-    \item{\code{meta}}{\code{TRUE} if return meta-analysis summary data from \code{pathway.summaryData}. The default is \code{FALSE}. }
+    \item{\code{meta}}{\code{TRUE} if return meta-analysis summary data from \code{sARTP}. The default is \code{FALSE}. }
     }
   
   \bold{Options for handling huge pathways: }
@@ -74,10 +74,10 @@ The list to describe the options that are used in \code{\link{pathway.summaryDat
 \details{ 
   \bold{Order of removing SNPs, genes and subjects:} \cr
    1. Apply the options \code{excluded.snps} and \code{selected.snps} if non-NULL. Code: \code{RM_BY_SNP_NAMES}.\cr
-   2. Apply the option \code{excluded.regions} if non-NULL and if \code{pathway.summaryData} is used. Code: \code{RM_BY_REGIONS}.\cr
+   2. Apply the option \code{excluded.regions} if non-NULL and if \code{sARTP} is used. Code: \code{RM_BY_REGIONS}.\cr
    2. Remove SNPs without summary statistics in \code{summary.files}. Code: \code{NO_SUM_STAT}; or remove SNPs without raw genotype data in \code{data} or \code{geno.files}. Code: \code{NO_RAW_GENO}. \cr
-   3. Remove SNPs not in \code{bim} files in \code{reference} if \code{pathway.summaryData} is used. Code: \code{NO_REF}. \cr
-   4. Remove SNPs with conflictive allele information in summary and reference data if \code{pathway.summaryData} is used. Code: \code{CONF_ALLELE_INFO}. \cr
+   3. Remove SNPs not in \code{bim} files in \code{reference} if \code{sARTP} is used. Code: \code{NO_REF}. \cr
+   4. Remove SNPs with conflictive allele information in summary and reference data if \code{sARTP} is used. Code: \code{CONF_ALLELE_INFO}. \cr
    5. Remove SNPs with high missing rate. Code: \code{SNP_MISS_RATE}. \cr
    6. Remove SNPs with low MAF. Code: \code{SNP_LOW_MAF}. \cr
    7. Remove constant SNPs. Code: \code{SNP_CONST}. \cr

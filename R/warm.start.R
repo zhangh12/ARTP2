@@ -1,7 +1,7 @@
 
 # lambda is the second round adjusted inflation factor
-# lambda is different with the ones in pathway.rawData and pathway.summaryData, in which lambda is the study-specific first round inflation factor
-pathway.warm.start <- function(setup, nperm = NULL, lambda = 1.0, nthread = NULL){
+# lambda is different with the ones in ARTP and sARTP, in which lambda is the study-specific first round inflation factor
+warm.start <- function(setup, nperm = NULL, lambda = 1.0, nthread = NULL){
   
   options(warn = 1)
   

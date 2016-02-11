@@ -1,5 +1,5 @@
 
-pathway.rawData <- function(formula, data, pathway, family, geno.files = NULL, lambda = 1.0, subset = NULL, options = NULL){
+rARTP <- function(formula, data, pathway, family, geno.files = NULL, lambda = 1.0, subset = NULL, options = NULL){
   
   options(warn = 1)
   
