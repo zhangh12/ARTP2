@@ -2,6 +2,6 @@
 
 test <- function(){
   
-  tmp <- .C("test")
+  tmp <- .C("test", PACKAGE = "ARTP2")
   
 }

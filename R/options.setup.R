@@ -127,7 +127,7 @@ options.setup <- function(options, family, lambda, ncases, ncontrols, nsamples){
     options$excluded.subs <- NULL
   }
   
-  tmp <- .C("check_nthread", nthread = as.integer(options$nthread))
+  tmp <- .C("check_nthread", nthread = as.integer(options$nthread), PACKAGE = "ARTP2")
   options$nthread <- tmp$nthread
   
   options

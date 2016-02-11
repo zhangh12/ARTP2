@@ -19,7 +19,7 @@ update.setup <- function(setup, nperm, lambda, nthread){
     }
   }
   
-  tmp <- .C("check_nthread", nthread = as.integer(setup$options$nthread))
+  tmp <- .C("check_nthread", nthread = as.integer(setup$options$nthread), PACKAGE = "ARTP2")
   setup$options$nthread <- tmp$nthread
   
   setup

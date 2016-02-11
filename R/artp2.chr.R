@@ -41,7 +41,8 @@ artp2.chr <- function(group.setup, gene.cutpoint.setup, U, score0, V, options, c
               gene.pval = as.double(gene.pval), 
               arr.rank = as.integer(arr.rank), 
               vsel.id = as.integer(vsel.id), 
-              marg.id = as.integer(marg.id))
+              marg.id = as.integer(marg.id), 
+              PACKAGE = "ARTP2")
   }else{
     tmp <- .C('artp2_chr', as.character(file.prefix), as.integer(method), as.integer(nperm),
               as.integer(seed), as.integer(nthread), as.integer(nsnp), 
@@ -55,7 +56,8 @@ artp2.chr <- function(group.setup, gene.cutpoint.setup, U, score0, V, options, c
               gene.pval = as.double(gene.pval), 
               arr.rank = as.integer(arr.rank), 
               vsel.id = as.integer(vsel.id), 
-              marg.id = as.integer(marg.id))
+              marg.id = as.integer(marg.id), 
+              PACKAGE = "ARTP2")
   }
   
 #   tmp <- .C(METHOD[method], as.character(file.prefix), as.integer(method), as.integer(nperm),
@@ -70,7 +72,7 @@ artp2.chr <- function(group.setup, gene.cutpoint.setup, U, score0, V, options, c
 #             gene.pval = as.double(gene.pval), 
 #             arr.rank = as.integer(arr.rank), 
 #             vsel.id = as.integer(vsel.id), 
-#             marg.id = as.integer(marg.id))
+#             marg.id = as.integer(marg.id), PACKAGE = "ARTP2")
   
   gene.pval <- tmp$gene.pval
   names(gene.pval) <- group.setup$GeneInGroup

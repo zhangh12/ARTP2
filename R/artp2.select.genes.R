@@ -20,7 +20,8 @@ artp2.select.genes <- function(group.id, gene.id, pathway.cutpoint, gene.name, o
             pathway.pvalue = as.double(pathway.pvalue), 
             arr.rank = as.integer(arr.rank), 
             gene.pval = as.double(gene.pval), 
-            pathway.pval.stat = as.double(pathway.pval.stat))
+            pathway.pval.stat = as.double(pathway.pval.stat), 
+            PACKAGE = "ARTP2")
   
   pathway.pvalue <- tmp$pathway.pvalue
   arr.rank <- tmp$arr.rank

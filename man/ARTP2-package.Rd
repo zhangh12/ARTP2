@@ -12,7 +12,7 @@ Pathway and gene level association test using raw data or summary statistics.
 \tabular{ll}{
 Package: \tab ARTP2\cr
 Type: \tab Package\cr
-Version: \tab 0.9.20\cr
+Version: \tab 0.9.21\cr
 Date: \tab 2016-02-10\cr
 License: \tab MIT + file LICENSE\cr
 }

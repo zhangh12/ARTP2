@@ -1,11 +1,12 @@
 Package: ARTP2
 Type: Package
 Title: Pathway and Gene-Level Association Test
-Version: 0.9.20
+Version: 0.9.21
 Date: 2016-02-10
 Author: Han Zhang, Bill Wheeler, Kai Yu, Yifan Yang
 Maintainer: Han Zhang <han.zhang2@nih.gov>
-Depends: R (>= 2.10), parallel, Formula, data.table
-Description: Pathway and gene level association test using raw data or summary statistics. 
-License: MIT + file LICENSE
+Depends: R (>= 2.10), parallel, Formula, data.table, stats, utils
+Description: Pathway and gene level association test using raw data or summary statistics.
+License: GPL-2 | GPL-3
+URL: https://github.com/zhangh12/ARTP2
 NeedsCompilation: yes
