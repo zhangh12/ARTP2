@@ -15,7 +15,7 @@ rARTP(formula, data, pathway, family, geno.files = NULL, lambda = 1.0,
 an object of class \code{\link[stats]{formula}}: a symbolic description of basic risk model to be fitted. Only the outcome and covariates are included. See more details of formula in \code{\link[stats]{glm}}. 
 }
   \item{data}{
-a data frame containing the variables specified in \code{formula}. If \code{geno.files} is not \code{NULL}, then it also contains genotypes. 
+a data frame containing the variables specified in \code{formula}. If \code{geno.files} is \code{NULL}, then it also contains genotypes. 
 }
   \item{pathway}{
 a character of the name of file containing definition of a pathway. It must be able to be read by \code{\link[utils]{read.table}} and have columns called \code{SNP}, \code{Gene}, \code{Chr}. It also can be a data frame with the three columns. 
@@ -24,7 +24,7 @@ a character of the name of file containing definition of a pathway. It must be a
 a character taking values of \code{'gaussian'} or \code{'binomial'}. 
 }
   \item{geno.files}{
-a character vector containing paths of plain text files containing  the genotype data. Those files can be compressed as gz files and are able to be read by \code{read.table}. It can be a data frame with columns \code{bed}, \code{bim}, and \code{fam}. The data frame contains paths of (multiple sets of) PLINK files containing the genotype data. It can be \code{NULL} if all genotype data are put in \code{data}. 
+a character vector containing paths of plain text files containing the genotype data. Those files can be compressed as gz files and are able to be read by \code{\link[utils]{read.table}}. It can be a data frame with columns \code{bed}, \code{bim}, and \code{fam}. The data frame contains paths of (multiple sets of) PLINK files containing the genotype data. It can be \code{NULL} if all genotype data are already been put in \code{data}. 
 }
   \item{lambda}{
 a numeric specifying inflation factor. The default is 1.0. 
@@ -38,6 +38,8 @@ a list of options to control the test procedure. If \code{NULL}, default options
 }
 \details{
 This function computes gene and pathway p-values when raw genotype data is available. The ARTP test modified from Yu et al. (2009) and AdaJoint test from Zhang et al. (2014) are released with this package. ARTP is the Adaptive Rank Truncated Product test.
+
+The raw (i.e. individual-level) genotype data, can be encoded as 0, 1, or 2 (counts of effect allele), or any quantitative values (e.g., output from genotype imputation program). 
 }
 \value{
 \code{rARTP} returns an object of class \code{ARTP2}. It is a list containing the following components: 
