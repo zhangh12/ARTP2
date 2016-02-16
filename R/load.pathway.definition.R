@@ -32,6 +32,8 @@ load.pathway.definition <- function(pathway, options){
   }
   
   pathway <- pathway[, header]
+  pathway$SNP <- as.character(pathway$SNP)
+  pathway$Gene <- as.character(pathway$Gene)
   
   if(!is.null(options$selected.snps)){
     pathway <- pathway[pathway$SNP %in% options$selected.snps, , drop = FALSE]
