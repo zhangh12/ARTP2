@@ -2,7 +2,7 @@
 \alias{warm.start}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-warm.start
+Performing ARTP2 test with warm start
 }
 \description{
 This function is designed to accelerate the \code{ARTP2} test in practice. It uses pre-calculated and reusable statistics as input and allow the users to try different testing configuration more efficiently. See \code{Details} for more information. 

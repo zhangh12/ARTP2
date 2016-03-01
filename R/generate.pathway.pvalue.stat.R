@@ -27,7 +27,7 @@ generate.pathway.pvalue.stat <- function(setup){
   unadj.pvalue <- NULL
   gene.stat.file <- NULL
   for(g in 1:ngrp){
-    msg <- paste("Permuting group ", names(V)[[g]], ": ", date(), sep = "")
+    msg <- paste('Permuting ', ifelse(is.null(options$group.gap), 'chromosome ', 'group ') , names(V)[[g]], ': ', date(), sep = '')
     if(options$print) message(msg)
     
     U <- cov.svd(V[[g]], names(V)[[g]])

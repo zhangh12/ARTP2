@@ -5,6 +5,9 @@ find.snps.in.regions <- function(stat, options){
     return(NULL)
   }
   
+  msg <- paste('Removing SNPs in specified regions:', date())
+  if(options$print) message(msg)
+  
   exc.reg <- options$excluded.regions
   nfiles <- length(stat)
   exc.snps <- NULL

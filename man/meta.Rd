@@ -2,10 +2,10 @@
 \alias{meta}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-  meta
+  Single-marker meta-analysis
 }
 \description{
-  Perform the single-marker meta-analysis. 
+  Perform the single-marker meta-analysis with inflation adjustment. 
 }
 \usage{
   meta(summary.files, lambda = NULL, sel.snps = NULL, only.meta = TRUE)

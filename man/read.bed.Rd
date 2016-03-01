@@ -1,9 +1,9 @@
 \name{read.bed}
 \alias{read.bed}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Data input}
+\title{Reading data from binary PLINK files}
 \description{
-Loads genotype data from plink format files .bed, .bim, and .fam.
+Loads genotype data from PLINK format files .bed, .bim, and .fam.
 }
 \usage{
 read.bed(bed, bim, fam, sel.snps = NULL, sel.subs = NULL, encode012 = TRUE)
