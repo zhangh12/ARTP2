@@ -90,7 +90,13 @@ recover.stat <- function(sum.stat, pathway, ref.geno, allele.info, options){
       }
       colnames(tmp) <- sum.info[[k]][ks, "SNP"]
       
-      es <- t(tmp) %*% (tmp * nsamples[[k]])
+      if(!options$min.n){
+        es <- t(tmp) %*% (tmp * nsamples[[k]])
+      }else{
+        n <- colSums(tmp * nsamples[[k]])
+        es <- outer(n, n, Vectorize(function(a1,a2){min(a1,a2)}))
+      }
+      
       se <- sum.info[[k]][ks, "SE"]
       
       wt[[i]][ks, ks] <- wt[[i]][ks, ks] + es * outer(diag(es), diag(es), "*")^(-.5) / outer(se, se, "*")

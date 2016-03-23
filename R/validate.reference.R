@@ -4,7 +4,7 @@ validate.reference <- function(reference){
   # validate reference
   tmp <- (c("data.frame", "matrix") %in% class(reference))
   if(!any(tmp)){
-    msg <- "pathway should be either an external file name or a data.frame"
+    msg <- "reference should be either an external file name or a data.frame"
     stop(msg)
   }else{
     if("matrix" %in% class(reference)){

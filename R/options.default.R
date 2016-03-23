@@ -40,6 +40,7 @@ options.default <- function(){
                       huge.chr.size = 2000, 
                       huge.gene.R2 = .85, 
                       huge.chr.R2 = .85, 
+                      min.n = FALSE, 
                       version = packageVersion('ARTP2'))
   
   opt.default

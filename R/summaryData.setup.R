@@ -17,7 +17,7 @@ summaryData.setup <- function(summary.files, pathway, family, reference, lambda,
   pathway <- load.pathway.definition(pathway, options)
   
   # load and check summary statistics
-  sum.stat <- load.summary.statistics(summary.files, family, pathway$SNP, options)
+  sum.stat <- load.summary.statistics(summary.files, pathway$SNP, options)
   
   # deleted snps and their reason
   deleted.snps <- data.frame(SNP = NULL, reason = NULL, comment = NULL, stringsAsFactors = FALSE)

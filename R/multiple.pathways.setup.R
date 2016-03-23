@@ -19,7 +19,7 @@ multiple.pathways.setup <- function(summary.files, pathway, family, reference, l
   pathway <- load.pathway.definition(pathway, options)
   
   # load and check summary statistics
-  sum.stat <- load.summary.statistics(summary.files, family, pathway$SNP, options)
+  sum.stat <- load.summary.statistics(summary.files, pathway$SNP, options)
   
   # estimate P and SE if they are not provided by users
   sum.stat <- complete.sum.stat(sum.stat, options)

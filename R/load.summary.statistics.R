@@ -1,5 +1,5 @@
 
-load.summary.statistics <- function(summary.files, family, snps.in.pathway, options){
+load.summary.statistics <- function(summary.files, snps.in.pathway, options){
   
   snps.in.pathway <- unique(snps.in.pathway)
   
