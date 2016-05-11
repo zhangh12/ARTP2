@@ -82,7 +82,7 @@ filter.reference.geno <- function(ref.geno, pathway, sum.stat, options){
     id <- which(hwe.pval < options$HWE.p)
     if(length(id) > 0){
       exc.snps <- colnames(ref.geno)[id]
-      del.snps <- data.frame(SNP = exc.snps, reason = "SNP_HWE", comment = "", stringsAsFactors = FALSE)
+      del.snps <- data.frame(SNP = exc.snps, reason = "SNP_HWE", comment = hwe.pval[id], stringsAsFactors = FALSE)
       ref.geno <- ref.geno[, -id, drop = FALSE]
       rs <- setdiff(rs, exc.snps)
       if(length(rs) == 0){

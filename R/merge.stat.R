@@ -1,6 +1,6 @@
 
 
-merge.stat <- function(stat, ref.allele, conf.snps, lambda, only.meta){
+merge.stat <- function(stat, ref.allele, conf.snps, pos.info, lambda, only.meta){
   
   msg <- paste("Merging summary statistics:", date())
   message(msg)
@@ -71,6 +71,10 @@ merge.stat <- function(stat, ref.allele, conf.snps, lambda, only.meta){
   }
   
   meta.stat <- meta.stat[order(meta.stat$P), ]
+  
+  if(!is.null(pos.info)){
+    meta.stat <- merge(pos.info, meta.stat, by = 'SNP')
+  }
   rownames(meta.stat) <- NULL
   
   list(meta.stat = meta.stat, conf.snps = conf.snps)

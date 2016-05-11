@@ -126,7 +126,7 @@ rawData.dataframe.setup <- function(formula, data, pathway, family, lambda, subs
   }
   
   # calculate normal covariance and mean
-  norm.stat <- generate.normal.statistics(resp.var, null, raw.geno, pathway, family, lambda)
+  norm.stat <- generate.normal.statistics(resp.var, null, raw.geno, pathway, family, lambda, options)
   
   if(!options$keep.geno){
     rm(raw.geno)

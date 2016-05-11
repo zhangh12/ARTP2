@@ -125,7 +125,7 @@ rawData.plinkfiles.setup <- function(formula, null, pathway, family, geno.files,
         if(length(id) == 0){
           next
         }
-        raw.geno.chr <- data.frame(raw.geno.chr, geno[, id, drop = FALSE])
+        raw.geno.chr <- cbind(raw.geno.chr, geno[, id, drop = FALSE])
       }
       rm(geno)
       gc()
@@ -156,13 +156,13 @@ rawData.plinkfiles.setup <- function(formula, null, pathway, family, geno.files,
     gc()
     
     # calculate normal covariance and mean
-    stat <- generate.normal.statistics(resp.var, null, raw.geno.chr, pathway, family, lambda)
+    stat <- generate.normal.statistics(resp.var, null, raw.geno.chr, pathway, family, lambda, options)
     
     if(options$keep.geno){
       if(is.null(raw.geno)){
         raw.geno <- raw.geno.chr
       }else{
-        raw.geno <- data.frame(raw.geno, raw.geno.chr)
+        raw.geno <- cbind(raw.geno, raw.geno.chr)
       }
     }
     

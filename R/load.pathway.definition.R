@@ -25,6 +25,7 @@ load.pathway.definition <- function(pathway, options){
   }
   
   header <- c("SNP", "Gene", "Chr")
+  colnames(pathway) <- convert.header(colnames(pathway), header)
   tmp <- (header %in% colnames(pathway))
   if(!all(tmp)){
     msg <- paste("Columns below were not found in pathway definition:\n", paste(header[!tmp], collapse = " "))
@@ -59,6 +60,14 @@ load.pathway.definition <- function(pathway, options){
   if(any(id)){
     dup.genes <- rownames(tmp)[id]
     msg <- paste(c('The follow gene(s) are included in more than one chromosome:\n', dup.genes), collapse = ' ', sep = '')
+    stop(msg)
+  }
+  
+  tmp <- table(pathway$SNP, pathway$Chr)
+  id <- apply(tmp, 1, function(x){sum(x > 0) > 1})
+  if(any(id)){
+    dup.snps <- rownames(tmp)[id]
+    msg <- paste(c('The follow SNP(s) are included in more than one chromosome:\n', dup.snps), collapse = ' ', sep = '')
     stop(msg)
   }
   

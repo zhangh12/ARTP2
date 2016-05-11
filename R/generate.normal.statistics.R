@@ -1,5 +1,5 @@
 
-generate.normal.statistics <- function(resp.var, null, raw.geno, pathway, family, lambda){
+generate.normal.statistics <- function(resp.var, null, raw.geno, pathway, family, lambda, options){
   
   pathway <- pathway[pathway$SNP %in% colnames(raw.geno), ]
   
@@ -29,6 +29,18 @@ generate.normal.statistics <- function(resp.var, null, raw.geno, pathway, family
   X <- as.matrix(null[, -1, drop = FALSE])
   V <- list()
   score0 <- list()
+  
+  for(i in 1:nchr){
+    gs <- gen.stat.miss(resp.var, null, family, G[[i]], X, lambda, options)
+    V[[i]] <- gs$V
+    score0[[i]] <- gs$score0
+    G[[i]] <- NA
+    rm(gs)
+    gc()
+  }
+  
+  debug <- FALSE
+  if(debug){
   if(family == "binomial"){
     y.hat <- mdl.null$fitted.values
     r <- null[, 1] - y.hat
@@ -72,6 +84,7 @@ generate.normal.statistics <- function(resp.var, null, raw.geno, pathway, family
     rs <- sort(names(score0[[i]]))
     score0[[i]] <- score0[[i]][rs]
     V[[i]] <- V[[i]][rs, rs, drop = FALSE]
+  }
   }
   
   names(V) <- as.character(chr)

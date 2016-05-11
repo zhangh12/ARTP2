@@ -10,6 +10,8 @@ validate.plinkfiles <- function(geno.files){
     geno.files <- as.data.frame(geno.files)
   }
   
+  colnames(geno.files) <- convert.header(colnames(geno.files), c('fam', 'bim', 'bed'))
+  
   if(!all(c('fam', 'bim', 'bed') %in% colnames(geno.files))){
     msg <- 'geno.files should be a data frame with columns \'fam\', \'bim\', \'bed\''
     stop(msg)

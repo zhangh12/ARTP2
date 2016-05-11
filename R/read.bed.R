@@ -49,7 +49,7 @@ read.bed <- function(bed, bim, fam, sel.snps = NULL, sel.subs = NULL, encode012 
   
   if(!is.null(sel.subs)){
     if(any(duplicated(sel.subs))){
-      msg <- 'Duplicated subjects exist in sel.subs and are returnsed as duplicated lines'
+      msg <- 'Duplicated subjects exist in sel.subs and are returned as duplicated lines. Consider to check options$selected.subs if you did not call read.bed directly. '
       warning(msg)
     }
     sel.subs <- as.character(sel.subs)

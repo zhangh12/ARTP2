@@ -140,7 +140,7 @@ filter.raw.geno <- function(raw.geno, pathway, options, control.id = NULL, print
     id <- which(hwe.pval < options$HWE.p)
     if(length(id) > 0){
       exc.snps <- colnames(raw.geno)[id]
-      del.snps <- data.frame(SNP = exc.snps, reason = "SNP_HWE", comment = "", stringsAsFactors = FALSE)
+      del.snps <- data.frame(SNP = exc.snps, reason = "SNP_HWE", comment = hwe.pval[id], stringsAsFactors = FALSE)
       raw.geno <- raw.geno[, -id, drop = FALSE]
       rs <- setdiff(rs, exc.snps)
       deleted.snps <- rbind(deleted.snps, del.snps)

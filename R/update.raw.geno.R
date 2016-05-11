@@ -7,7 +7,7 @@ update.raw.geno <- function(raw.geno, exc.snps){
   
   id <- which(!(colnames(raw.geno) %in% exc.snps))
   if(length(id) == 0){
-    msg <- "All SNPs excluded in update.raw.geno"
+    msg <- "All SNPs are excluded in update.raw.geno"
     stop(msg)
   }
   
