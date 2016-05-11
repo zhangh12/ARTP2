@@ -1,8 +1,8 @@
 
-gen.stat.miss <- function(resp.var, null, family, G, X, lambda, options){
+gen.stat.miss <- function(resp.var, null, family, G, X, lambda, options, cid){
   
   if(options$impute & any(is.na(G))){
-    msg <- paste('Imputing missing genotype with means:', date())
+    msg <- paste0('Imputing missing genotype with means in chromosome ', cid, ': ', date())
     if(options$print) message(msg)
     
     for(j in 1:ncol(G)){
@@ -43,7 +43,7 @@ gen.stat.miss <- function(resp.var, null, family, G, X, lambda, options){
   
   if(any(is.na(G))){
     
-    msg <- paste('Some genotypes are missing:', date())
+    msg <- paste0('Some genotypes are missing in chromosome ', cid, ': ', date())
     if(options$print) message(msg)
     
     V.m <- matrix(NA, ng, ng)

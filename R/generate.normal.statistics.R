@@ -31,7 +31,7 @@ generate.normal.statistics <- function(resp.var, null, raw.geno, pathway, family
   score0 <- list()
   
   for(i in 1:nchr){
-    gs <- gen.stat.miss(resp.var, null, family, G[[i]], X, lambda, options)
+    gs <- gen.stat.miss(resp.var, null, family, G[[i]], X, lambda, options, chr[i])
     V[[i]] <- gs$V
     score0[[i]] <- gs$score0
     G[[i]] <- NA
