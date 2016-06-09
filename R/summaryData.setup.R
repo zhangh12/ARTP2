@@ -88,14 +88,25 @@ summaryData.setup <- function(summary.files, pathway, family, reference, lambda,
                                       reason = filtered.markers$reason, 
                                       comment = filtered.markers$comment)
   deleted.genes <- update.deleted.genes(deleted.genes, exc.genes, filtered.genes$reason)
-  pathway <- update.pathway.definition(pathway, exc.snps, exc.genes)
+  pathway <- update.pathway.definition(pathway, exc.snps)
   sum.stat <- update.sum.stat(sum.stat, exc.snps)
   allele.info <- update.allele.info(allele.info, exc.snps)
   ref.snps <- update.ref.snps(ref.snps, exc.snps)
   ref.geno <- update.ref.geno(ref.geno, exc.snps)
   
   # estimate P and SE if they are not provided by users
-  sum.stat <- complete.sum.stat(sum.stat, options)
+  css <- complete.sum.stat(sum.stat, options)
+  sum.stat <- css$sum.stat
+  exc.snps <- css$deleted.snps
+  rm(css)
+  gc()
+  
+  deleted.snps <- update.deleted.snps(deleted.snps, exc.snps, reason = "LACK_OF_ACCU_BETA", comment = "")
+  pathway <- update.pathway.definition(pathway, exc.snps)
+  sum.stat <- update.sum.stat(sum.stat, exc.snps)
+  allele.info <- update.allele.info(allele.info, exc.snps)
+  ref.snps <- update.ref.snps(ref.snps, exc.snps)
+  ref.geno <- update.ref.geno(ref.geno, exc.snps)
   
   # redefine the pathway by introducing independent group to reduce computational burden
   pathway <- split.pathway(pathway, allele.info, options$group.gap)

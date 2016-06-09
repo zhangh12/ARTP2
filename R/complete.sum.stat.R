@@ -6,6 +6,8 @@ complete.sum.stat <- function(sum.stat, options){
   
   nf <- length(sum.stat$stat)
   lambda <- sum.stat$lambda
+  
+  deleted.snps <- NULL
   for(i in 1:nf){
     
     st <- sum.stat$stat[[i]]
@@ -24,12 +26,17 @@ complete.sum.stat <- function(sum.stat, options){
     st$SE <- sqrt(lambda[i]) * st$SE
     st$P <- pchisq((st$BETA/st$SE)^2, df = 1, lower.tail = FALSE)
     
+    lack.info.id <- which(apply(st[, c('BETA', 'SE', 'P')], 1, function(u){sum(is.na(u)) > 0}))
+    if(length(lack.info.id) > 0){
+      deleted.snps <- c(deleted.snps, st[lack.info.id, 'SNP'])
+    }
+    
     sum.stat$stat[[i]] <- st
     rm(st)
     gc()
   }
   
-  sum.stat
+  list(sum.stat = sum.stat, deleted.snps = deleted.snps)
   
 }
 

@@ -612,7 +612,11 @@ int *R_sel_id, int *R_marg_id){
   for(int g = 0; g < ngene; ++g){
   	fstream gout(gene_out[g].c_str(), ios::out | ios::binary);
   	if(!gout){
-  		error("Fail to write observed statistics to file");
+  	  string warn_msg = string("Is the specified options$out.dir (or by default, your working directory) being monitored or synchronized by some other program, like Dropbox? If so, ARTP2 might have issue in file manipulation. Try to use other folder. ");
+  	  warning(warn_msg.c_str());
+  		warn_msg = string(strerror(errno)) + string("\nIgnoring the file name, does the following path really exist?\n") + string(gene_out[g].c_str());
+  		warning(warn_msg.c_str());
+  		error("Fail to write observed statistics to file in artp2_chr");
   	}
   	int ns = gene_idx[g].size();
     int ncp = cutpoint[g].size();
@@ -714,7 +718,11 @@ int *R_sel_id, int *R_marg_id){
 	  		ofstream gout;
 	  		gout.open(gene_out[g].c_str(), ios::out | ios::binary | ios::app);
 	  		if(!gout){
-	  			error("Fail to write null statistics to file");
+	  		  string warn_msg = string("Is the specified options$out.dir (or by default, your working directory) being monitored or synchronized by some other program, like Dropbox? If so, ARTP2 might have issue in file manipulation. Try to use other folder. ");
+	  		  warning(warn_msg.c_str());
+	  			warn_msg = string(strerror(errno)) + string("\nIgnoring the file name, does the following path really exist?\n") + string(gene_out[g].c_str());
+	  			warning(warn_msg.c_str());
+	  			error("Fail to write null statistics to file in artp2_chr");
 	  		}
         int ns = gene_idx[g].size();
         int ncp = cutpoint[g].size();
@@ -766,7 +774,11 @@ int *R_sel_id, int *R_marg_id){
     */
     
     if(remove(gene_out[g].c_str())){
-      error("Cannot delete gene output file");
+      string warn_msg = string("Is the specified options$out.dir (or by default, your working directory) being monitored or synchronized by some other program, like Dropbox? If so, ARTP2 might have issue in file manipulation. Try to use other folder. ");
+      warning(warn_msg.c_str());
+    	warn_msg = string(strerror(errno)) + string("\nIgnoring the file name, does the following path really exist?\n") + string(gene_out[g].c_str());
+  		warning(warn_msg.c_str());
+      error("Cannot delete gene output file in artp2_chr");
     }
   	
   	imat arr_rank(ncp, ivec (nperm + 1, 0));
@@ -866,7 +878,11 @@ int *R_sel_id, int *R_marg_id){
     
     fstream gout(gene_out[g].c_str(), ios::out | ios::binary);
     if(!gout){
-      error("Fail to write gene statistics to file");
+      string warn_msg = string("Is the specified options$out.dir (or by default, your working directory) being monitored or synchronized by some other program, like Dropbox? If so, ARTP2 might have issue in file manipulation. Try to use other folder. ");
+      warning(warn_msg.c_str());
+    	warn_msg = string(strerror(errno)) + string("\nIgnoring the file name, does the following path really exist?\n") + string(gene_out[g].c_str());
+  		warning(warn_msg.c_str());
+      error("Fail to write gene statistics to file in artp2_chr");
     }
     
     gout.write((char*)(gene_p_stat), sizeof(int) * (nperm + 1));
@@ -939,7 +955,11 @@ int *R_sel_id, int *R_marg_id){
   for(int g = 0; g < ngene; ++g){
     fstream gout(gene_out[g].c_str(), ios::out | ios::binary);
     if(!gout){
-      error("Fail to write observed statistics to file");
+      string warn_msg = string("Is the specified options$out.dir (or by default, your working directory) being monitored or synchronized by some other program, like Dropbox? If so, ARTP2 might have issue in file manipulation. Try to use other folder. ");
+      warning(warn_msg.c_str());
+    	warn_msg = string(strerror(errno)) + string("\nIgnoring the file name, does the following path really exist?\n") + string(gene_out[g].c_str());
+  		warning(warn_msg.c_str());
+      error("Fail to write observed statistics to file in adajoint_chr");
   	}
   	
   	fvec S;
@@ -1030,7 +1050,11 @@ int *R_sel_id, int *R_marg_id){
 	  		ofstream gout;
 	  		gout.open(gene_out[g].c_str(), ios::out | ios::binary | ios::app);
 	  		if(!gout){
-	  			error("Fail to write null statistics to file");
+	  		  string warn_msg = string("Is the specified options$out.dir (or by default, your working directory) being monitored or synchronized by some other program, like Dropbox? If so, ARTP2 might have issue in file manipulation. Try to use other folder. ");
+	  		  warning(warn_msg.c_str());
+	  			warn_msg = string(strerror(errno)) + string("\nIgnoring the file name, does the following path really exist?\n") + string(gene_out[g].c_str());
+	  			warning(warn_msg.c_str());
+	  			error("Fail to write null statistics to file in adajoint_chr");
 	  		}
 	  		
 	  		fmat Sigma;
@@ -1083,7 +1107,11 @@ int *R_sel_id, int *R_marg_id){
     gin.close();
     
     if(remove(gene_out[g].c_str())){
-      error("Cannot delete gene output file");
+      string warn_msg = string("Is the specified options$out.dir (or by default, your working directory) being monitored or synchronized by some other program, like Dropbox? If so, ARTP2 might have issue in file manipulation. Try to use other folder. ");
+      warning(warn_msg.c_str());
+    	warn_msg = string(strerror(errno)) + string("\nIgnoring the file name, does the following path really exist?\n") + string(gene_out[g].c_str());
+  		warning(warn_msg.c_str());
+      error("Cannot delete gene output file in adajoint_chr");
     }
   	
   	imat arr_rank(ncp, ivec (nperm + 1, 0));
@@ -1183,7 +1211,11 @@ int *R_sel_id, int *R_marg_id){
     
     fstream gout(gene_out[g].c_str(), ios::out | ios::binary);
     if(!gout){
-      error("Fail to write gene statistics to file");
+      string warn_msg = string("Is the specified options$out.dir (or by default, your working directory) being monitored or synchronized by some other program, like Dropbox? If so, ARTP2 might have issue in file manipulation. Try to use other folder. ");
+      warning(warn_msg.c_str());
+    	warn_msg = string(strerror(errno)) + string("\nIgnoring the file name, does the following path really exist?\n") + string(gene_out[g].c_str());
+  		warning(warn_msg.c_str());
+      error("Fail to write gene statistics to file in adajoint_chr");
     }
     
     gout.write((char*)(gene_p_stat), sizeof(int) * (nperm + 1));
@@ -1313,7 +1345,11 @@ double *R_pathway_pval, int *R_arr_rank, double *R_gene_pval){
   for(int g = 0; g < ngene; ++g){
   	(*(gin[g])).close();
   	if(remove(gene_out[g].c_str())){
-  		error("Cannot delete gene output file");
+  	  string warn_msg = string("Is the specified options$out.dir (or by default, your working directory) being monitored or synchronized by some other program, like Dropbox? If so, ARTP2 might have issue in file manipulation. Try to use other folder. ");
+  	  warning(warn_msg.c_str());
+  		warn_msg = string(strerror(errno)) + string("\nIgnoring the file name, does the following path really exist?\n") + string(gene_out[g].c_str());
+  		warning(warn_msg.c_str());
+  		error("Cannot delete gene output file in artp2");
   	}
   }
   

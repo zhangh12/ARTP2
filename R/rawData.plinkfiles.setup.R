@@ -39,7 +39,7 @@ rawData.plinkfiles.setup <- function(formula, null, pathway, family, geno.files,
   
   #
   
-  ini <- data.parse(formula, null)
+  ini <- data.parse(formula, null, family)
   rm(null)
   gc()
   null <- ini$null

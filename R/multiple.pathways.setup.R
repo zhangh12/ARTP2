@@ -22,7 +22,7 @@ multiple.pathways.setup <- function(summary.files, pathway, family, reference, l
   sum.stat <- load.summary.statistics(summary.files, pathway$SNP, options)
   
   # estimate P and SE if they are not provided by users
-  sum.stat <- complete.sum.stat(sum.stat, options)
+  sum.stat <- complete.sum.stat(sum.stat, options)$sum.stat
   
   # split super-pathway into independent sub-pathways
   sub.pathway <- create.sub.pathway(pathway)

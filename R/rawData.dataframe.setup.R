@@ -33,7 +33,7 @@ rawData.dataframe.setup <- function(formula, data, pathway, family, lambda, subs
   raw.geno <- data[, snps, drop = FALSE]
   null <- data[, setdiff(colnames(data), snps), drop = FALSE]
   
-  ini <- data.parse(formula, null)
+  ini <- data.parse(formula, null, family)
   rm(null, data)
   gc()
   null <- ini$null

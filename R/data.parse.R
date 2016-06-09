@@ -1,5 +1,5 @@
 
-data.parse <- function(formula, null){
+data.parse <- function(formula, null, family){
   
   if(!("Formula" %in% class(formula))){
     if("formula" %in% class(formula)){
@@ -16,7 +16,7 @@ data.parse <- function(formula, null){
   null <- null[, vars, drop = FALSE]
   gc()
   
-  validate.outcome(null, resp.var)
+  validate.outcome(null, resp.var, family)
   check.misleading.factor(null, resp.var)
   
   mf <- model.frame(formula, na.action = na.pass, data = null, rhs = 1, lhs = 1, drop = FALSE)
