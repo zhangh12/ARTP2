@@ -11,6 +11,7 @@ extract.position.information <- function(stat){
     }
   }
   
+  pos.info <- pos.info[complete.cases(pos.info), ]
   pos.info <- pos.info[!duplicated(pos.info$SNP), ]
   rownames(pos.info) <- NULL
   pos.info

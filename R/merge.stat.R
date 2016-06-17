@@ -5,6 +5,8 @@ merge.stat <- function(stat, ref.allele, conf.snps, pos.info, lambda, only.meta)
   msg <- paste("Merging summary statistics:", date())
   message(msg)
   
+  stat <- update.direction(stat, ref.allele)
+  
   RefAllele <- ref.allele$RefAllel
   EffectAllele <- ref.allele$EffectAllele
   
@@ -57,6 +59,7 @@ merge.stat <- function(stat, ref.allele, conf.snps, pos.info, lambda, only.meta)
         stat[[i]] <- stat[[i]][, header]
       }
       
+      stat[[i]] <- stat[[i]][, setdiff(colnames(stat[[i]]), c('RefAllele', 'EffectAllele'))]
       rownames(stat[[i]]) <- NULL
       colnames(stat[[i]]) <- c('SNP', paste(colnames(stat[[i]])[-1], 'Study', i, sep = '.'))
     }
@@ -71,9 +74,9 @@ merge.stat <- function(stat, ref.allele, conf.snps, pos.info, lambda, only.meta)
   }
   
   meta.stat <- meta.stat[order(meta.stat$P), ]
-  
+  pos.info <- pos.info[pos.info$SNP %in% meta.stat$SNP, ]
   if(!is.null(pos.info)){
-    meta.stat <- merge(pos.info, meta.stat, by = 'SNP')
+    meta.stat <- merge(pos.info, meta.stat, by = 'SNP', all = TRUE)
   }
   rownames(meta.stat) <- NULL
   

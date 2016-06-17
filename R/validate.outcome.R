@@ -15,7 +15,7 @@ validate.outcome <- function(null, resp.var, family){
 	  }
   }else{
   	if(family == 'binomial'){
-  		msg <- "response variable in formula should have two levels"
+  		msg <- "response variable in formula should have two levels if family = \'binomial\'"
   		stop(msg)
   	}
   }
