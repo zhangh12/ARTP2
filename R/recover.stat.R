@@ -33,6 +33,8 @@ recover.stat <- function(sum.stat, pathway, ref.geno, allele.info, options){
     grp.snps <- colnames(ref.cor[[i]])
     nsnp <- length(grp.snps)
     score0[[i]] <- rep(0, nsnp)
+    
+    # ra is the reference allele used to merge scores across studies
     ra[[i]] <- rep(NA, nsnp)
     names(score0[[i]]) <- grp.snps
     names(ra[[i]]) <- grp.snps
@@ -42,6 +44,8 @@ recover.stat <- function(sum.stat, pathway, ref.geno, allele.info, options){
         if(rs %in% sum.info[[k]][, "SNP"]){
           nr <- which(sum.info[[k]][, "SNP"] == rs)
           
+          # the reference allele used in the first summary file (study) is used as the reference allele when merging scores across studies
+          # I therefore modify extract.reference.allele() so that the same strategy is used in meta()
           if(is.na(ra[[i]][rs])){
             ra[[i]][rs] <- sum.info[[k]][nr, "RefAllele"]
           }

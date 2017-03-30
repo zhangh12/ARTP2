@@ -3,7 +3,7 @@
 
 #include <Rconfig.h>
 
-#if defined(SUPPORT_OPENMP) && __GNUG__ && defined(__linux__)
+#if defined(_OPENMP) && __GNUG__ && defined(__linux__)
 #define __PARALLEL__ true
 #else
 #define __PARALLEL__ false

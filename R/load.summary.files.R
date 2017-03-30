@@ -27,7 +27,7 @@ load.summary.files <- function(summary.files, lambda, sel.snps){
     col.id <- which(colnames(st) %in% complete.header)
     col.class[-col.id] <- "NULL"
     col.class[c('SNP', 'RefAllele', 'EffectAllele')] <- 'character'
-    st <- read.table(summary.files[i], header = TRUE, as.is = TRUE, colClasses = col.class)
+    try(st <- read.table(summary.files[i], header = TRUE, as.is = TRUE, colClasses = col.class), silent = TRUE)
     colnames(st) <- convert.header(colnames(st), complete.header)
     if(!is.null(sel.snps)){
       st <- st[st$SNP %in% sel.snps, ]
