@@ -30,8 +30,8 @@ Kernel configured for up to 8 processors.
 Processor type: x86_64h (Intel x86-64h Haswell)
 Processors active: 0 1 2 3 4 5 6 7
 Primary memory available: 16.00 gigabytes
-Default processor set: 336 tasks, 1942 threads, 8 processors
-Load average: 1.70, Mach factor: 6.28
+Default processor set: 295 tasks, 1629 threads, 8 processors
+Load average: 2.40, Mach factor: 5.59
 /bin/machine           = unknown
 /usr/bin/oslevel       = unknown
 /bin/universe          = unknown
@@ -52,57 +52,57 @@ PATH: /opt/local/bin
 ## ----------- ##
 
 configure:1912: checking for C++ compiler version
-configure:1921: clang++ -std=c++11 --version >&5
+configure:1921: clang++ -std=gnu++11 --version >&5
 Apple LLVM version 7.3.0 (clang-703.0.31)
 Target: x86_64-apple-darwin15.3.0
 Thread model: posix
 InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
 configure:1932: $? = 0
-configure:1921: clang++ -std=c++11 -v >&5
+configure:1921: clang++ -std=gnu++11 -v >&5
 Apple LLVM version 7.3.0 (clang-703.0.31)
 Target: x86_64-apple-darwin15.3.0
 Thread model: posix
 InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
-clang: warning: argument unused during compilation: '-std=c++11'
+clang: warning: argument unused during compilation: '-std=gnu++11'
 configure:1932: $? = 0
-configure:1921: clang++ -std=c++11 -V >&5
+configure:1921: clang++ -std=gnu++11 -V >&5
 clang: error: argument to '-V' is missing (expected 1 value)
 clang: error: no input files
 configure:1932: $? = 1
-configure:1921: clang++ -std=c++11 -qversion >&5
+configure:1921: clang++ -std=gnu++11 -qversion >&5
 clang: error: unknown argument: '-qversion'
 clang: error: no input files
 configure:1932: $? = 1
 configure:1952: checking whether the C++ compiler works
-configure:1974: clang++ -std=c++11 -Wall -mtune=core2 -g -O2   conftest.cpp  >&5
+configure:1974: clang++ -std=gnu++11 -Wall -g -O2   conftest.cpp  >&5
 configure:1978: $? = 0
 configure:2026: result: yes
 configure:2029: checking for C++ compiler default output file name
 configure:2031: result: a.out
 configure:2037: checking for suffix of executables
-configure:2044: clang++ -std=c++11 -o conftest -Wall -mtune=core2 -g -O2   conftest.cpp  >&5
+configure:2044: clang++ -std=gnu++11 -o conftest -Wall -g -O2   conftest.cpp  >&5
 configure:2048: $? = 0
 configure:2070: result: 
 configure:2092: checking whether we are cross compiling
-configure:2100: clang++ -std=c++11 -o conftest -Wall -mtune=core2 -g -O2   conftest.cpp  >&5
+configure:2100: clang++ -std=gnu++11 -o conftest -Wall -g -O2   conftest.cpp  >&5
 configure:2104: $? = 0
 configure:2111: ./conftest
 configure:2115: $? = 0
 configure:2130: result: no
 configure:2135: checking for suffix of object files
-configure:2157: clang++ -std=c++11 -c -Wall -mtune=core2 -g -O2  conftest.cpp >&5
+configure:2157: clang++ -std=gnu++11 -c -Wall -g -O2  conftest.cpp >&5
 configure:2161: $? = 0
 configure:2182: result: o
 configure:2186: checking whether we are using the GNU C++ compiler
-configure:2205: clang++ -std=c++11 -c -Wall -mtune=core2 -g -O2  conftest.cpp >&5
+configure:2205: clang++ -std=gnu++11 -c -Wall -g -O2  conftest.cpp >&5
 configure:2205: $? = 0
 configure:2214: result: yes
-configure:2223: checking whether clang++ -std=c++11 accepts -g
-configure:2243: clang++ -std=c++11 -c -g  conftest.cpp >&5
+configure:2223: checking whether clang++ -std=gnu++11 accepts -g
+configure:2243: clang++ -std=gnu++11 -c -g  conftest.cpp >&5
 configure:2243: $? = 0
 configure:2284: result: yes
-configure:2308: checking for clang++ -std=c++11 option to support OpenMP
-configure:2323: clang++ -std=c++11 -o conftest -Wall -mtune=core2 -g -O2   conftest.cpp  >&5
+configure:2308: checking for clang++ -std=gnu++11 option to support OpenMP
+configure:2323: clang++ -std=gnu++11 -o conftest -Wall -g -O2   conftest.cpp  >&5
 conftest.cpp:11:2: error: unknown type name 'choke'
  choke me
  ^
@@ -127,7 +127,7 @@ configure: failed program was:
 | #include <omp.h>
 | int main () { return omp_get_num_threads (); }
 | 
-configure:2343: clang++ -std=c++11 -o conftest -Wall -mtune=core2 -g -O2 -fopenmp   conftest.cpp  >&5
+configure:2343: clang++ -std=gnu++11 -o conftest -Wall -g -O2 -fopenmp   conftest.cpp  >&5
 clang: error: unsupported option '-fopenmp'
 clang: error: unsupported option '-fopenmp'
 configure:2343: $? = 1
@@ -147,7 +147,7 @@ configure: failed program was:
 | #include <omp.h>
 | int main () { return omp_get_num_threads (); }
 | 
-configure:2343: clang++ -std=c++11 -o conftest -Wall -mtune=core2 -g -O2 -xopenmp   conftest.cpp  >&5
+configure:2343: clang++ -std=gnu++11 -o conftest -Wall -g -O2 -xopenmp   conftest.cpp  >&5
 clang: error: language not recognized: 'openmp'
 configure:2343: $? = 1
 configure: failed program was:
@@ -166,7 +166,7 @@ configure: failed program was:
 | #include <omp.h>
 | int main () { return omp_get_num_threads (); }
 | 
-configure:2343: clang++ -std=c++11 -o conftest -Wall -mtune=core2 -g -O2 -qopenmp   conftest.cpp  >&5
+configure:2343: clang++ -std=gnu++11 -o conftest -Wall -g -O2 -qopenmp   conftest.cpp  >&5
 clang: error: unknown argument: '-qopenmp'
 configure:2343: $? = 1
 configure: failed program was:
@@ -185,7 +185,7 @@ configure: failed program was:
 | #include <omp.h>
 | int main () { return omp_get_num_threads (); }
 | 
-configure:2343: clang++ -std=c++11 -o conftest -Wall -mtune=core2 -g -O2 -openmp   conftest.cpp  >&5
+configure:2343: clang++ -std=gnu++11 -o conftest -Wall -g -O2 -openmp   conftest.cpp  >&5
 conftest.cpp:11:2: error: unknown type name 'choke'
  choke me
  ^
@@ -210,7 +210,7 @@ configure: failed program was:
 | #include <omp.h>
 | int main () { return omp_get_num_threads (); }
 | 
-configure:2343: clang++ -std=c++11 -o conftest -Wall -mtune=core2 -g -O2 -mp   conftest.cpp  >&5
+configure:2343: clang++ -std=gnu++11 -o conftest -Wall -g -O2 -mp   conftest.cpp  >&5
 clang: error: unknown argument: '-mp'
 configure:2343: $? = 1
 configure: failed program was:
@@ -229,7 +229,7 @@ configure: failed program was:
 | #include <omp.h>
 | int main () { return omp_get_num_threads (); }
 | 
-configure:2343: clang++ -std=c++11 -o conftest -Wall -mtune=core2 -g -O2 -omp   conftest.cpp  >&5
+configure:2343: clang++ -std=gnu++11 -o conftest -Wall -g -O2 -omp   conftest.cpp  >&5
 conftest.cpp:11:2: error: unknown type name 'choke'
  choke me
  ^
@@ -254,7 +254,7 @@ configure: failed program was:
 | #include <omp.h>
 | int main () { return omp_get_num_threads (); }
 | 
-configure:2343: clang++ -std=c++11 -o conftest -Wall -mtune=core2 -g -O2 -qsmp=omp   conftest.cpp  >&5
+configure:2343: clang++ -std=gnu++11 -o conftest -Wall -g -O2 -qsmp=omp   conftest.cpp  >&5
 clang: error: unknown argument: '-qsmp=omp'
 configure:2343: $? = 1
 configure: failed program was:
@@ -273,7 +273,7 @@ configure: failed program was:
 | #include <omp.h>
 | int main () { return omp_get_num_threads (); }
 | 
-configure:2343: clang++ -std=c++11 -o conftest -Wall -mtune=core2 -g -O2 -homp   conftest.cpp  >&5
+configure:2343: clang++ -std=gnu++11 -o conftest -Wall -g -O2 -homp   conftest.cpp  >&5
 clang: error: unknown argument: '-homp'
 configure:2343: $? = 1
 configure: failed program was:
@@ -292,7 +292,7 @@ configure: failed program was:
 | #include <omp.h>
 | int main () { return omp_get_num_threads (); }
 | 
-configure:2343: clang++ -std=c++11 -o conftest -Wall -mtune=core2 -g -O2 -fopenmp=libomp   conftest.cpp  >&5
+configure:2343: clang++ -std=gnu++11 -o conftest -Wall -g -O2 -fopenmp=libomp   conftest.cpp  >&5
 clang: error: unsupported argument 'libomp' to option 'fopenmp='
 clang: error: unsupported argument 'libomp' to option 'fopenmp='
 configure:2343: $? = 1
@@ -312,7 +312,7 @@ configure: failed program was:
 | #include <omp.h>
 | int main () { return omp_get_num_threads (); }
 | 
-configure:2343: clang++ -std=c++11 -o conftest -Wall -mtune=core2 -g -O2 -Popenmp   conftest.cpp  >&5
+configure:2343: clang++ -std=gnu++11 -o conftest -Wall -g -O2 -Popenmp   conftest.cpp  >&5
 clang: error: unknown argument: '-Popenmp'
 configure:2343: $? = 1
 configure: failed program was:
@@ -331,7 +331,7 @@ configure: failed program was:
 | #include <omp.h>
 | int main () { return omp_get_num_threads (); }
 | 
-configure:2343: clang++ -std=c++11 -o conftest -Wall -mtune=core2 -g -O2 --openmp   conftest.cpp  >&5
+configure:2343: clang++ -std=gnu++11 -o conftest -Wall -g -O2 --openmp   conftest.cpp  >&5
 clang: error: unsupported option '--openmp'
 configure:2343: $? = 1
 configure: failed program was:
@@ -402,8 +402,8 @@ ac_cv_prog_cxx_openmp=unsupported
 ## ----------------- ##
 
 CPPFLAGS=''
-CXX='clang++ -std=c++11'
-CXXFLAGS='-Wall -mtune=core2 -g -O2'
+CXX='clang++ -std=gnu++11'
+CXXFLAGS='-Wall -g -O2'
 DEFS='-DPACKAGE_NAME=\"ARTP2\" -DPACKAGE_TARNAME=\"ARTP2\" -DPACKAGE_VERSION=\"0.9.31\" -DPACKAGE_STRING=\"ARTP2\ 0.9.31\" -DPACKAGE_BUGREPORT=\"\" -DPACKAGE_URL=\"\"'
 ECHO_C='\c'
 ECHO_N=''

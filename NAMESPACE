@@ -1,4 +1,4 @@
 import(Formula, data.table, parallel, stats, utils)
-useDynLib(ARTP2)
+useDynLib(ARTP2, .registration = TRUE)
 export(rARTP, sARTP, warm.start, options.default, 
        read.bed, meta, exclude.snps, inflation)

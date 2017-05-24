@@ -23,13 +23,13 @@ extract.reference.allele <- function(stat){
     
     if(any(is.na(RefAllele[s]))){
       s <- s[is.na(RefAllele[s])]
-      RefAllele[s] <- stat[[i]][, 'RefAllele']
+      RefAllele[s] <- stat[[i]][s, 'RefAllele']
     }
     
     s <- stat[[i]][, 'SNP']
     if(any(is.na(EffectAllele[s]))){
       s <- s[is.na(EffectAllele[s])]
-      EffectAllele[s] <- stat[[i]][, 'EffectAllele']
+      EffectAllele[s] <- stat[[i]][s, 'EffectAllele']
     }
   }
   

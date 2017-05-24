@@ -169,9 +169,9 @@ family <- 'binomial'
 #              ncases, ncontrols, options = options)
 
 # ret$pathway.pvalue
-## [1] 0.03994601  # Mac OS
-## [1] 0.04014599  # Linux with 1 thread
-## [1] 0.03419658  # Linux with 32 threads
+## [1] 0.04594541  # Mac OS
+## [1] 0.05149485  # Linux with 1 thread
+## [1] 0.03969603  # Linux with 32 threads
 
 ## Mac OS
 # head(ret$gene.pvalue)
@@ -211,10 +211,14 @@ family <- 'binomial'
 #               ncases[2], ncontrols[2], options = options)
 
 # ret1$pathway.pvalue
-## [1] 0.03554645 # Mac OS
+## [1] 0.04279572  # Mac OS
+## [1] 0.03519648  # Linux with 1 thread
+## [1] 0.04644536  # Linux with 32 threads
 
 # ret2$pathway.pvalue
-## [1] 0.3028197  # Mac OS
+## [1] 0.3092691  # Mac OS
+## [1] 0.2870213  # Linux with 1 thread
+## [1] 0.3010699  # Linux with 32 threads
 
 ##################################################
 ## The reference is passed as an individual-level genotype data frame
@@ -249,7 +253,9 @@ options$excluded.regions <- exc.reg1
 #                   ncases, ncontrols, options = options)
 
 # ret.exc1$pathway.pvalue
-## [1] 0.0380462 # Mac OS
+## [1] 0.04619538 # Mac OS
+## [1] 0.0510449  # Linux with 1 thread
+## [1] 0.04054595 # Linux with 32 threads
 
 # sum(ret.exc1$deleted.snps$reason == 'RM_BY_REGIONS')
 
@@ -276,6 +282,8 @@ options$excluded.regions <- NULL
 # ret.sel <- sARTP(summary.files = c(study1, study2), pathway, family, reference, lambda, 
 #                  ncases, ncontrols, options = options)
 # ret.sel$pathway.pvalue
-## [1] 0.02944706 # Mac OS
+## [1] 0.03469653 # Mac OS
+## [1] 0.05284472 # Linux with 1 thread
+## [1] 0.04164584 # Linux with 32 threads
 
 }

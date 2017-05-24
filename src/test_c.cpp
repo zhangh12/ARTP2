@@ -5,7 +5,7 @@
 
 extern "C" {
 
-void test(){
+void test_c(){
   
   ;
   

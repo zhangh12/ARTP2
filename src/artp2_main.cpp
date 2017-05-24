@@ -1228,7 +1228,7 @@ int *R_sel_id, int *R_marg_id){
   
 }
 
-void artp2(char **R_file_prefix, int *R_nperm, int *R_nthread, 
+void artp2_main(char **R_file_prefix, int *R_nperm, int *R_nthread, 
 int *R_ngene, int *R_group_id, int *R_gene_id, 
 int *R_pathway_cutpoint, int *R_ncp, 
 double *R_pathway_pval, int *R_arr_rank, double *R_gene_pval){

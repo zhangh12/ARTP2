@@ -15,7 +15,7 @@ artp2 <- function(group.id, gene.id, pathway.cutpoint, gene.name, options){
   pathway.pvalue <- -1.0
   arr.rank <- rep(0, ncp)
   gene.pval <- rep(0, ngene)
-  tmp <- .C("artp2", as.character(file.prefix), as.integer(nperm),
+  tmp <- .C("artp2_main", as.character(file.prefix), as.integer(nperm),
             as.integer(nthread), as.integer(ngene), 
             as.integer(group.id), as.integer(gene.id), 
             as.integer(pathway.cutpoint), as.integer(ncp), 

@@ -103,8 +103,8 @@ options <- list(inspect.snp.n = 5, nperm = 1e5,
 
 # ret1$pathway.pvalue 
 ## [1] 0.03218968 # Mac OS
-## [1] 0.03455965 # Linux with 32 threads
 ## [1] 0.02188978 # Linux with 1 thread
+## [1] 0.03455965 # Linux with 32 threads
 
 ## Mac OS
 # head(ret1$gene.pvalue)
@@ -115,6 +115,26 @@ options <- list(inspect.snp.n = 5, nperm = 1e5,
 ## 4  SOX12  20    15 0.349406506
 ## 5 CDKN2C   1     6 0.358031420
 ## 6   FEN1  11     4 0.415345847
+
+## Linux with 1 thread
+# head(ret1$gene.pvalue)
+##     Gene Chr N.SNP      Pvalue
+## 1  USP30  12    18 0.000899991
+## 2  DCAF7  17     9 0.070219298
+## 3   CANX   5    13 0.269772302
+## 4  SOX12  20    15 0.350061499
+## 5 CDKN2C   1     6 0.357766422
+## 6   FEN1  11     4 0.414760852
+
+## Linux with 32 threads
+# head(ret1$gene.pvalue)
+##     Gene Chr N.SNP      Pvalue
+## 1  USP30  12    18 0.001454985
+## 2  DCAF7  17     9 0.070379296
+## 3   CANX   5    13 0.266927331
+## 4  SOX12  20    15 0.350481495
+## 5 CDKN2C   1     6 0.357701423
+## 6   FEN1  11     4 0.414425856
 
 # table(ret1$deleted.snps$reason)
 # head(ret1$deleted.genes)

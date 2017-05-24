@@ -5,7 +5,7 @@
   Single-marker meta-analysis
 }
 \description{
-  Perform the single-marker meta-analysis with inflation adjustment. 
+  Perform the single-marker meta-analysis with inflation adjustment. The inverse-variance weighting approach is used. 
 }
 \usage{
   meta(summary.files, lambda = NULL, sel.snps = NULL, only.meta = TRUE)

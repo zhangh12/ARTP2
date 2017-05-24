@@ -124,6 +124,8 @@ options$only.setup <- FALSE
 # setup$options$method <- 2
 # setup$options$inspect.snp.n <- 3
 
+## nthread = 2 for Linux only
+## nthread will be reset to 1 under Windows and Mac OS
 # ret3 <- warm.start(setup, nperm = 1e5, nthread = 2)
 
 }
