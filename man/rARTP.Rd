@@ -58,10 +58,11 @@ is satisfied.
 \item{setup}{a list containing necessary input for \code{\link{warm.start}}. It can be written to a file by using the function \code{\link[base]{save}}, then its path can be the input of \code{\link{warm.start}}. It also contains a data frame of outcome and covariates that are specified in \code{formula} (\code{setup$yx}), a data frame of genotypes of SNPs in \code{pathway} (\code{setup$raw.geno}), and a formula object \code{setup$formula} corresponding to \code{setup$yx}, if \code{options$keep.geno} is \code{TRUE}. }
 }
 \references{
-Yu K, Li Q, Bergen AW, Pfeiffer RM, Rosenberg PS, Caporaso N, Kraft P, Chatterjee N. (2009) Pathway analysis by adaptive combination of P-values. 
-Genet Epidemiol 33(8): 700 - 709
+Zhang H, Wheeler W, Hyland LP, Yang Y, Shi J, Chatterjee N, Yu K. (2016) A powerful procedure for pathway-based meta-analysis using summary statistics identifies 43 pathways associated with type II diabetes in European populations. PLoS Genetics 12(6): e1006122
 
-Zhang H, Shi J, Liang F, Wheeler W, Stolzenberg-Solomon R, Yu K.  (2014) A fast multilocus test with adaptive SNP selection for large-scale genetic association studies. European Journal of Human Genetics, 22, 696 - 702
+Yu K, Li Q, Bergen AW, Pfeiffer RM, Rosenberg PS, Caporaso N, Kraft P, Chatterjee N. (2009) Pathway analysis by adaptive combination of P-values. Genet Epidemiol 33(8): 700 - 709
+
+Zhang H, Shi J, Liang F, Wheeler W, Stolzenberg-Solomon R, Yu K.  (2014) A fast multilocus test with adaptive SNP selection for large-scale genetic association studies. European Journal of Human Genetics 22: 696 - 702
 }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
