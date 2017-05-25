@@ -11,10 +11,16 @@ generate.normal.statistics <- function(resp.var, null, raw.geno, pathway, family
     G[[i]] <- as.matrix(raw.geno[, id, drop = FALSE])
     setDT(raw.geno)
     rs <- colnames(raw.geno)[id]
-    for(r in rs){
-      raw.geno[, r := NULL, with = FALSE]
-    }
+    raw.geno[, (rs) := NULL]
+    ## with=FALSE together with := was deprecated in data.table v1.9.4
+    ## a solution is to wrap the LHS of := with parentheses; 
+    ## e.g., DT[,(myVar):=sum(b),by=a] to assign to column name(s) held in variable myVar
+    ## this following loop is thereby replaced by raw.geno[, (rs) := NULL]
+    # for(r in rs){
+    #   raw.geno[, r := NULL, with = FALSE]
+    # }
     class(raw.geno) <- "data.frame"
+    ## the following line make hard copy in memory so it is inefficient
     #raw.geno <- raw.geno[, -id, drop = FALSE]
     gc()
   }

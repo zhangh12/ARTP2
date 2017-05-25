@@ -57,8 +57,8 @@ rawData.dataframe.setup <- function(formula, data, pathway, family, lambda, subs
     tmp <- data.table(V1 = raw.geno[[snps[1]]][comp.id])
     setnames(tmp, names(tmp), snps[1])
     for(s in snps[-1]){
-      tmp[, s := raw.geno[[s]][comp.id], with = FALSE]
-      raw.geno[, s := NULL, with = FALSE]
+      tmp[, (s) := raw.geno[[s]][comp.id]]
+      raw.geno[, (s) := NULL]
     }
     gc()
     raw.geno <- tmp
