@@ -1,13 +1,18 @@
 
 read.bed <- function(bed, bim, fam, sel.snps = NULL, sel.subs = NULL, encode012 = TRUE){
   
-  col.class <- c("NULL", "character", "NULL", "NULL", "character", "character")
-  bim.file <- read.table(bim, header = FALSE, as.is = TRUE, colClasses = col.class)
-  colnames(bim.file) <- c('SNP', 'RefAllele', 'EffectAllele')
+  col.class <- c("integer", "character", "NULL", "integer", "character", "character")
+  bim.file <- read.table(bim, header = FALSE, as.is = TRUE, colClasses = col.class, dec = '*')
+  colnames(bim.file) <- c('Chr', 'SNP', 'Pos', 'RefAllele', 'EffectAllele')
   nsnp <- nrow(bim.file)
   
+  non.rs.id <- which(is.na(bim.file$SNP) | (bim.file$SNP == '.'))
+  if(length(non.rs.id) > 0){
+    bim.file[non.rs.id, 'SNP'] <- paste0('C', bim.file[non.rs.id, 'Chr'], 'P', bim.file[non.rs.id, 'Pos'])
+  }
+  
   if(is.null(sel.snps)){
-    sel.snps <- bim.file[, 1]
+    sel.snps <- bim.file$SNP
   }else{
     sel.snps <- as.character(sel.snps)
     if(any(duplicated(sel.snps))){
@@ -15,10 +20,15 @@ read.bed <- function(bed, bim, fam, sel.snps = NULL, sel.subs = NULL, encode012 
       warning(msg)
     }
     sel.snps <- unique(sel.snps)
-    sel.snps <- intersect(bim.file[, 1], sel.snps)
+    non.rs.id <- intersect(grep(':', sel.snps), which((substr(sel.snps, 1, 2) != 'rs') & (substr(sel.snps, 1, 1) %in% 0:9)))
+    if(length(non.rs.id) > 0){
+      sel.snps[non.rs.id] <- paste0('C', sel.snps[non.rs.id])
+      sel.snps[non.rs.id] <- gsub(':', 'P', sel.snps[non.rs.id])
+    }
+    sel.snps <- intersect(bim.file$SNP, sel.snps)
   }
   
-  sel.snp.id <- which(bim.file[, 1] %in% sel.snps)
+  sel.snp.id <- which(bim.file$SNP %in% sel.snps)
   
   nsel <- length(sel.snp.id)
   if(nsel == 0){
@@ -26,7 +36,7 @@ read.bed <- function(bed, bim, fam, sel.snps = NULL, sel.subs = NULL, encode012 
   }
   
   bim.file <- bim.file[sel.snp.id, , drop = FALSE]
-  sel.snps <- bim.file[, 1]
+  sel.snps <- bim.file$SNP
   
   col.class <- rep("NULL", 6)
   col.class[2] <- "character"
@@ -56,7 +66,7 @@ read.bed <- function(bed, bim, fam, sel.snps = NULL, sel.subs = NULL, encode012 
     id <- which(sel.subs %in% rownames(geno))
     if(length(id) == 0){
       msg <- paste("No subjects were left in \n", bed)
-      stop(msg)
+      return(NULL)
     }
     sel.subs <- sel.subs[id]
     geno <- geno[sel.subs, , drop = FALSE]
