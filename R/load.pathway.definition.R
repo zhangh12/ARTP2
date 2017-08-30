@@ -33,7 +33,8 @@ load.pathway.definition <- function(pathway, options){
   }
   
   pathway <- pathway[, header]
-  pathway$SNP <- as.character(pathway$SNP)
+  # rename SNP that without a rs number to be C1P234
+  pathway$SNP <- reformat.snps(as.character(pathway$SNP))
   pathway$Gene <- as.character(pathway$Gene)
   
   if(!is.null(options$selected.snps)){

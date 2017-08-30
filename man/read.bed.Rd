@@ -20,7 +20,7 @@ the name of the bim file. For a SNP without a rs number, use any character (incl
 the name of the fam file. 
 }
   \item{sel.snps}{
-a character vector of SNPs to be extracted from the plink files. The default is \code{NULL}, i.e., all SNPs are extracted. SNPs could be named by its rs number (e.g. rs1234), or by \code{Chr:Pos} (e.g. 13:234567) if a rs number is not available. All other naming methods for a SNP are not accepted in current version. 
+a character vector of SNPs to be extracted from the plink files. The default is \code{NULL}, i.e., all SNPs are extracted. SNPs could be named by its rs number (e.g. rs1234), or by \code{Chr:Pos} (e.g. 13:234567, or C13P234567) if a rs number is not available. All other naming methods for a SNP are not accepted in current version. 
 }
   \item{sel.subs}{
 an optional character vector specifying a subset of subject IDs to be extracted from the plink files. These IDs should be matched with the second column of \code{fam} files. The default is \code{NULL}, i.e., all subjects are extracted. 

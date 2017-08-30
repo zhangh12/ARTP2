@@ -9,6 +9,10 @@ update.setup <- function(setup, nperm, lambda, nthread){
     setup$options$nthread <- nthread
   }
   
+  # hyper-threading is off. Convenient for NIH biowulf users
+  # mightbe unnecessary for others
+  setup$options$nthread <- min(setup$options$nthread, detectCores());
+  
   if(is.null(lambda)){
     lambda <- 1.0
   }else{

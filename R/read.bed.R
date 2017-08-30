@@ -6,6 +6,7 @@ read.bed <- function(bed, bim, fam, sel.snps = NULL, sel.subs = NULL, encode012 
   colnames(bim.file) <- c('Chr', 'SNP', 'Pos', 'RefAllele', 'EffectAllele')
   nsnp <- nrow(bim.file)
   
+  # rename SNP that without a rs number to be C1P234
   non.rs.id <- which(is.na(bim.file$SNP) | (bim.file$SNP == '.'))
   if(length(non.rs.id) > 0){
     bim.file[non.rs.id, 'SNP'] <- paste0('C', bim.file[non.rs.id, 'Chr'], 'P', bim.file[non.rs.id, 'Pos'])
@@ -20,11 +21,7 @@ read.bed <- function(bed, bim, fam, sel.snps = NULL, sel.subs = NULL, encode012 
       warning(msg)
     }
     sel.snps <- unique(sel.snps)
-    non.rs.id <- intersect(grep(':', sel.snps), which((substr(sel.snps, 1, 2) != 'rs') & (substr(sel.snps, 1, 1) %in% 0:9)))
-    if(length(non.rs.id) > 0){
-      sel.snps[non.rs.id] <- paste0('C', sel.snps[non.rs.id])
-      sel.snps[non.rs.id] <- gsub(':', 'P', sel.snps[non.rs.id])
-    }
+    sel.snps <- reformat.snps(sel.snps)
     sel.snps <- intersect(bim.file$SNP, sel.snps)
   }
   

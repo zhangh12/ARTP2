@@ -40,6 +40,7 @@ load.summary.statistics <- function(summary.files, snps.in.pathway, options){
     names(col.class) <- header.map[names(col.class)]
     st <- read.table(summary.files[i], header = TRUE, as.is = TRUE, colClasses = col.class)
     colnames(st) <- convert.header(colnames(st), complete.header)
+    st$SNP <- reformat.snps(st$SNP)
     st <- st[st$SNP %in% snps.in.pathway, , drop = FALSE]
     if(nrow(st) == 0){
       next

@@ -79,6 +79,7 @@ summaryData.setup <- function(summary.files, pathway, family, reference, lambda,
   # SNP filtering based on options
   filtered.data <- filter.reference.geno(ref.geno, pathway, sum.stat, options)
   filtered.markers <- filtered.data$deleted.snps
+  # a gene is deleted because it is a subset of another gene. The SNPs within this gene would not be deleted
   filtered.genes <- filtered.data$deleted.genes
   
   # update with valid/available SNPs
@@ -88,7 +89,8 @@ summaryData.setup <- function(summary.files, pathway, family, reference, lambda,
                                       reason = filtered.markers$reason, 
                                       comment = filtered.markers$comment)
   deleted.genes <- update.deleted.genes(deleted.genes, exc.genes, filtered.genes$reason)
-  pathway <- update.pathway.definition(pathway, exc.snps)
+  # SNPs within deleted genes are not be deleted
+  pathway <- update.pathway.definition(pathway, exc.snps, exc.genes)
   sum.stat <- update.sum.stat(sum.stat, exc.snps)
   allele.info <- update.allele.info(allele.info, exc.snps)
   ref.snps <- update.ref.snps(ref.snps, exc.snps)

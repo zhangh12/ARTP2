@@ -122,6 +122,14 @@ options.setup <- function(options, family, lambda, ncases, ncontrols, nsamples){
   	options$selected.subs <- as.character(options$selected.subs)
   }
   
+  if(!is.null(options$selected.snps)){
+    options$selected.snps <- reformat.snps(as.character(options$selected.snps))
+  }
+  
+  if(!is.null(options$excluded.snps)){
+    options$excluded.snps <- reformat.snps(as.character(options$excluded.snps))
+  }
+  
   if(!is.null(options$excluded.subs) && !is.null(options$selected.subs)){
     options$selected.subs <- setdiff(options$selected.subs, options$excluded.subs)
     options$excluded.subs <- NULL

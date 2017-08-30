@@ -29,6 +29,13 @@ load.reference.allele <- function(reference, pathway, options){
       
       colnames(bim) <- c("Chr", "SNP", "Pos", "RefAllele", "EffectAllele")
       bim$Reference.ID <- i
+      
+      # rename SNP that without a rs number to be C1P234
+      non.rs.id <- which(is.na(bim$SNP) | (bim$SNP == '.'))
+      if(length(non.rs.id) > 0){
+        bim[non.rs.id, 'SNP'] <- paste0('C', bim[non.rs.id, 'Chr'], 'P', bim[non.rs.id, 'Pos'])
+      }
+      
       bim <- bim[bim$SNP %in% snps.in.pathway, ]
       bim$RefAllele <- toupper(bim$RefAllele)
       bim$EffectAllele <- toupper(bim$EffectAllele)
