@@ -1,8 +1,8 @@
 Package: ARTP2
 Type: Package
 Title: Pathway and Gene-Level Association Test
-Version: 0.9.38
-Date: 2017-08-28
+Version: 0.9.39
+Date: 2017-08-31
 Author: Han Zhang, Bill Wheeler, Kai Yu, Yifan Yang, R Core Team
 Maintainer: Han Zhang <han.zhang2@nih.gov>
 Depends: R (>= 3.4.0), stats, utils
