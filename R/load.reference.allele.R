@@ -55,42 +55,57 @@ load.reference.allele <- function(reference, pathway, options){
     msg <- paste("Loading allele information from reference:", date())
     if(options$print) message(msg)
     
-    snps.in.pathway <- intersect(snps.in.pathway, colnames(reference))
-    if(length(snps.in.pathway) == 0){
-      msg <- 'No SNPs are found in reference genotypes'
-      stop(msg)
+    if(rt == 'ref.geno'){
+      snps.in.pathway <- intersect(snps.in.pathway, colnames(reference))
+      if(length(snps.in.pathway) == 0){
+        msg <- 'No SNPs are found in reference genotypes'
+        stop(msg)
+      }
+      
+      reference <- reference[, snps.in.pathway, drop = FALSE]
+      
+      foo1 <- function(s){
+        s <- unique(unlist(base::strsplit(toupper(s), '')))
+        s <- setdiff(s, c('/', '-', ' ', '\\', '_', NA))
+        length(s)
+      }
+      
+      id <- which(apply(reference, 2, foo1) == 2)
+      if(length(id) == 0){
+        msg <- 'All SNPs in reference genotypes are excluded'
+        stop(msg)
+      }
+      
+      reference <- reference[, id, drop = FALSE]
+      
+      foo2 <- function(s){
+        s <- unique(unlist(base::strsplit(toupper(s), '')))
+        s <- setdiff(s, c('/', '-', ' ', '\\', '_', NA))
+        s
+      }
+      
+      tmp <- apply(reference, 2, foo2)
+      SNP <- colnames(reference)
+      RefAllele <- as.vector(tmp[1, ])
+      EffectAllele <- as.vector(tmp[2, ])
+      allele.info <- data.frame(SNP = SNP, Pos = NA, RefAllele = RefAllele, EffectAllele = EffectAllele, stringsAsFactors = FALSE)
+      path <- pathway[!duplicated(pathway$SNP), c('SNP', 'Chr')]
+      allele.info <- merge(allele.info, path, by = 'SNP')
+      allele.info <- allele.info[, c("Chr", "SNP", "Pos", "RefAllele", "EffectAllele")]
+    }else{ # type = 'ref.does'
+      
+      allele.info <- reference$allele.info
+      rownames(allele.info) <- allele.info$SNP
+      
+      snps.in.pathway <- intersect(snps.in.pathway, allele.info$SNP)
+      if(length(snps.in.pathway) == 0){
+        msg <- 'No SNPs are found in reference genotypes'
+        stop(msg)
+      }
+      
+      allele.info <- allele.info[snps.in.pathway, , drop = FALSE]
+      allele.info <- allele.info[, c("Chr", "SNP", "Pos", "RefAllele", "EffectAllele")]
     }
-    
-    reference <- reference[, snps.in.pathway, drop = FALSE]
-    
-    foo1 <- function(s){
-      s <- unique(unlist(base::strsplit(toupper(s), '')))
-      s <- setdiff(s, c('/', '-', ' ', '\\', '_', NA))
-      length(s)
-    }
-    
-    id <- which(apply(reference, 2, foo1) == 2)
-    if(length(id) == 0){
-      msg <- 'All SNPs in reference genotypes are excluded'
-      stop(msg)
-    }
-    
-    reference <- reference[, id, drop = FALSE]
-    
-    foo2 <- function(s){
-      s <- unique(unlist(base::strsplit(toupper(s), '')))
-      s <- setdiff(s, c('/', '-', ' ', '\\', '_', NA))
-      s
-    }
-    
-    tmp <- apply(reference, 2, foo2)
-    SNP <- colnames(reference)
-    RefAllele <- as.vector(tmp[1, ])
-    EffectAllele <- as.vector(tmp[2, ])
-    allele.info <- data.frame(SNP = SNP, Pos = NA, RefAllele = RefAllele, EffectAllele = EffectAllele, stringsAsFactors = FALSE)
-    path <- pathway[!duplicated(pathway$SNP), c('SNP', 'Chr')]
-    allele.info <- merge(allele.info, path, by = 'SNP')
-    allele.info <- allele.info[, c("Chr", "SNP", "Pos", "RefAllele", "EffectAllele")]
     
   }
   

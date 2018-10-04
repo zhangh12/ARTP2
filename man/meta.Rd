@@ -8,7 +8,7 @@
   Perform the single-marker meta-analysis with inflation adjustment. The inverse-variance weighting approach is used. 
 }
 \usage{
-  meta(summary.files, lambda = NULL, sel.snps = NULL, only.meta = TRUE)
+  meta(summary.files, lambda = NULL, sel.snps = NULL, only.meta=TRUE, ambig.by.AF=FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -21,8 +21,11 @@ a numeric vector of inflation factors. Each file in \code{summary.files} should 
   \item{sel.snps}{
 a character vector of SNPs to be used in meta-analysis. The default is \code{NULL}, i.e., all SNPs are used. 
 }
-  \item{only.meta}{
-\code{TRUE} if do not returned individual summary data. The default is \code{TRUE}. 
+\item{only.meta}{
+\code{TRUE} if do not returned individual summary data. The default is TRUE. 
+}  
+\item{ambig.by.AF}{TRUE or FALSE to align SNPs with ambiguous alleles by allele frequency
+    (see \code{\link{options}}). The default is FALSE. 
 }
 }
 \details{
@@ -47,7 +50,7 @@ snps <- c('rs13266821', 'rs4824130', 'rs1792438', 'rs1000047',
 m1 <- meta(summary.files = c(study1, study2), lambda = c(1.10, 1.08), 
            sel.snps = snps)
 m2 <- meta(summary.files = c(study1, study2), lambda = c(1.10, 1.08), 
-           sel.snps = snps, only.meta = FALSE)
+           sel.snps = snps, only.meta=FALSE)
 
 m1$conf.snps
 

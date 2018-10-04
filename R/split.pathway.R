@@ -1,6 +1,8 @@
 
 split.pathway <- function(pathway, allele.info, group.gap){
   
+  # Set group to chr here
+
   if(is.null(group.gap) || group.gap == 0 || all(is.na(allele.info$Pos))){
     return(pathway)
   }
@@ -32,6 +34,7 @@ split.pathway <- function(pathway, allele.info, group.gap){
     
   }
   
+  # Add group and keep chr the same
   pathway <- data.frame(pathway[, c('SNP', 'Gene')], Chr = Group, stringsAsFactors = FALSE)
   rownames(pathway) <- NULL
   

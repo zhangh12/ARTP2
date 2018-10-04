@@ -1,13 +1,20 @@
 
-load.summary.files <- function(summary.files, lambda, sel.snps){
+load.summary.files <- function(summary.files, lambda, sel.snps, options){
   
   msg <- paste("Loading summary files:", date())
-  message(msg)
+  if(options$print) message(msg)
   
+  ambigFlag <- options$ambig.by.AF
   header <- c('SNP', 'RefAllele', 'EffectAllele', 'BETA') # columns that must be provided by users
   opt.header <- c('P', 'SE')
+  if (ambigFlag) {
+    opt.header3 <- c("RAF", "EAF")
+  } else {
+    opt.header3 <- NULL
+  } 
   
-  complete.header <- c(header, opt.header, 'Chr', 'Pos', 'Direction')
+
+  complete.header <- c(header, opt.header, 'Chr', 'Pos', 'Direction', opt.header3)
   
   nfiles <- length(summary.files)
   stat <- list()
@@ -68,6 +75,8 @@ load.summary.files <- function(summary.files, lambda, sel.snps){
       st$Direction <- ifelse(st$BETA == 0, '0', ifelse(st$BETA > 0, '+', '-'))
     }
     
+    if (ambigFlag) st <- ambig.check.data(st, summary.files[i], vars=opt.header3)
+
     nc <- unique(nchar(st$Direction))
     if(length(nc) != 1){
       msg <- paste0('String lengths of Direction are unequal in ', summary.files[i])

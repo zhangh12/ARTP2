@@ -12,6 +12,8 @@ recover.stat <- function(sum.stat, pathway, ref.geno, allele.info, options){
   
   nstudy <- length(sum.info)
   
+  # Use groups here 
+
   chr <- unique(pathway$Chr)
   ngrp <- length(unique(chr))
   

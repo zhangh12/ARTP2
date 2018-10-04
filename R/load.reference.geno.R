@@ -37,34 +37,39 @@ load.reference.geno <- function(reference, snps.in.pathway, options){
     
     msg <- paste("Loading genotypes from reference:", date())
     if(options$print) message(msg)
-    
-    snps.in.pathway <- intersect(snps.in.pathway, colnames(reference))
-    reference <- reference[, snps.in.pathway, drop = FALSE]
-    
-    foo1 <- function(u){
-      if(any(is.na(u))){
-        return(c(NA, NA))
+    if(rt == 'ref.geno'){
+      snps.in.pathway <- intersect(snps.in.pathway, colnames(reference))
+      reference <- reference[, snps.in.pathway, drop = FALSE]
+      
+      foo1 <- function(u){
+        if(any(is.na(u))){
+          return(c(NA, NA))
+        }
+        id <- which(u %in% c('/', '-', ' ', '\\', '_'))
+        if(length(id) > 0){
+          u <- u[-id]
+        }
+        toupper(u)
       }
-      id <- which(u %in% c('/', '-', ' ', '\\', '_'))
-      if(length(id) > 0){
-        u <- u[-id]
+      
+      foo2 <- function(s){
+        s <- base::strsplit(toupper(s), '')
+        tmp <- unique(unlist(s))
+        tmp <- setdiff(tmp, c('/', '-', ' ', '\\', '_', NA))
+        ea <- tmp[2]
+        s <- sapply(s, foo1)
+        apply(s, 2, function(u){ifelse(any(is.na(u)), NA, sum(u == ea))})
       }
-      toupper(u)
+      
+      geno <- apply(reference, 2, foo2)
+      
+      colnames(geno) <- colnames(reference)
+    }else{ # rt = 'ref.does'
+      geno <- reference$ref.geno
+      snps.in.pathway <- intersect(snps.in.pathway, colnames(geno))
+      geno <- geno[, snps.in.pathway, drop = FALSE]
     }
-    
-    foo2 <- function(s){
-      s <- base::strsplit(toupper(s), '')
-      tmp <- unique(unlist(s))
-      tmp <- setdiff(tmp, c('/', '-', ' ', '\\', '_', NA))
-      ea <- tmp[2]
-      s <- sapply(s, foo1)
-      apply(s, 2, function(u){ifelse(any(is.na(u)), NA, sum(u == ea))})
-    }
-    
-    geno <- apply(reference, 2, foo2)
-    
-    colnames(geno) <- colnames(reference)
-    
+      
   }
   
   id <- which(apply(geno, 2, sd, na.rm = TRUE) == 0)

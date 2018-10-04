@@ -18,13 +18,22 @@ an object of class \code{\link[stats]{formula}}: a symbolic description of basic
 a data frame containing the variables specified in \code{formula}. If \code{geno.files} is \code{NULL}, then it also contains genotypes. 
 }
   \item{pathway}{
-a character of the name of file containing definition of a pathway. It must be able to be read by \code{\link[utils]{read.table}} and have columns called \code{SNP}, \code{Gene}, \code{Chr}. It also can be a data frame with the three columns. 
+a character of the name of file containing definition of a pathway. 
+It must be able to be read by \code{\link[utils]{read.table}} and have columns called
+ \code{SNP}, \code{Gene}, \code{Chr}. 
+It also can be a data frame with the three columns. 
+The \code{SNP} column can also have values of the form \code{loc1-loc2}, where \code{loc1} and \code{loc2} are
+base-pair locations denoting a region of SNPs to use.
 }
   \item{family}{
 a character taking values of \code{'gaussian'} or \code{'binomial'}. 
 }
   \item{geno.files}{
-a character vector containing paths of plain text files containing the genotype data. Those files can be compressed as gz files and are able to be read by \code{\link[utils]{read.table}}. It can be a data frame with columns \code{bed}, \code{bim}, and \code{fam}. The data frame contains paths of (multiple sets of) PLINK files containing the genotype data. It can be \code{NULL} if all genotype data are already been put in \code{data}. 
+a character vector containing paths of plain text files containing the genotype data. 
+Those files can be compressed as gz files and are able to be read by \code{\link[utils]{read.table}}. 
+It can be a data frame with columns \code{bed}, \code{bim}, and \code{fam}. 
+The data frame contains paths of (multiple sets of) PLINK files containing the genotype data. 
+It can be \code{NULL} if all genotype data are already been put in \code{data}. 
 }
   \item{lambda}{
 a numeric specifying inflation factor. The default is 1.0. 

@@ -1,3 +1,4 @@
+# History Jan 09 2018 Add option ambig.by.AF
 
 options.default <- function(){
   
@@ -42,6 +43,7 @@ options.default <- function(){
                       huge.gene.R2 = .85, 
                       huge.chr.R2 = .85, 
                       min.n = FALSE, 
+                      ambig.by.AF = FALSE,
                       version = packageVersion('ARTP2'))
   
   opt.default

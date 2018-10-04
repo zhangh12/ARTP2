@@ -12,16 +12,31 @@ sARTP(summary.files, pathway, family, reference, lambda,
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{summary.files}{
-a character vector of file names containing the summary results of SNPs included in one or multiple studies. Each file must be able to be read by \code{\link[utils]{read.table}}. Each file must have columns called \code{SNP}, \code{RefAllele}, \code{EffectAllele}, \code{Beta}, and at least one of \code{SE}, \code{P}. An optional column called \code{Direction} describing studies information can also be included if the summary results were calculated from multiple studies by inverse weighting method. Two optional columns called \code{Chr} and \code{Pos} are required if \code{excluded.regions} is specified in \code{options}. SNPs within \code{excluded.regions} are going to be excluded from the analysis. See \code{Details}.
+  a character vector of file names containing the summary results of SNPs included in one or multiple studies. 
+  Each file must be able to be read by \code{\link[utils]{read.table}}. 
+  Each file must have columns called \code{SNP}, \code{RefAllele}, \code{EffectAllele}, \code{Beta}, 
+  and at least one of \code{SE}, \code{P}. 
+  An optional column called \code{Direction} describing studies information can also be included if the 
+  summary results were calculated from multiple studies by inverse weighting method. 
+  Two optional columns called \code{Chr} and \code{Pos} are required if \code{excluded.regions} is specified in \code{options}. 
+  SNPs within \code{excluded.regions} are going to be excluded from the analysis. 
+  If \code{options$ambig.by.AF} is TRUE, then a column called "RAF" or "EAF" is required.
+  See \code{Details}.
 }
   \item{pathway}{
-a character of the name of file containing definition of a pathway. It must be able to be read by \code{\link[utils]{read.table}} and have columns called \code{SNP}, \code{Gene}, and \code{Chr}. It can also be a data frame with the three columns. 
+a character of the name of file containing definition of a pathway. 
+It must be able to be read by \code{\link[utils]{read.table}} and have columns called \code{SNP}, \code{Gene}, and \code{Chr}. 
+It can also be a data frame with the three columns. 
+The \code{SNP} column can also have values of the form \code{loc1-loc2}, where \code{loc1} and \code{loc2} are
+base-pair locations denoting a region of SNPs to use.
 }
   \item{family}{
 a character taking values of \code{'gaussian'} or \code{'binomial'}. 
 }
   \item{reference}{
-a data.frame containing the paths of binary PLINK files of reference dataset. It must have columns called \code{bed}, \code{bim} and \code{fam}. The current version allows users to specify multiple sets of bed/bim/fam PLINK files as separate rows of the data frame. 
+a data.frame containing the paths of binary PLINK files of reference dataset. 
+It must have columns called \code{bed}, \code{bim} and \code{fam}. 
+The current version allows users to specify multiple sets of bed/bim/fam PLINK files as separate rows of the data frame. 
 }
   \item{lambda}{
 a numeric vector of inflation factors. Each file in \code{summary.files} should have one inflation factor specified in \code{lambda}. 
@@ -40,7 +55,9 @@ a list of options to control the test procedure. If \code{NULL}, default options
 }
 }
 \details{
-This function computes gene and pathway p-values when only summary data is available. Only the ARTP test modified from Yu et al. (2009) is well tested and is released with this package. ARTP is the Adaptive Rank Truncated Product test.
+This function computes gene and pathway p-values when only summary data is available. 
+Only the ARTP test modified from Yu et al. (2009) is well tested and is released with this package. 
+ARTP is the Adaptive Rank Truncated Product test.
 
 Each file in \code{summary.files} must contain
 \itemize{
@@ -63,9 +80,15 @@ Another two optional columns \code{Chr} and \code{Pos} are needed if \code{exclu
 \item{\code{Chr}}{ chromosome. }
 \item{\code{Pos}}{ base-pair position (bp units). }
 }
+If the option \code{ambig.by.AF} is set to 1, then the summary files must contain at least one of:
+\itemize{
+\item{\code{RAF}}{ reference allele frequency.}
+\item{\code{EAF}}{ effect allele frequency.}
+}
 
-
-The order of columns in files \code{summary.files}, \code{pathway} or in data frame \code{reference} are arbitrary, and all unnecessary columns (if any) are discarded in the analysis. 
+The order of columns in files \code{summary.files}, \code{pathway} or in data frame \code{reference} are arbitrary, 
+and all unnecessary columns (if any) are discarded in the analysis. \cr 
+ 
 }
 \value{
 \code{sARTP} returns an object of class \code{ARTP2}. It is a list containing the following components: 

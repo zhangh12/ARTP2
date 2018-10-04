@@ -1,3 +1,4 @@
+# History Jan 09 2018 Add code for ambig.by.AF option
 
 load.summary.statistics <- function(summary.files, snps.in.pathway, options){
   
@@ -6,11 +7,18 @@ load.summary.statistics <- function(summary.files, snps.in.pathway, options){
   msg <- paste("Loading summary statistics:", date())
   if(options$print) message(msg)
   
+  ambigFlag <- options$ambig.by.AF
+
   header <- c("SNP", "RefAllele", "EffectAllele", "BETA") # columns that must be provided by users
   opt.header <- c("P", "SE")
   opt.header2 <- c('Chr', 'Pos')
-  
-  complete.header <- c(header, opt.header, opt.header2, "Direction")
+  if (ambigFlag) {
+    opt.header3 <- c("RAF", "EAF")
+  } else {
+    opt.header3 <- NULL
+  } 
+
+  complete.header <- c(header, opt.header, opt.header2, "Direction", opt.header3)
   
   # summary.files is a vector of file names
   stat <- list()
@@ -73,6 +81,8 @@ load.summary.statistics <- function(summary.files, snps.in.pathway, options){
       st$Pos <- NA
     }
     
+    if (ambigFlag) st <- ambig.check.data(st, summary.files[i], vars=opt.header3)
+      
     st <- st[, complete.header]
     
     dup <- duplicated(st$SNP)
@@ -110,8 +120,8 @@ load.summary.statistics <- function(summary.files, snps.in.pathway, options){
     st$N1 <- sapply(tmp, function(x, ss = options$ncases[[i]]){sum(ss[x != '?'])})
     st$N0 <- sapply(tmp, function(x, ss = options$ncontrols[[i]]){sum(ss[x != '?'])})
 	  
-    st$RefAllele <- toupper(st$RefAllele)
-    st$EffectAllele <- toupper(st$EffectAllele)
+    st$RefAllele    <- removeWhiteSpace(toupper(st$RefAllele))
+    st$EffectAllele <- removeWhiteSpace(toupper(st$EffectAllele))
     
     rm(tmp)
     gc()

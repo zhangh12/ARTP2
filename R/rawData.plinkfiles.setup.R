@@ -18,6 +18,9 @@ rawData.plinkfiles.setup <- function(formula, null, pathway, family, geno.files,
   # load definition of pathway
   pathway <- load.pathway.definition(pathway, options)
   
+  # Expand the pathway 
+  pathway <- expand_pathway(pathway, geno.files)
+
   # check if all genotype files can be found. Missing files will be given in warning messages
   geno.files <- validate.plinkfiles(geno.files)
   sf <- map.SNPs.to.plinkfiles(geno.files, pathway)

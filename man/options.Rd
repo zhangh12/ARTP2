@@ -47,6 +47,7 @@ The list to describe the options that are used in \code{\link{sARTP}}, \code{\li
     \item{\code{selected.subs}}{character vector of subject IDs to be selected in the analysis. These IDs must match with those in the second column (Individual ID) of the \code{fam} files in \code{reference}. The default is \code{NULL}. }
     \item{\code{excluded.genes}}{character vector of genes to be excluded in the analysis. \code{NULL} if no gene is excluded. The default is \code{NULL}. }
     \item{\code{meta}}{\code{TRUE} if return meta-analysis summary data from \code{sARTP}. The default is \code{FALSE}. }
+    \item{\code{ambig.by.AF}}{TRUE or FALSE to align SNPs with ambiguous alleles by allele frequency (see details). The default is FALSE. }
     }
   
   \bold{Options for handling huge pathways: }
@@ -76,17 +77,18 @@ The list to describe the options that are used in \code{\link{sARTP}}, \code{\li
   \bold{Order of removing SNPs, genes and subjects:} \cr
    1. Apply the options \code{excluded.snps} and \code{selected.snps} if non-NULL. Code: \code{RM_BY_SNP_NAMES}.\cr
    2. Apply the option \code{excluded.regions} if non-NULL and if \code{sARTP} is used. Code: \code{RM_BY_REGIONS}.\cr
-   2. Remove SNPs without summary statistics in \code{summary.files}. Code: \code{NO_SUM_STAT}; or remove SNPs without raw genotype data in \code{data} or \code{geno.files}. Code: \code{NO_RAW_GENO}. \cr
-   3. Remove SNPs not in \code{bim} files in \code{reference} if \code{sARTP} is used. Code: \code{NO_REF}. \cr
-   4. Remove SNPs with conflictive allele information in summary and reference data if \code{sARTP} is used. Code: \code{CONF_ALLELE_INFO}. \cr
-   5. Remove SNPs with high missing rate. Code: \code{SNP_MISS_RATE}. \cr
-   6. Remove SNPs with low MAF. Code: \code{SNP_LOW_MAF}. \cr
-   7. Remove constant SNPs. Code: \code{SNP_CONST}. \cr
-   8. Remove SNPs fail to pass HWE test. Code: \code{SNP_HWE}. \cr
-   9. Remove highly correlated SNPs within each gene. Code: \code{GENE_R2} or \code{HUGE_GENE_R2}. \cr
-   10. Remove highly correlated SNPs within each chromosome. Code: \code{CHR_R2}, \code{HUGE_CHR}, \code{HUGE_CHR2} or \code{HUGE_CHR3}. \cr
-   11. Remove genes with high missing rate. Code: \code{GENE_MISS_RATE}. \cr
-   12. Remove genes which are subsets of other genes. Code: \code{GENE_SUBSET}. \cr
+   3. Remove SNPs without summary statistics in \code{summary.files}. Code: \code{NO_SUM_STAT}; or remove SNPs without raw genotype data in \code{data} or \code{geno.files}. Code: \code{NO_RAW_GENO}. \cr
+   4. Remove SNPs not in \code{bim} files in \code{reference} if \code{sARTP} is used. Code: \code{NO_REF}. \cr
+   5. Remove SNPs with conflictive allele information in summary and reference data if \code{sARTP} is used. Code: \code{CONF_ALLELE_INFO}. \cr
+   6. Remove SNPs with missing RAF or EAF if \code{sARTP} and \code{options$ambig.by.AF} are used. Code: \code{NO_VALID_EAF_RAF}. \cr
+   7. Remove SNPs with high missing rate. Code: \code{SNP_MISS_RATE}. \cr
+   8. Remove SNPs with low MAF. Code: \code{SNP_LOW_MAF}. \cr
+   9. Remove constant SNPs. Code: \code{SNP_CONST}. \cr
+   10. Remove SNPs fail to pass HWE test. Code: \code{SNP_HWE}. \cr
+   11. Remove highly correlated SNPs within each gene. Code: \code{GENE_R2} or \code{HUGE_GENE_R2}. \cr
+   12. Remove highly correlated SNPs within each chromosome. Code: \code{CHR_R2}, \code{HUGE_CHR}, \code{HUGE_CHR2} or \code{HUGE_CHR3}. \cr
+   13. Remove genes with high missing rate. Code: \code{GENE_MISS_RATE}. \cr
+   14. Remove genes which are subsets of other genes. Code: \code{GENE_SUBSET}. \cr
    
   \bold{Example truncation points defined by \code{inspect.snp.n} and \code{inspect.snp.percent}: } 
   Assume the number of SNPs in a gene is 100. Below are examples of the truncation points for different values of \code{inspect.snp.n} and \code{inspect.snp.percent}. Similar values are applied to \code{inspect.gene.n} and \code{inspect.gene.percent}. 
@@ -103,6 +105,13 @@ inspect.snp.n \tab inspect.snp.percent \tab truncation points \cr
 2 \tab 1 \tab 100 \cr
 3 \tab 0.2 \tab 20, 40, 60 
 } % END: tabular
+
+  \bold{SNPs with ambiguous alleles:} \cr
+  A SNP with alleles A and T (or C and G) is ambiguous because the strand cannot be determined. Without
+  strand information, it is sometimes better to match SNPs with ambiguous alleles by allele frequency
+  instead of by matching the alleles. By default, this package matches all SNPs by alleles. If matching
+  by allele frequency for the SNPs with ambiguous alleles is desired, then summary files must contain
+  a variable called "RAF" (reference allele frequency) or a variable "EAF" (effect allele frequency). 
 
 }
 

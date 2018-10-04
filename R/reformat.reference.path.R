@@ -1,9 +1,11 @@
 
 reformat.reference.path <- function(reference){
   
-  reference <- as.data.frame(reference)
+  if(!('list' %in% class(reference))){
+    reference <- as.data.frame(reference)
+  }
   
-  if(reference.type(reference) == 'ref.geno'){
+  if(reference.type(reference) %in% c('ref.geno', 'ref.does')){
     return(reference)
   }
   

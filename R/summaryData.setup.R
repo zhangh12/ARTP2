@@ -16,6 +16,9 @@ summaryData.setup <- function(summary.files, pathway, family, reference, lambda,
   # load definition of pathway
   pathway <- load.pathway.definition(pathway, options)
   
+  # Expand the pathway 
+  pathway <- expand_pathway(pathway, reference)
+
   # load and check summary statistics
   sum.stat <- load.summary.statistics(summary.files, pathway$SNP, options)
   
@@ -63,6 +66,18 @@ summaryData.setup <- function(summary.files, pathway, family, reference, lambda,
   allele.info <- update.allele.info(allele.info, exc.snps)
   ref.snps <- update.ref.snps(ref.snps, exc.snps)
   
+  # filter out snps with missing EAF and ambiguous alleles
+  if (options$ambig.by.AF) {
+    exc.snps     <- filter.ambig.snps(sum.stat, allele.info, options)
+  
+    # update with valid/available SNPs
+    deleted.snps <- update.deleted.snps(deleted.snps, exc.snps, reason = "NO_VALID_EAF_RAF", comment = "")
+    pathway      <- update.pathway.definition(pathway, exc.snps)
+    sum.stat     <- update.sum.stat(sum.stat, exc.snps)
+    allele.info  <- update.allele.info(allele.info, exc.snps)
+    ref.snps     <- update.ref.snps(ref.snps, exc.snps)
+  }
+
   # load genotypes in reference
   ref.geno <- load.reference.geno(reference, pathway$SNP, options)
   exc.snps <- setdiff(pathway$SNP, colnames(ref.geno))
@@ -113,6 +128,9 @@ summaryData.setup <- function(summary.files, pathway, family, reference, lambda,
   # redefine the pathway by introducing independent group to reduce computational burden
   pathway <- split.pathway(pathway, allele.info, options$group.gap)
   
+  # Align SNPs with ambiguous alleles by allele freq
+  if (options$ambig.by.AF) sum.stat <- align.ambig.snps(sum.stat, allele.info, ref.geno, options)
+
   # recover the summary statistics
   norm.stat <- recover.stat(sum.stat, pathway, ref.geno, allele.info, options)
   
@@ -137,7 +155,8 @@ summaryData.setup <- function(summary.files, pathway, family, reference, lambda,
   }
   
   if(options$meta){
-    meta.stat <- meta(summary.files, lambda, sel.snps = unique(pathway$SNP), only.meta = options$only.meta)$meta.stat
+    meta.stat <- meta(summary.files, lambda, sel.snps = unique(pathway$SNP), only.meta=options$only.meta,
+                      ambig.by.AF=options$ambig.by.AF)$meta.stat
   }else{
     meta.stat <- NULL
   }
