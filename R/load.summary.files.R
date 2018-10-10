@@ -88,8 +88,12 @@ load.summary.files <- function(summary.files, lambda, sel.snps, options){
     dup <- duplicated(st$SNP)
     if(any(dup)){
       dup.snps <- unique(st$SNP[dup])
-      msg <- paste("SNPs below are duplicated: ", paste(dup.snps, collapse = " "))
-      stop(msg)
+      msg <- paste("SNPs duplicated in ", summary.files[i], " are discarded: ", paste(dup.snps, collapse = " "))
+      warning(msg)
+      st <- subset(st, !(st$SNP %in% dup.snps))
+      if(nrow(st) == 0){
+        next
+      }
     }
     
     id.no.SE.P <- which(is.na(st$SE) & is.na(st$P))

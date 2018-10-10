@@ -26,7 +26,7 @@ a character vector of SNPs to be extracted from the plink files. The default is 
 an optional character vector specifying a subset of subject IDs to be extracted from the plink files. These IDs should be matched with the second column of \code{fam} files. The default is \code{NULL}, i.e., all subjects are extracted. 
 }
   \item{encode012}{
-logical. Encoding the genotypes using 0/1/2 if \code{TRUE}, or using symbols of the reference and effect alleles if \code{FALSE}. The default is \code{TRUE}. 
+logical. Encoding the genotypes using 0/1/2 if \code{TRUE}, or using symbols of the reference and effect alleles if \code{FALSE}. The default is \code{TRUE}, then 2 means two copies of effect allele (6th column of \code{bim} file). 
 }
 }
 \value{
