@@ -1,8 +1,12 @@
 # History Jan 09 2018 Add code for ambig.by.AF option
 
-load.summary.statistics <- function(summary.files, snps.in.pathway, options){
+load.summary.statistics <- function(summary.files, pathway, options){
   
-  snps.in.pathway <- unique(snps.in.pathway)
+  snps.in.pathway1 <- unique(paste0('C', pathway$Chr, 'P', pathway$Pos))
+  snps.in.pathway2 <- unique(paste0(pathway$Chr, ':', pathway$Pos))
+  snps.in.pathway3 <- unique(pathway$SNP)
+  
+  snps.in.pathway <- unique(c(snps.in.pathway1, snps.in.pathway2, snps.in.pathway3))
   
   msg <- paste("Loading summary statistics:", date())
   if(options$print) message(msg)
@@ -46,13 +50,15 @@ load.summary.statistics <- function(summary.files, snps.in.pathway, options){
     col.class[-col.id] <- "NULL"
     col.class[c('SNP', 'RefAllele', 'EffectAllele')] <- 'character'
     names(col.class) <- header.map[names(col.class)]
-    st <- read.table(summary.files[i], header = TRUE, as.is = TRUE, colClasses = col.class)
+    # st <- read.table(summary.files[i], header = TRUE, as.is = TRUE, colClasses = col.class)
+    st <- setDF(fread(summary.files[i], header = TRUE, showProgress = FALSE, select = which(col.class != 'NULL')))
     colnames(st) <- convert.header(colnames(st), complete.header)
-    st$SNP <- reformat.snps(st$SNP)
     st <- st[st$SNP %in% snps.in.pathway, , drop = FALSE]
     if(nrow(st) == 0){
       next
     }
+    
+    st$SNP <- reformat.snps(st$SNP)
     
     if(!("Direction" %in% colnames(st))){
       st$Direction <- paste(rep('*', length(options$nsamples[[i]])), collapse = '', sep = '')
