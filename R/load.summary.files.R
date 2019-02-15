@@ -22,7 +22,7 @@ load.summary.files <- function(summary.files, lambda, sel.snps, options){
   
   fid <- 0
   for(i in 1:nfiles){
-    st <- read.table(summary.files[i], header = TRUE, as.is = TRUE, nrows = 1e4)
+    st <- load.file(summary.files[i], header = TRUE, nrows = 1e4)
     header.map <- colnames(st)
     colnames(st) <- convert.header(colnames(st), complete.header)
     tmp <- (header %in% colnames(st))
@@ -37,7 +37,7 @@ load.summary.files <- function(summary.files, lambda, sel.snps, options){
     col.class[-col.id] <- "NULL"
     col.class[c('SNP', 'RefAllele', 'EffectAllele')] <- 'character'
     names(col.class) <- header.map[names(col.class)]
-    try(st <- read.table(summary.files[i], header = TRUE, as.is = TRUE, colClasses = col.class), silent = TRUE)
+    try(st <- load.file(summary.files[i], header = TRUE, select = col.class), silent = TRUE)
     colnames(st) <- convert.header(colnames(st), complete.header)
     if(!is.null(sel.snps)){
       st <- st[st$SNP %in% sel.snps, ]

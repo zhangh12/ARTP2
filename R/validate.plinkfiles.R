@@ -23,7 +23,7 @@ validate.plinkfiles <- function(geno.files){
   cc <- rep('NULL', 6)
   cc[1] <- 'character'
   for(f in fam){
-    re <- try(tmp <- read.table(f, header = FALSE, as.is = TRUE, colClasses = cc, nrows = 1e3))
+    re <- try(tmp <- load.file(f, header = FALSE, select = cc, nrows = 1e3))
     if("try-error" %in% class(re)){
       msg <- paste0('Cannot load ', f)
       stop(msg)
@@ -36,7 +36,7 @@ validate.plinkfiles <- function(geno.files){
   cc <- rep('NULL', 6)
   cc[2] <- 'character'
   for(b in bim){
-    re <- try(tmp <- read.table(b, header = FALSE, as.is = TRUE, colClasses = cc, nrows = 1e3))
+    re <- try(tmp <- load.file(b, header = FALSE, select = cc, nrows = 1e3))
     if("try-error" %in% class(re)){
       msg <- paste0('Cannot load ', b)
       stop(msg)

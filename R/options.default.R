@@ -12,6 +12,8 @@ options.default <- function(){
                       chr.R2 = .95, 
                       gene.R2 = .95, 
                       gene.miss.rate = 1.0,                       
+                      min.marg.p = 1E-7, 
+                      window = 500 * 1000, 
                       group.gap = NULL, 
                       rm.gene.subset = TRUE, 
                       turn.off.filters = FALSE, 

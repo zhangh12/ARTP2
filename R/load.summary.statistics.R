@@ -35,7 +35,7 @@ load.summary.statistics <- function(summary.files, pathway, options){
   nfiles <- length(summary.files)
   
   for(i in 1:nfiles){
-    st <- read.table(summary.files[i], header = TRUE, as.is = TRUE, nrows = 1e4)
+    st <- load.file(summary.files[i], header = TRUE, nrows = 1e4)
     header.map <- colnames(st)
     colnames(st) <- convert.header(colnames(st), complete.header)
     tmp <- (header %in% colnames(st))
@@ -50,8 +50,7 @@ load.summary.statistics <- function(summary.files, pathway, options){
     col.class[-col.id] <- "NULL"
     col.class[c('SNP', 'RefAllele', 'EffectAllele')] <- 'character'
     names(col.class) <- header.map[names(col.class)]
-    # st <- read.table(summary.files[i], header = TRUE, as.is = TRUE, colClasses = col.class)
-    st <- setDF(fread(summary.files[i], header = TRUE, showProgress = FALSE, select = which(col.class != 'NULL')))
+    st <- load.file(summary.files[i], header = TRUE, select = col.class)
     colnames(st) <- convert.header(colnames(st), complete.header)
     st <- st[st$SNP %in% snps.in.pathway, , drop = FALSE]
     if(nrow(st) == 0){

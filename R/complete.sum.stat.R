@@ -19,10 +19,6 @@ complete.sum.stat <- function(sum.stat, options){
       st$SE[id.no.SE] <- abs(st$BETA[id.no.SE]/sqrt(z2))
     }
     
-    if(length(id.no.P) > 0){
-      st$P[id.no.P] <- pchisq((st$BETA[id.no.P]/st$SE[id.no.P])^2, df = 1, lower.tail = FALSE)
-    }
-    
     st$SE <- sqrt(lambda[i]) * st$SE
     st$P <- pchisq((st$BETA/st$SE)^2, df = 1, lower.tail = FALSE)
     

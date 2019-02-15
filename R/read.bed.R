@@ -2,7 +2,7 @@
 read.bed <- function(bed, bim, fam, sel.snps = NULL, sel.subs = NULL, encode012 = TRUE){
   
   col.class <- c("integer", "character", "NULL", "integer", "character", "character")
-  bim.file <- read.table(bim, header = FALSE, as.is = TRUE, colClasses = col.class, dec = '*')
+  bim.file <- load.file(bim, header = FALSE, select = col.class, dec = '*')
   colnames(bim.file) <- c('Chr', 'SNP', 'Pos', 'RefAllele', 'EffectAllele')
   bim.file$CP <- paste0('C', bim.file$Chr, 'P', bim.file$Pos)
   bim.file$ID <- NA
@@ -46,7 +46,7 @@ read.bed <- function(bed, bim, fam, sel.snps = NULL, sel.subs = NULL, encode012 
   
   col.class <- rep("NULL", 6)
   col.class[2] <- "character"
-  sid <- read.table(fam, header = FALSE, as.is = TRUE, colClasses = col.class)[, 1]
+  sid <- load.file(fam, header = FALSE, select = col.class)[, 1]
   if(any(duplicated(sid))){
     msg <- paste0('Duplicated subjects exist in fam file: \n', fam)
     warning(msg)

@@ -113,6 +113,7 @@ summaryData.setup <- function(summary.files, pathway, family, reference, lambda,
   ref.geno <- update.ref.geno(ref.geno, exc.snps)
   
   # estimate P and SE if they are not provided by users
+  # lambda is adjusted to SE in this function
   css <- complete.sum.stat(sum.stat, options)
   sum.stat <- css$sum.stat
   exc.snps <- css$deleted.snps
@@ -120,6 +121,15 @@ summaryData.setup <- function(summary.files, pathway, family, reference, lambda,
   gc()
   
   deleted.snps <- update.deleted.snps(deleted.snps, exc.snps, reason = "LACK_OF_ACCU_BETA", comment = "")
+  pathway <- update.pathway.definition(pathway, exc.snps)
+  sum.stat <- update.sum.stat(sum.stat, exc.snps)
+  allele.info <- update.allele.info(allele.info, exc.snps)
+  ref.snps <- update.ref.snps(ref.snps, exc.snps)
+  ref.geno <- update.ref.geno(ref.geno, exc.snps)
+  
+  ma <- find.marg.signal(sum.stat, allele.info, options)
+  exc.snps <- ma$SNP
+  deleted.snps <- update.deleted.snps(deleted.snps, exc.snps, reason = 'CLOSE_TO_MARG_SIG', comment = ma$comment)
   pathway <- update.pathway.definition(pathway, exc.snps)
   sum.stat <- update.sum.stat(sum.stat, exc.snps)
   allele.info <- update.allele.info(allele.info, exc.snps)

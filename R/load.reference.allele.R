@@ -21,7 +21,7 @@ load.reference.allele <- function(reference, pathway, options){
     nfiles <- length(bim.files)
     allele.info <- NULL
     for(i in 1:nfiles){
-      tmp <- try(bim <- read.table(bim.files[i], header = FALSE, as.is = TRUE, colClasses = col.class), silent = TRUE)
+      tmp <- try(bim <- load.file(bim.files[i], header = FALSE, select = col.class), silent = TRUE)
       if(error.try(tmp)){
         msg <- paste0('Cannot load ', bim.files[i])
         stop(msg)

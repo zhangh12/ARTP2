@@ -16,7 +16,7 @@ load.reference.geno <- function(reference, snps.in.pathway, options){
     if(is.null(sel.subs) && !is.null(exc.subs)){
       col.class <- rep("NULL", 6)
       col.class[2] <- "character"
-      sel.subs <- read.table(reference$fam[1], header = FALSE, as.is = TRUE, colClasses = col.class)[, 1]
+      sel.subs <- load.file(reference$fam[1], header = FALSE, select = col.class)[, 1]
       sel.subs <- setdiff(sel.subs, exc.subs)
       exc.subs <- NULL
     }

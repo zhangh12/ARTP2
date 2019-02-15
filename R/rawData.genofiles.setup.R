@@ -94,7 +94,7 @@ rawData.genofiles.setup <- function(formula, null, pathway, family, geno.files, 
         ncol <- tmp1$ncol[1]
         cc <- rep('NULL', ncol)
         cc[tmp1$col] <- 'numeric'
-        rg <- read.table(f, header = TRUE, as.is = TRUE, colClasses = cc)
+        rg <- load.file(f, header = TRUE, select = cc)
         if(is.null(geno)){
           geno <- rg
         }else{

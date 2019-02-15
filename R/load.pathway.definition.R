@@ -5,7 +5,7 @@ load.pathway.definition <- function(pathway, options){
   if(options$print) message(msg)
   
   if(is.character(pathway)){
-    tmp <- try(pd <- read.table(pathway, header = TRUE, as.is = TRUE), silent = TRUE)
+    tmp <- try(pd <- load.file(pathway, header = TRUE), silent = TRUE)
     if(error.try(tmp)){
       msg <- paste0("Cannot load ", pathway)
       stop(msg)

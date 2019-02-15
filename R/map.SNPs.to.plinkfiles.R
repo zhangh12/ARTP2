@@ -7,7 +7,7 @@ map.SNPs.to.plinkfiles <- function(plink.files, pathway){
   SNP <- NULL
   iplink <- NULL
   for(i in 1:nf){
-    re <- try(b <- read.table(bim[i], header = FALSE, as.is = TRUE, colClasses = cc)[, 1], silent = TRUE)
+    re <- try(b <- load.file(bim[i], header = FALSE, select = cc)[, 1], silent = TRUE)
     if("try-error" %in% class(re)){
       msg <- paste0('Cannot load ', b)
       stop(msg)

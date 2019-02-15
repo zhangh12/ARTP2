@@ -4,7 +4,7 @@ validate.genofiles <- function(geno.files){
   
   miss.files <- NULL
   for(f in geno.files){
-    re <- try(tmp <- read.table(f, header = TRUE, as.is = TRUE, nrows = 1), silent = TRUE)
+    re <- try(tmp <- load.file(f, header = TRUE, nrows = 1), silent = TRUE)
     if("try-error" %in% class(re)){
       miss.files <- c(miss.files, f)
     }
