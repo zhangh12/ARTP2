@@ -37,8 +37,8 @@ find.marg.signal <- function(sum.stat, allele.info, options){
   names(P) <- names(BETA)
   
   region <- NULL
-  if(any(P < options$min.marg.p)){
-    idx.snp <- names(P)[P < options$min.marg.p]
+  if(any(P <= options$min.marg.p)){
+    idx.snp <- names(P)[P <= options$min.marg.p]
     idx.snp <- allele.info[allele.info$SNP %in% idx.snp, c('Chr', 'SNP', 'Pos')]
     region <- NULL
     for(i in 1:nrow(idx.snp)){
