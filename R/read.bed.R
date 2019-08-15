@@ -45,8 +45,8 @@ read.bed <- function(bed, bim, fam, sel.snps = NULL, sel.subs = NULL, encode012 
   sel.snps <- bim.file$ID
   
   col.class <- rep("NULL", 6)
-  col.class[2] <- "character"
-  sid <- load.file(fam, header = FALSE, select = col.class)[, 1]
+  col.class[1:2] <- "character"
+  sid <- apply(load.file(fam, header = FALSE, select = col.class), 1, paste, collapse = '-')
   if(any(duplicated(sid))){
     msg <- paste0('Duplicated subjects exist in fam file: \n', fam)
     warning(msg)
